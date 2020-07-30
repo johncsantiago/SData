@@ -1,13 +1,13 @@
 Sample,Mito,Treat,Time,Replicate,Group
-OO1,OreR,Control,Starved,1,OO0HC
-OO2,OreR,Control,Starved,2,OO0HC
-OO3,OreR,Control,Starved,3,OO0HC
-OO4,OreR,Control,1 Hour,1,OO1HC
-OO5,OreR,Control,1 Hour,2,OO1HC
-OO6,OreR,Control,1 Hour,3,OO1HC
-OO7,OreR,Rapa,1 Hour,1,OO1HR
-OO8,OreR,Rapa,1 Hour,2,OO1HR
-OO9,OreR,Rapa,1 Hour,3,OO1HR
+OO01,OreR,Control,Starved,1,OO0HC
+OO02,OreR,Control,Starved,2,OO0HC
+OO03,OreR,Control,Starved,3,OO0HC
+OO04,OreR,Control,1 Hour,1,OO1HC
+OO05,OreR,Control,1 Hour,2,OO1HC
+OO06,OreR,Control,1 Hour,3,OO1HC
+OO07,OreR,Rapa,1 Hour,1,OO1HR
+OO08,OreR,Rapa,1 Hour,2,OO1HR
+OO09,OreR,Rapa,1 Hour,3,OO1HR
 OO10,OreR,Control,2 Hour,1,OO2HC
 OO11,OreR,Control,2 Hour,2,OO2HC
 OO12,OreR,Control,2 Hour,3,OO2HC
