@@ -2,6 +2,7 @@ library(oligo)
 library(affycoretools)
 library(limma)
 library(pd.hugene.2.0.st)
+library(affy)
 
 setwd("/Users/johncsantiago/Documents/Elizabeth Files/")
 gfs <- read.celfiles(
@@ -11,7 +12,7 @@ gfs <- read.celfiles(
   "JT_071318_HUGENE_DMSOB_ElDeiry_(HuGene-2_0-st).CEL")
 
 ## Do RMA normalization & get ExpressionSet object:
-ES <- rma(gfs)
+ES <- rma(gfs,bgversion=1)
 
 lowExprCutoff <- quantile(exprs(ES), 0.1) ## see Below (*)
 
@@ -44,20 +45,20 @@ maxvals <- apply(exprs(ES), 1, max)
 ES <- ES[maxvals > lowExprCutoff, ]
 
   ##apply a cpm cutoff to the data before calculating DE gene
-  cutoff=5
-  maxvals <- apply(cpm(2^exprs(ES)), 1, max)
-  maxvals=maxvals>cutoff
-  ES <- ES[maxvals, ]
+  ##cutoff=5
+  ##maxvals <- apply(cpm(2^exprs(ES)), 1, max)
+  ##maxvals=maxvals>cutoff
+  ##ES <- ES[maxvals, ]
 
 
   ##This will generate a table of the genes that remain after a specified cpm cutoff
-  cutoff=5
-  temp=2^exprs(ES)
-  cpmtemp=cpm(temp)
-  tempcutoff=apply(cpmtemp, 1, max)
-  tempcutoff=tempcutoff>cutoff
-  cpmtemp=cpmtemp[tempcutoff,]
-  dim(cpmtemp)
+  ##cutoff=5
+  ##temp=2^exprs(ES)
+  ##cpmtemp=cpm(temp)
+  ##tempcutoff=apply(cpmtemp, 1, max)
+  ##tempcutoff=tempcutoff>cutoff
+  ##cpmtemp=cpmtemp[tempcutoff,]
+  ##dim(cpmtemp)
 
 ## These are the pieces to doo defferential expression analysis with limma:
 
