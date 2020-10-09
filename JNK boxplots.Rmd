@@ -1,0 +1,69 @@
+---
+title: "jnk"
+author: "John Santiago"
+date: "10/9/2020"
+output: 
+  html_document: 
+    fig_width: 10
+    fig_height: 10
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=FALSE}
+
+library(org.Hs.eg.db)
+library(RcisTarget)
+library(visNetwork)
+library(gplots)
+library(dendextend)
+library(ggsci)
+library(goseq)
+library(RColorBrewer)
+
+##################################################
+##Barplot of Total DE for each condition vs time 0
+##################################################
+
+library(edgeR)
+library(plot3D)
+library(VennDiagram)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/raw_countdata.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/groups.csv",row.names=1)
+countdata=countdata[,row.names(groups)]
+
+x <- countdata
+group=(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE]
+y <- calcNormFactors(y)
+z=y
+cpmdata=cpm(z)
+
+
+cpmdata["ENSG00000107643",]
+cpmdata["ENSG00000050748",]
+cpmdata["ENSG00000109339",]
+```
+
+JNK1<br  />
+```{r fig.height=5, fig.width=5}
+boxplot(cpmdata["ENSG00000107643",]~group)
+
+```
+
+JNK2<br  />
+```{r fig.height=5, fig.width=5}
+
+boxplot(cpmdata["ENSG00000050748",]~group)
+
+```
+
+JNK3<br  />
+```{r fig.height=5, fig.width=5}
+
+boxplot(cpmdata["ENSG00000109339",]~group)
+```

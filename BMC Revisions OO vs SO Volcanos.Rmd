@@ -1,0 +1,151 @@
+---
+title: "sm21;OreR vs OreR;OreR 0 Hour Control Response BMC Revisions"
+author: "John Santiago"
+date: "10/9/2020"
+output: 
+  html_document: 
+    fig_width: 10
+    fig_height: 10
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=FALSE}
+# load required libraries 
+library(tidyverse)
+library(annotate)
+library(EnhancedVolcano)
+library(edgeR)
+library(org.Dm.eg.db)
+
+trim=c(FALSE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, FALSE,  TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, FALSE, TRUE)
+##edgeR processing
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Fly_CountTable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Fly_Metadata.csv",row.names=1)
+countdata=countdata[,trim]
+groups=groups[trim,]
+convert=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/FlyID%20Conversion%20Table.csv",row.names=1)
+countdata=countdata[intersect(row.names(countdata),row.names(convert[convert$mt==0,])),]
+x <- countdata
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+
+design<-model.matrix(~0+group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+```
+
+```{r}
+volcano=function(results,volcanotitle){
+plot(y=-log(results$FDR,base=2),x=results$logFC,pch=20,cex=.7,main=volcanotitle,ylab="-log2(FDR)",xlab="logFC",ylim=c(0,6),xlim=c(-8,8))
+sigup=results[results$logFC>0&results$FDR<.05,]
+points(y=-log(sigup$FDR,base=2),x=sigup$logFC,pch=20,cex=.7,col="red")
+sigdown=results[results$logFC<0&results$FDR<.05,]
+points(y=-log(sigdown$FDR,base=2),x=sigdown$logFC,pch=20,cex=.7,col="blue")
+abline(h=-log(.05,base=2),lty=2)
+abline(v=0,lty=2)
+abline(h=c(0:6),col = "lightgray", lty = "dotted")
+}
+```
+
+SO0HC vs OO0HC
+```{r include=FALSE}
+compare = makeContrasts((SO1HC-OO1HC), levels=design)
+volcanotitle="FDR Distribution for DE in SO relative to OO, 0 Hour Control Response"
+
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt, n=nrow(lrt$table),adjust.method="BH", sort.by="PValue")
+results=G_X_E$table
+
+```
+
+
+```{r}
+##How many genes are they?
+NumberDE=nrow(results[results$FDR<.05,])
+names(NumberDE)="Total DE"
+NumberDE
+```
+
+```{r fig.height=5, fig.width=9}
+hist(results$FDR,breaks = c(.05*(1:20)),col=c("red",rep("grey",19)),main=volcanotitle,xlim=c(0,1))
+```
+
+```{r fig.height=5, fig.width=5}
+volcano(results,volcanotitle)
+
+```
+
+
+<br   />
+<br   />
+<br   />
+SO1HC vs OO1HC
+```{r include=FALSE}
+compare = makeContrasts((SO1HC-OO1HC), levels=design)
+volcanotitle="FDR Distribution for DE in SO relative to OO, 1 Hour Control Response"
+
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt, n=nrow(lrt$table),adjust.method="BH", sort.by="PValue")
+results=G_X_E$table
+
+```
+
+```{r}
+##How many genes are they?
+NumberDE=nrow(results[results$FDR<.05,])
+names(NumberDE)="Total DE"
+NumberDE
+```
+
+```{r fig.height=5, fig.width=9}
+hist(results$FDR,breaks = c(.05*(0:20)),col=c("red",rep("grey",19)),main=volcanotitle,xlim=c(0,1))
+```
+
+```{r fig.height=5, fig.width=5}
+volcano(results,volcanotitle)
+
+```
+
+
+<br   />
+<br   />
+<br   />
+SO2HC vs OO2HC
+```{r include=FALSE}
+compare = makeContrasts((SO2HC-OO2HC), levels=design)
+volcanotitle="FDR Distribution for DE in SO relative to OO, 2 Hour Control Response"
+
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt, n=nrow(lrt$table),adjust.method="BH", sort.by="PValue")
+results=G_X_E$table
+
+```
+
+```{r}
+##How many genes are they?
+NumberDE=nrow(results[results$FDR<.05,])
+names(NumberDE)="Total DE"
+NumberDE
+```
+
+```{r fig.height=5, fig.width=9}
+hist(results$FDR,breaks = c(.05*(0:20)),col=c("red",rep("grey",19)),main=volcanotitle,xlim=c(0,1))
+```
+
+```{r fig.height=5, fig.width=5}
+volcano(results,volcanotitle)
+
+```
+
+
+
