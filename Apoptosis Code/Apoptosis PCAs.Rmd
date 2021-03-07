@@ -1,0 +1,346 @@
+---
+title: "Apoptosis 3D PCA"
+author: "John Santiago"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(rgl)
+knitr::opts_chunk$set(echo = FALSE, fig.align="center")
+knitr::knit_hooks$set(webgl = hook_webgl)
+
+```
+
+```{r include=FALSE}
+# load required libraries 
+library(tidyverse)
+library(annotate)
+library(EnhancedVolcano)
+library(edgeR)
+library(org.Dm.eg.db)
+library(pca3d)
+library(plot3D)
+library(scatterplot3d)
+library(plot3D)
+library(plot3Drgl)
+library(data.table)
+
+##apcountdata=read.csv("/Users/johncsantiago/Documents/GitHub/SandersLab/GenericCode/Data Files/rna-seq/MGH_Apoptosis_STAR/MGH_Apoptosis_STAR_all_counts.csv",row.names=1)
+##apgroups=read.csv("/Users/johncsantiago/Google Drive File Stream/My Drive/Sanders Lab Files/All Code/Liver Metadata.csv",row.names=1)
+
+##countdata=read.csv("/Users/johncsantiago/Documents/GitHub/SandersLab/MGH_2020/RNA-Seq Data Files/mgh_raw_countdata.csv",row.names=1)
+
+##colnames(apcountdata)=apgroups[colnames(apcountdata),"Library.ID"]
+##common.genes=intersect(row.names(countdata),row.names(apcountdata))
+##allapcountdata=cbind(apcountdata[common.genes,],countdata[common.genes,])
+##row.names(apgroups)=apgroups$Library.ID
+##allapcountdata=allapcountdata[,row.names(apgroups)[apgroups$Apoptosis.ID!=""&apgroups$Library.ID!=""]]
+##allapgroups=apgroups[colnames(allapcountdata),]
+##colnames(allapgroups)[3]="Group"
+##write.csv(allapcountdata,"/Users/johncsantiago/Google Drive File Stream/My Drive/Sanders Lab Files/All Code/apcountdata.csv")
+##write.csv(allapgroups,"/Users/johncsantiago/Google Drive File Stream/My Drive/Sanders Lab Files/All Code/apmetadata.csv")
+
+countdata=read.csv("/Users/johncsantiago/Google Drive File Stream/My Drive/Sanders Lab Files/All Code/apcountdata.csv",row.names=1)
+groups=read.csv("/Users/johncsantiago/Google Drive File Stream/My Drive/Sanders Lab Files/All Code/apmetadata.csv",row.names=1)
+
+x <- countdata[,row.names(groups)]
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+##write.csv(cpmdata,"/Users/johncsantiago/Google Drive File Stream/My Drive/Sanders Lab Files/All Code/apcpmdata.csv")
+
+pca <- prcomp(t(cpmdata), scale.=TRUE) 
+gr=factor(groups$Library.ID)
+
+```
+
+Apoptosis PC Contributions
+```{r fig.height=6, fig.width=10}
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+names(ve)=c("PC1","PC2","PC3")
+barplot(ve,ylim=c(0,20),cex.names =.8)
+```
+
+<br  />
+<br  />
+<br  />
+Timecourse Perspective PCA
+```{r}
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+
+
+pcacolors=c("darkgreen","red3","royalblue")
+text2D(x=xcoords,y=ycoords,labels = (gr), 
+       col=c(pcacolors[c(rep(3,15),rep(2,8),rep(1,6),rep(2,6),rep(1,9))]),
+       xlab="PC1",ylab="PC2")
+
+lines2D(x=xcoords[c(3,1,2)],y=ycoords[c(3,1,2)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(6,4,5)],y=ycoords[c(6,4,5)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(9,7,8)],y=ycoords[c(9,7,8)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(12,10,11)],y=ycoords[c(12,10,11)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(15,13,14)],y=ycoords[c(15,13,14)],col=pcacolors[3],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(18,16,17)],y=ycoords[c(18,16,17)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(21,19,20)],y=ycoords[c(21,19,20)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(22,23)],y=ycoords[c(22,23)],col=pcacolors[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(26,24,25)],y=ycoords[c(26,24,25)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(29,27,28)],y=ycoords[c(29,27,28)],col=pcacolors[1],add=T,lty=1)
+
+lines2D(x=xcoords[c(32,30,31)],y=ycoords[c(32,30,31)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(35,33,34)],y=ycoords[c(35,33,34)],col=pcacolors[2],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(38,36,37)],y=ycoords[c(38,36,37)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(41,39,40)],y=ycoords[c(41,39,40)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(44,42,43)],y=ycoords[c(44,42,43)],col=pcacolors[1],add=T,lty=1)
+
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+```
+
+```{r}
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+
+
+pcacolors=c("darkgreen","red3","royalblue")
+text2D(x=xcoords,y=zcoords,labels = (gr), 
+       col=c(pcacolors[c(rep(3,15),rep(2,8),rep(1,6),rep(2,6),rep(1,9))]),
+       xlab="PC1",ylab="PC3")
+
+lines2D(x=xcoords[c(3,1,2)],y=zcoords[c(3,1,2)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(6,4,5)],y=zcoords[c(6,4,5)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(9,7,8)],y=zcoords[c(9,7,8)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(12,10,11)],y=zcoords[c(12,10,11)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(15,13,14)],y=zcoords[c(15,13,14)],col=pcacolors[3],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(18,16,17)],y=zcoords[c(18,16,17)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(21,19,20)],y=zcoords[c(21,19,20)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(22,23)],y=zcoords[c(22,23)],col=pcacolors[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(26,24,25)],y=zcoords[c(26,24,25)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(29,27,28)],y=zcoords[c(29,27,28)],col=pcacolors[1],add=T,lty=1)
+
+lines2D(x=xcoords[c(32,30,31)],y=zcoords[c(32,30,31)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(35,33,34)],y=zcoords[c(35,33,34)],col=pcacolors[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(38,36,37)],y=zcoords[c(38,36,37)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(41,39,40)],y=zcoords[c(41,39,40)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(44,42,43)],y=zcoords[c(44,42,43)],col=pcacolors[1],add=T,lty=1)
+
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+```
+
+```{r include=FALSE}
+plot3d(y=c(-100,150),x=0,z=0,ylim=c(-100,150),xlim=c(-125,125),zlim=c(-100,100),ylab="PC1",xlab="PC2",zlab="PC3",type="l",lty=1,lwd=1)
+view3d(theta = -45, phi = 25)
+
+text3d(x=xcoords,y=ycoords,z=zcoords,texts=gr,add=T,col=c(pcacolors[c(rep(3,15),rep(2,8),rep(1,6),rep(2,6),rep(1,9))]))
+points3d(x=xcoords,y=ycoords,z=zcoords,texts=gr,add=T,col=c(pcacolors[c(rep(3,15),rep(2,8),rep(1,6),rep(2,6),rep(1,9))]))
+lines3d(y=0,x=c(-125,125),z=0,lty=1,add=T)
+lines3d(y=0,x=0,z=c(-100,100),lty=1,add=T)
+
+lines3d(x=xcoords[c(3,1,2)],y=ycoords[c(3,1,2)],z=zcoords[c(3,1,2)],col=pcacolors[3],add=T,lty=1)
+lines3d(x=xcoords[c(6,4,5)],y=ycoords[c(6,4,5)],z=zcoords[c(6,4,5)],col=pcacolors[3],add=T,lty=1)
+lines3d(x=xcoords[c(9,7,8)],y=ycoords[c(9,7,8)],z=zcoords[c(9,7,8)],col=pcacolors[3],add=T,lty=1)
+lines3d(x=xcoords[c(12,10,11)],y=ycoords[c(12,10,11)],z=zcoords[c(12,10,11)],col=pcacolors[3],add=T,lty=1)
+lines3d(x=xcoords[c(15,13,14)],y=ycoords[c(15,13,14)],z=zcoords[c(15,13,14)],col=pcacolors[3],add=T,lty=1)
+
+lines3d(x=xcoords[c(18,16,17)],y=ycoords[c(18,16,17)],z=zcoords[c(18,16,17)],col=pcacolors[2],add=T,lty=1)
+lines3d(x=xcoords[c(21,19,20)],y=ycoords[c(21,19,20)],z=zcoords[c(21,19,20)],col=pcacolors[2],add=T,lty=1)
+lines3d(x=xcoords[c(22,23)],y=ycoords[c(22,23)],z=zcoords[c(22,23)],col=pcacolors[2],add=T,lty=1)
+
+lines3d(x=xcoords[c(26,24,25)],y=ycoords[c(26,24,25)],z=zcoords[c(26,24,25)],col=pcacolors[1],add=T,lty=1)
+lines3d(x=xcoords[c(29,27,28)],y=ycoords[c(29,27,28)],z=zcoords[c(29,27,28)],col=pcacolors[1],add=T,lty=1)
+
+lines3d(x=xcoords[c(32,30,31)],y=ycoords[c(32,30,31)],z=zcoords[c(32,30,31)],col=pcacolors[2],add=T,lty=1)
+lines3d(x=xcoords[c(35,33,34)],y=ycoords[c(35,33,34)],z=zcoords[c(35,33,34)],col=pcacolors[2],add=T,lty=1)
+
+lines3d(x=xcoords[c(38,36,37)],y=ycoords[c(38,36,37)],z=zcoords[c(38,36,37)],col=pcacolors[1],add=T,lty=1)
+lines3d(x=xcoords[c(41,39,40)],y=ycoords[c(41,39,40)],z=zcoords[c(41,39,40)],col=pcacolors[1],add=T,lty=1)
+lines3d(x=xcoords[c(44,42,43)],y=ycoords[c(44,42,43)],z=zcoords[c(44,42,43)],col=pcacolors[1],add=T,lty=1)
+
+
+```
+
+```{r out.width="100%", fig.height= 10, fig.align = 'center'}
+fn <- spin3d(axis = c(0, 1, 0))
+control <- par3dinterpControl(fn, 0, 12, steps = 60)
+rglwidget() %>% playwidget(control, step=0.01, loop = TRUE, rate = 0.5)
+
+
+```
+
+```{r}
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+
+
+pcacolors=c("darkgreen","red3","blue3")
+text2D(x=xcoords,y=ycoords,labels = c(rep("",44)), 
+       col=c(pcacolors[c(rep(3,15),rep(2,8),rep(1,6),rep(2,6),rep(1,9))]),
+       xlab="PC1",ylab="PC2",xlim=c(-150,150),ylim=c(-200,100))
+
+lines2D(x=xcoords[c(3,1,2)],y=ycoords[c(3,1,2)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(6,4,5)],y=ycoords[c(6,4,5)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(9,7,8)],y=ycoords[c(9,7,8)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(12,10,11)],y=ycoords[c(12,10,11)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(15,13,14)],y=ycoords[c(15,13,14)],col=pcacolors[3],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(18,16,17)],y=ycoords[c(18,16,17)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(21,19,20)],y=ycoords[c(21,19,20)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(22,23)],y=ycoords[c(22,23)],col=pcacolors[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(26,24,25)],y=ycoords[c(26,24,25)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(29,27,28)],y=ycoords[c(29,27,28)],col=pcacolors[1],add=T,lty=1)
+
+lines2D(x=xcoords[c(32,30,31)],y=ycoords[c(32,30,31)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(35,33,34)],y=ycoords[c(35,33,34)],col=pcacolors[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(38,36,37)],y=ycoords[c(38,36,37)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(41,39,40)],y=ycoords[c(41,39,40)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(44,42,43)],y=ycoords[c(44,42,43)],col=pcacolors[1],add=T,lty=1)
+
+
+points2D(x=xcoords[c(3,1,2)],y=ycoords[c(3,1,2)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=1.5)
+points2D(x=xcoords[c(6,4,5)],y=ycoords[c(6,4,5)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=1.5)
+points2D(x=xcoords[c(9,7,8)],y=ycoords[c(9,7,8)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=1.5)
+points2D(x=xcoords[c(12,10,11)],y=ycoords[c(12,10,11)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=1.5)
+points2D(x=xcoords[c(15,13,14)],y=ycoords[c(15,13,14)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=1.5)
+
+
+points2D(x=xcoords[c(18,16,17)],y=ycoords[c(18,16,17)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=1.5)
+points2D(x=xcoords[c(21,19,20)],y=ycoords[c(21,19,20)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=1.5)
+points2D(x=xcoords[c(22,23)],y=ycoords[c(22,23)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(23,22),bg="red",cex=1.5)
+
+points2D(x=xcoords[c(26,24,25)],y=ycoords[c(26,24,25)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=1.5)
+points2D(x=xcoords[c(29,27,28)],y=ycoords[c(29,27,28)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=1.5)
+
+points2D(x=xcoords[c(32,30,31)],y=ycoords[c(32,30,31)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=1.5)
+points2D(x=xcoords[c(35,33,34)],y=ycoords[c(35,33,34)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=1.5)
+
+points2D(x=xcoords[c(38,36,37)],y=ycoords[c(38,36,37)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=1.5)
+points2D(x=xcoords[c(41,39,40)],y=ycoords[c(41,39,40)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=1.5)
+points2D(x=xcoords[c(44,42,43)],y=ycoords[c(44,42,43)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=1.5)
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+
+legend("topleft", legend=c("Apoptosis","Non-Viable","Viable"),col=pcacolors[c(3,2,1)],lty=1,bty="n",lwd=2)
+legend("bottomleft",legend=c("0 Hour","3 Hour","6 Hour"),pch=c(22,23,21),pt.bg="grey",bty="n")
+```
+
+```{r}
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+
+
+pcacolors=c("darkgreen","red3","blue3")
+text2D(x=xcoords,y=zcoords,labels = c(rep("",44)), 
+       col=c(pcacolors[c(rep(3,15),rep(2,8),rep(1,6),rep(2,6),rep(1,9))]),
+       xlab="PC1",ylab="PC3",xlim=c(-150,150),ylim=c(-200,100))
+
+lines2D(x=xcoords[c(3,1,2)],y=zcoords[c(3,1,2)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(6,4,5)],y=zcoords[c(6,4,5)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(9,7,8)],y=zcoords[c(9,7,8)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(12,10,11)],y=zcoords[c(12,10,11)],col=pcacolors[3],add=T,lty=1)
+lines2D(x=xcoords[c(15,13,14)],y=zcoords[c(15,13,14)],col=pcacolors[3],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(18,16,17)],y=zcoords[c(18,16,17)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(21,19,20)],y=zcoords[c(21,19,20)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(22,23)],y=zcoords[c(22,23)],col=pcacolors[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(26,24,25)],y=zcoords[c(26,24,25)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(29,27,28)],y=zcoords[c(29,27,28)],col=pcacolors[1],add=T,lty=1)
+
+lines2D(x=xcoords[c(32,30,31)],y=zcoords[c(32,30,31)],col=pcacolors[2],add=T,lty=1)
+lines2D(x=xcoords[c(35,33,34)],y=zcoords[c(35,33,34)],col=pcacolors[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(38,36,37)],y=zcoords[c(38,36,37)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(41,39,40)],y=zcoords[c(41,39,40)],col=pcacolors[1],add=T,lty=1)
+lines2D(x=xcoords[c(44,42,43)],y=zcoords[c(44,42,43)],col=pcacolors[1],add=T,lty=1)
+
+
+points2D(x=xcoords[c(3,1,2)],y=zcoords[c(3,1,2)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=2)
+points2D(x=xcoords[c(6,4,5)],y=zcoords[c(6,4,5)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=2)
+points2D(x=xcoords[c(9,7,8)],y=zcoords[c(9,7,8)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=2)
+points2D(x=xcoords[c(12,10,11)],y=zcoords[c(12,10,11)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=2)
+points2D(x=xcoords[c(15,13,14)],y=zcoords[c(15,13,14)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(22,23,21),bg="dodgerblue",cex=2)
+
+
+points2D(x=xcoords[c(18,16,17)],y=zcoords[c(18,16,17)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=2)
+points2D(x=xcoords[c(21,19,20)],y=zcoords[c(21,19,20)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=2)
+points2D(x=xcoords[c(22,23)],y=zcoords[c(22,23)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(23,22),bg="red",cex=2)
+
+points2D(x=xcoords[c(26,24,25)],y=zcoords[c(26,24,25)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=2)
+points2D(x=xcoords[c(29,27,28)],y=zcoords[c(29,27,28)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=2)
+
+points2D(x=xcoords[c(32,30,31)],y=zcoords[c(32,30,31)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=2)
+points2D(x=xcoords[c(35,33,34)],y=zcoords[c(35,33,34)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(22,23,21),bg="red",cex=2)
+
+points2D(x=xcoords[c(38,36,37)],y=zcoords[c(38,36,37)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=2)
+points2D(x=xcoords[c(41,39,40)],y=zcoords[c(41,39,40)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=2)
+points2D(x=xcoords[c(44,42,43)],y=zcoords[c(44,42,43)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(22,23,21),bg="limegreen",cex=2)
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+
+legend("topleft", legend=c("Apoptosis","Non-Viable","Viable"),col=pcacolors[c(3,2,1)],lty=1,bty="n",lwd=2)
+legend("bottomleft",legend=c("0 Hour","3 Hour","6 Hour"),pch=c(22,23,21),pt.bg="grey",bty="n")
+```
+
+
+
+
+
