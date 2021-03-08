@@ -1,0 +1,57 @@
+---
+title: "Apoptosis Top PCA Contribution"
+author: "John Santiago"
+date: "3/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(rgl)
+knitr::opts_chunk$set(echo = FALSE, fig.align="center")
+knitr::knit_hooks$set(webgl = hook_webgl)
+
+```
+
+```{r include=FALSE}
+# load required libraries 
+library(tidyverse)
+library(annotate)
+library(EnhancedVolcano)
+library(edgeR)
+library(org.Dm.eg.db)
+library(pca3d)
+library(plot3D)
+library(scatterplot3d)
+library(plot3D)
+library(plot3Drgl)
+library(data.table)
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+
+##EdgeR comparisons
+countdata=countdata[,row.names(groups)]
+x <- countdata
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+
+pca <- prcomp(t(cpmdata), scale.=TRUE) 
+gr=factor(groups$Library.ID)
+
+```
+
+Apoptosis PC Contributions
+```{r fig.height=6, fig.width=10}
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+names(ve)=c("PC1","PC2","PC3")
+barplot(ve,ylim=c(0,20),cex.names =.8)
+```
+
+
+

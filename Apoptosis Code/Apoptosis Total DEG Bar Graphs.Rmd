@@ -21,9 +21,8 @@ library(gplots)
 ```
 
 ```{r include =F}
-groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/ApoptosisMetadata.csv",row.names=1)
-countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/ApoptosisCountdata.csv",row.names=1)
-
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
 
 ##EdgeR comparisons
 countdata=countdata[,row.names(groups)]
