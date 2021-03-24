@@ -351,6 +351,7 @@ names(meanycoords)[1:6]=c("CN1","CN2","CN3","CV1","CV2","CV3")
         meanycoords[4]=mean(ycoords[substring(gr,1,3)=="CV1"])
         meanycoords[5]=mean(ycoords[substring(gr,1,3)=="CV2"])
         meanycoords[6]=mean(ycoords[substring(gr,1,3)=="CV3"])
+        
 
 meangr=factor(names(meanxcoords))
 
@@ -567,6 +568,255 @@ points3D(x=xcoords[c(8,11,14,17,20)],y=ycoords[c(8,11,14,17,20)],z=zcoords[c(8,1
 points3D(x=xcoords[3],y=ycoords[3],z=zcoords[3],type="p",colkey=F,col="firebrick3",add=T,pch=22,bg="red",cex=2)
 points3D(x=xcoords[6],y=ycoords[6],z=zcoords[6],type="p",colkey=F,col="darkgreen",add=T,pch=22,bg="limegreen",cex=2)
 points3D(x=xcoords[c(9,12,15,18,21)],y=ycoords[c(9,12,15,18,21)],z=zcoords[c(9,12,15,18,21)],type="p",colkey=F,col="royalblue3",add=T,pch=22,bg="dodgerblue",cex=2)
+
+
+
+legend("topleft", legend=c("Apoptosis","Viable","Nonviable"),col=pcacolors.pal[c(3,2,1)],lty=1,bty="n",lwd=2)
+
+```
+
+```{r}
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+
+meanxcoords=xcoords[c(1:9)]
+names(meanxcoords)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+        meanxcoords[1]=mean(xcoords[substring(gr,1,3)=="CN1"])
+        meanxcoords[2]=mean(xcoords[substring(gr,1,3)=="CN2"])
+        meanxcoords[3]=mean(xcoords[substring(gr,1,3)=="CN3"])
+        meanxcoords[4]=mean(xcoords[substring(gr,1,3)=="CV1"])
+        meanxcoords[5]=mean(xcoords[substring(gr,1,3)=="CV2"])
+        meanxcoords[6]=mean(xcoords[substring(gr,1,3)=="CV3"])
+        meanxcoords[7]=mean(xcoords[substring(gr,1,3)=="EM1"])
+        meanxcoords[8]=mean(xcoords[substring(gr,1,3)=="EM2"])
+        meanxcoords[9]=mean(xcoords[substring(gr,1,3)=="EM3"])
+        
+meanycoords=ycoords[c(1:9)]
+names(meanycoords)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+        meanycoords[1]=mean(ycoords[substring(gr,1,3)=="CN1"])
+        meanycoords[2]=mean(ycoords[substring(gr,1,3)=="CN2"])
+        meanycoords[3]=mean(ycoords[substring(gr,1,3)=="CN3"])
+        meanycoords[4]=mean(ycoords[substring(gr,1,3)=="CV1"])
+        meanycoords[5]=mean(ycoords[substring(gr,1,3)=="CV2"])
+        meanycoords[6]=mean(ycoords[substring(gr,1,3)=="CV3"])
+        meanycoords[7]=mean(ycoords[substring(gr,1,3)=="EM1"])
+        meanycoords[8]=mean(ycoords[substring(gr,1,3)=="EM2"])
+        meanycoords[9]=mean(ycoords[substring(gr,1,3)=="EM3"])
+        
+
+meangr=factor(names(meanxcoords))
+
+xcoords=meanxcoords
+ycoords=meanycoords
+
+pcacolors.pal=c("red3","darkgreen","royalblue")
+pcacolors = sapply(as.character(substring(meangr,1,2)), switch, "CN" = "red3", "CV" = "darkgreen", "EM" = "royalblue", USE.NAMES = F)
+text2D(x=xcoords,y=ycoords,labels = c(rep("",9)), 
+       col=pcacolors,
+       xlab="PC1",ylab="PC2",xlim=c(-75,125),ylim=c(-50,100))
+
+lines2D(x=xcoords[c(1,2,3)],y=ycoords[c(1,2,3)],col=pcacolors.pal[1],add=T,lty=1)
+
+lines2D(x=xcoords[c(4,5,6)],y=ycoords[c(4,5,6)],col=pcacolors.pal[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(7,8,9)],y=ycoords[c(7,8,9)],col=pcacolors.pal[3],add=T,lty=1)
+
+
+
+points2D(x=xcoords[c(1,2,3)],y=ycoords[c(1,2,3)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(21,24,22),bg="red",cex=1.5)
+
+points2D(x=xcoords[c(4,5,6)],y=ycoords[c(4,5,6)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(21,24,22),bg="limegreen",cex=1.5)
+
+points2D(x=xcoords[c(7,8,9)],y=ycoords[c(7,8,9)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(21,24,22),bg="dodgerblue",cex=1.5)
+
+
+
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+
+legend("topleft", legend=c("Apoptosis","Viable","Nonviable"),col=pcacolors.pal[c(3,2,1)],lty=1,bty="n",lwd=2)
+legend("bottomleft",legend=c("0 Hour","3 Hour","6 Hour"),pch=c(21,24,22),pt.bg="grey",bty="n")
+```
+
+
+
+```{r}
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,3]
+
+
+meanxcoords=xcoords[c(1:9)]
+names(meanxcoords)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+        meanxcoords[1]=mean(xcoords[substring(gr,1,3)=="CN1"])
+        meanxcoords[2]=mean(xcoords[substring(gr,1,3)=="CN2"])
+        meanxcoords[3]=mean(xcoords[substring(gr,1,3)=="CN3"])
+        meanxcoords[4]=mean(xcoords[substring(gr,1,3)=="CV1"])
+        meanxcoords[5]=mean(xcoords[substring(gr,1,3)=="CV2"])
+        meanxcoords[6]=mean(xcoords[substring(gr,1,3)=="CV3"])
+        meanxcoords[7]=mean(xcoords[substring(gr,1,3)=="EM1"])
+        meanxcoords[8]=mean(xcoords[substring(gr,1,3)=="EM2"])
+        meanxcoords[9]=mean(xcoords[substring(gr,1,3)=="EM3"])
+        
+meanycoords=ycoords[c(1:9)]
+names(meanycoords)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+        meanycoords[1]=mean(ycoords[substring(gr,1,3)=="CN1"])
+        meanycoords[2]=mean(ycoords[substring(gr,1,3)=="CN2"])
+        meanycoords[3]=mean(ycoords[substring(gr,1,3)=="CN3"])
+        meanycoords[4]=mean(ycoords[substring(gr,1,3)=="CV1"])
+        meanycoords[5]=mean(ycoords[substring(gr,1,3)=="CV2"])
+        meanycoords[6]=mean(ycoords[substring(gr,1,3)=="CV3"])
+        meanycoords[7]=mean(ycoords[substring(gr,1,3)=="EM1"])
+        meanycoords[8]=mean(ycoords[substring(gr,1,3)=="EM2"])
+        meanycoords[9]=mean(ycoords[substring(gr,1,3)=="EM3"])
+        
+
+meangr=factor(names(meanxcoords))
+
+xcoords=meanxcoords
+ycoords=meanycoords
+
+pcacolors.pal=c("red3","darkgreen","royalblue")
+pcacolors = sapply(as.character(substring(meangr,1,2)), switch, "CN" = "red3", "CV" = "darkgreen", "EM" = "royalblue", USE.NAMES = F)
+text2D(x=xcoords,y=ycoords,labels = c(rep("",9)), 
+       col=pcacolors,
+       xlab="PC1",ylab="PC3",xlim=c(-75,125),ylim=c(-50,50))
+
+lines2D(x=xcoords[c(1,2,3)],y=ycoords[c(1,2,3)],col=pcacolors.pal[1],add=T,lty=1)
+
+lines2D(x=xcoords[c(4,5,6)],y=ycoords[c(4,5,6)],col=pcacolors.pal[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(7,8,9)],y=ycoords[c(7,8,9)],col=pcacolors.pal[3],add=T,lty=1)
+
+
+
+points2D(x=xcoords[c(1,2,3)],y=ycoords[c(1,2,3)],type="p",colkey=F,
+         col="firebrick3",add=T,pch=c(21,24,22),bg="red",cex=1.5)
+
+points2D(x=xcoords[c(4,5,6)],y=ycoords[c(4,5,6)],type="p",colkey=F,
+         col="darkgreen",add=T,pch=c(21,24,22),bg="limegreen",cex=1.5)
+
+points2D(x=xcoords[c(7,8,9)],y=ycoords[c(7,8,9)],type="p",colkey=F,
+         col="royalblue3",add=T,pch=c(21,24,22),bg="dodgerblue",cex=1.5)
+
+
+
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+
+legend("topleft", legend=c("Apoptosis","Viable","Nonviable"),col=pcacolors.pal[c(3,2,1)],lty=1,bty="n",lwd=2)
+legend("bottomleft",legend=c("0 Hour","3 Hour","6 Hour"),pch=c(21,24,22),pt.bg="grey",bty="n")
+```
+
+```{r include=FALSE}
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+
+meanxcoords=xcoords[c(1:9)]
+names(meanxcoords)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+        meanxcoords[1]=mean(xcoords[substring(gr,1,3)=="CN1"])
+        meanxcoords[2]=mean(xcoords[substring(gr,1,3)=="CN2"])
+        meanxcoords[3]=mean(xcoords[substring(gr,1,3)=="CN3"])
+        meanxcoords[4]=mean(xcoords[substring(gr,1,3)=="CV1"])
+        meanxcoords[5]=mean(xcoords[substring(gr,1,3)=="CV2"])
+        meanxcoords[6]=mean(xcoords[substring(gr,1,3)=="CV3"])
+        meanxcoords[7]=mean(xcoords[substring(gr,1,3)=="EM1"])
+        meanxcoords[8]=mean(xcoords[substring(gr,1,3)=="EM2"])
+        meanxcoords[9]=mean(xcoords[substring(gr,1,3)=="EM3"])
+        
+meanycoords=ycoords[c(1:9)]
+names(meanycoords)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+        meanycoords[1]=mean(ycoords[substring(gr,1,3)=="CN1"])
+        meanycoords[2]=mean(ycoords[substring(gr,1,3)=="CN2"])
+        meanycoords[3]=mean(ycoords[substring(gr,1,3)=="CN3"])
+        meanycoords[4]=mean(ycoords[substring(gr,1,3)=="CV1"])
+        meanycoords[5]=mean(ycoords[substring(gr,1,3)=="CV2"])
+        meanycoords[6]=mean(ycoords[substring(gr,1,3)=="CV3"])
+        meanycoords[7]=mean(ycoords[substring(gr,1,3)=="EM1"])
+        meanycoords[8]=mean(ycoords[substring(gr,1,3)=="EM2"])
+        meanycoords[9]=mean(ycoords[substring(gr,1,3)=="EM3"])
+        
+meanzcoords=zcoords[c(1:9)]
+names(meanzcoords)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+        meanzcoords[1]=mean(zcoords[substring(gr,1,3)=="CN1"])
+        meanzcoords[2]=mean(zcoords[substring(gr,1,3)=="CN2"])
+        meanzcoords[3]=mean(zcoords[substring(gr,1,3)=="CN3"])
+        meanzcoords[4]=mean(zcoords[substring(gr,1,3)=="CV1"])
+        meanzcoords[5]=mean(zcoords[substring(gr,1,3)=="CV2"])
+        meanzcoords[6]=mean(zcoords[substring(gr,1,3)=="CV3"])
+        meanzcoords[7]=mean(zcoords[substring(gr,1,3)=="EM1"])
+        meanzcoords[8]=mean(zcoords[substring(gr,1,3)=="EM2"])
+        meanzcoords[9]=mean(zcoords[substring(gr,1,3)=="EM3"])
+
+meangr=factor(names(meanxcoords))
+
+xcoords=meanxcoords
+ycoords=meanycoords
+zcoords=meanzcoords
+
+pcacolors.pal=c("red3","darkgreen","royalblue")
+pcacolors = sapply(as.character(substring(meangr,1,2)), switch, "CN" = "red3", "CV" = "darkgreen", "EM" = "royalblue", USE.NAMES = F)
+
+plot3d(y=c(-100,150),x=0,z=0,xlim=c(-75,125),ylim=c(-50,100),zlim=c(-50,50),xlab="PC1",ylab="PC2",zlab="PC3",type="l",lty=1,lwd=1)
+view3d(theta = -45, phi = 25)
+
+text3d(x=xcoords,y=ycoords,z=zcoords,texts=meangr,add=T,col=pcacolors)
+points3d(x=xcoords,y=ycoords,z=zcoords,texts=meangr,add=T,col=pcacolors)
+lines3d(y=0,x=c(-125,125),z=0,lty=1,add=T)
+lines3d(y=0,x=0,z=c(-100,100),lty=1,add=T)
+
+lines3d(x=xcoords[c(1,2,3)],y=ycoords[c(1,2,3)],z=zcoords[c(1,2,3)],col=pcacolors.pal[1],add=T,lty=1)
+lines3d(x=xcoords[c(4,5,6)],y=ycoords[c(4,5,6)],z=zcoords[c(4,5,6)],col=pcacolors.pal[2],add=T,lty=1)
+
+lines3d(x=xcoords[c(7,8,9)],y=ycoords[c(7,8,9)],z=zcoords[c(7,8,9)],col=pcacolors.pal[3],add=T,lty=1)
+
+normalxcoords=xcoords
+normalycoords=ycoords
+normalzcoords=zcoords
+```
+
+```{r out.width="100%", fig.height= 10, fig.align = 'center'}
+fn <- spin3d(axis = c(0, 1, 0))
+control <- par3dinterpControl(fn, 0, 12, steps = 60)
+rglwidget() %>% playwidget(control, step=0.01, loop = TRUE, rate = 0.5)
+
+
+```
+```{r}
+
+ycoords=normalzcoords
+zcoords=normalycoords
+
+lines3D(x=xcoords[c(1,2,3)],y=ycoords[c(1,2,3)],z=zcoords[c(1,2,3)],type="l",colkey=F,col="firebrick3",
+        xlim=c(-75,125),zlim=c(-50,100),ylim=c(-50,50),
+        xlab="PC1",ylab="PC3",zlab="PC2",
+        lty=1,axes=T,ticktype="detailed",box=T,bty="b2", theta=55, phi=25,r=4,lwd=2)
+
+lines3D(x=xcoords[c(4,5,6)],y=ycoords[c(4,5,6)],z=zcoords[c(4,5,6)],type="l",colkey=F,col="darkgreen",add=T,lty=1,lwd=2)
+lines3D(x=xcoords[c(7,8,9)],y=ycoords[c(7,8,9)],z=zcoords[c(7,8,9)],type="l",colkey=F,col="royalblue3",add=T,lty=1,lwd=2)
+
+
+
+points3D(x=xcoords[1],y=ycoords[1],z=zcoords[1],type="p",colkey=F,col="firebrick3",add=T,pch=21,bg="red",cex=2)
+points3D(x=xcoords[4],y=ycoords[4],z=zcoords[4],type="p",colkey=F,col="darkgreen",add=T,pch=21,bg="limegreen",cex=2)
+points3D(x=xcoords[c(7)],y=ycoords[c(7)],z=zcoords[c(7)],type="p",colkey=F,col="royalblue3",add=T,pch=21,bg="dodgerblue",cex=2)
+
+points3D(x=xcoords[2],y=ycoords[2],z=zcoords[2],type="p",colkey=F,col="firebrick3",add=T,pch=24,bg="red",cex=2)
+points3D(x=xcoords[5],y=ycoords[5],z=zcoords[5],type="p",colkey=F,col="darkgreen",add=T,pch=24,bg="limegreen",cex=2)
+points3D(x=xcoords[c(8)],y=ycoords[c(8)],z=zcoords[c(8)],type="p",colkey=F,col="royalblue3",add=T,pch=24,bg="dodgerblue",cex=2)
+
+points3D(x=xcoords[3],y=ycoords[3],z=zcoords[3],type="p",colkey=F,col="firebrick3",add=T,pch=22,bg="red",cex=2)
+points3D(x=xcoords[6],y=ycoords[6],z=zcoords[6],type="p",colkey=F,col="darkgreen",add=T,pch=22,bg="limegreen",cex=2)
+points3D(x=xcoords[c(9)],y=ycoords[c(9)],z=zcoords[c(9)],type="p",colkey=F,col="royalblue3",add=T,pch=22,bg="dodgerblue",cex=2)
 
 
 
