@@ -1,0 +1,933 @@
+---
+title: "Apoptosis GO Term Analysis"
+author: "John Santiago"
+date: "3/8/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##Load Libraries
+library(org.Hs.eg.db)
+library(PANDA)
+library(heatmaply)
+library(goseq)
+library(GO.db)
+library(edgeR)
+library(topGO)
+library(gplots)
+library(visNetwork)
+
+xx=as.list(org.Hs.egGO2ALLEGS)
+xxx=as.list(org.Hs.egPATH2EG)
+x1=as.list(org.Hs.egENSEMBL2EG)
+x2=as.list(org.Hs.egSYMBOL)
+x3=as.list(org.Hs.egENSEMBL)
+
+ccpar=as.list(GOCCPARENTS)
+ccchild=as.list(GOCCCHILDREN)
+
+bppar=as.list(GOBPPARENTS)
+bpchild=as.list(GOBPCHILDREN)
+
+mfpar=as.list(GOMFPARENTS)
+mfchild=as.list(GOMFCHILDREN)
+
+term=as.list(GOTERM)
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+meancpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/meancpmtable.csv",row.names=1)
+
+CV2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+CV2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCV=unique(c(row.names(sCV2),row.names(sCV3)))
+
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sCN=unique(c(row.names(sCN2),row.names(sCN3)))
+
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+sEM=unique(c(row.names(sEM2),row.names(sEM3)))
+
+row.names(CV2GO)=CV2GO$term
+row.names(CV3GO)=CV3GO$term
+
+row.names(CN2GO)=CN2GO$term
+row.names(CN3GO)=CN3GO$term
+
+row.names(EM2GO)=EM2GO$term
+row.names(EM3GO)=EM3GO$term
+
+CV2GO$condition="CV2"
+CV3GO$condition="CV3"
+
+CN2GO$condition="CN2"
+CN3GO$condition="CN3"
+
+EM2GO$condition="EM2"
+EM3GO$condition="EM3"
+
+```
+
+```{r eval=F}
+##EdgeR comparisons
+countdata=countdata[,row.names(groups)]
+x <- countdata
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+
+meancpmdata=cpmdata[,c(1:6,30:44)]
+i=1
+while(i<=nrow(cpmdata)){
+  meancpmdata[i,1]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="N1"])
+  meancpmdata[i,2]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="N2"])
+  meancpmdata[i,3]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="N3"])
+  meancpmdata[i,4]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="V1"])
+  meancpmdata[i,5]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="V2"])
+  meancpmdata[i,6]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="V3"])
+  i=i+1
+}
+colnames(meancpmdata)[1:6]=c("CN1","CN2","CN3","CV1","CV2","CV3")
+
+design<-model.matrix(~0+groups$Group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+
+##DE and GO analysis
+
+##comparisons
+##3 hour CV vs 0 hour CN
+compare = makeContrasts((CV2-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV2=G_X_E$table
+sCV2=CV2[CV2$FDR<.05,]
+
+sigs=row.names(sCV2)
+bg=CV2[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"hg19","ensGene")
+head(pwf)
+
+  GO.wall=goseq(pwf,"hg19","ensGene")
+  GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+CV2GO=GO.wall
+
+
+##6 hour CV vs 0 hour CN
+compare = makeContrasts((CV3-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV3=G_X_E$table
+sCV3=CV3[CV3$FDR<.05,]
+
+sigs=row.names(sCV3)
+bg=CV3[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"hg19","ensGene")
+head(pwf)
+
+  GO.wall=goseq(pwf,"hg19","ensGene")
+  GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+CV3GO=GO.wall
+
+
+##3 hour CN vs 0 hour CN
+compare = makeContrasts((CN2-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN2=G_X_E$table
+sCN2=CN2[CN2$FDR<.05,]
+
+sigs=row.names(sCN2)
+bg=CN2[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"hg19","ensGene")
+head(pwf)
+
+  GO.wall=goseq(pwf,"hg19","ensGene")
+  GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+CN2GO=GO.wall
+
+
+##6 hour CN vs 0 hour CN
+compare = makeContrasts((CN3-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN3=G_X_E$table
+sCN3=CN3[CN3$FDR<.05,]
+
+sigs=row.names(sCN3)
+bg=CN3[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"hg19","ensGene")
+head(pwf)
+
+  GO.wall=goseq(pwf,"hg19","ensGene")
+  GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+CN3GO=GO.wall
+
+##3 hour EM vs 0 hour EM
+compare = makeContrasts((EM2-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM2=G_X_E$table
+sEM2=EM2[EM2$FDR<.05,]
+
+sigs=row.names(sEM2)
+bg=EM2[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"hg19","ensGene")
+head(pwf)
+
+  GO.wall=goseq(pwf,"hg19","ensGene")
+  GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+  
+EM2GO=GO.wall
+
+
+##6 hour EM vs 0 hour EM
+compare = makeContrasts((EM3-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM3=G_X_E$table
+sEM3=EM3[EM3$FDR<.05,]
+
+sigs=row.names(sEM3)
+bg=EM3[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"hg19","ensGene")
+head(pwf)
+
+  GO.wall=goseq(pwf,"hg19","ensGene")
+  GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+EM3GO=GO.wall
+
+##writeall output files
+
+##write.csv(cpmdata,"/Users/johncsantiago/Documents/GitHub/SData/cpmtable.csv")
+##write.csv(meancpmdata,"/Users/johncsantiago/Documents/GitHub/SData/meancpmtable.csv")
+
+##write.csv(CV2,"/Users/johncsantiago/Documents/GitHub/SData/EdgeROuptut_Viable_3Hvs0H.csv")
+##write.csv(CV3,"/Users/johncsantiago/Documents/GitHub/SData/EdgeROuptut_Viable_6Hvs0H.csv")
+##write.csv(CN2,"/Users/johncsantiago/Documents/GitHub/SData/EdgeROuptut_Nonviable_3Hvs0H.csv")
+##write.csv(CN3,"/Users/johncsantiago/Documents/GitHub/SData/EdgeROuptut_Nonviable_6Hvs0H.csv")
+##write.csv(EM2,"/Users/johncsantiago/Documents/GitHub/SData/EdgeROuptut_Apoptosis_3Hvs0H.csv")
+##write.csv(EM3,"/Users/johncsantiago/Documents/GitHub/SData/EdgeROuptut_Apoptosis_6Hvs0H.csv")
+
+##write.csv(CV2GO,"/Users/johncsantiago/Documents/GitHub/SData/GOseqOuptut_Viable_3Hvs0H.csv")
+##write.csv(CV3GO,"/Users/johncsantiago/Documents/GitHub/SData/GOseqOuptut_Viable_6Hvs0H.csv")
+##write.csv(CN2GO,"/Users/johncsantiago/Documents/GitHub/SData/GOseqOuptut_Nonviable_3Hvs0H.csv")
+##write.csv(CN3GO,"/Users/johncsantiago/Documents/GitHub/SData/GOseqOuptut_Nonviable_6Hvs0H.csv")
+##write.csv(EM2GO,"/Users/johncsantiago/Documents/GitHub/SData/GOseqOuptut_Apoptosis_3Hvs0H.csv")
+##write.csv(EM3GO,"/Users/johncsantiago/Documents/GitHub/SData/GOseqOuptut_Apoptosis_6Hvs0H.csv")
+
+```
+
+```{r include=F}
+##Find all child GO terms from a specific GO ID
+
+specificGO="GO:0006915"
+temp=bpchild[specificGO]
+edges=matrix(specificGO,nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=temp[[1]]
+tested=specificGO
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+GO.wall=CV2GO
+row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+go.genes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+Apoptosis.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+Apoptosis.goterms=unique(c(edges[,1],edges[,3]))
+ApoptosisEdges=edges
+
+```
+
+```{r eval=F}
+##Heatmap of genes in GO term and its children
+
+hmd=meancpmdata[go.genes,c(1,4,7,10,13,16,19,2,5,8,11,14,17,20,3,6,9,12,15,18,21)]
+hmcolors=colorpanel(3,"royalblue4","white","firebrick4")
+heatmaply(hmd,scale="row",trace="none",Colv = F,cexRow = .1,main="Genes in Apoptosis GO term and all child GO terms",col=hmcolors, dendrogram = "both")
+```
+
+```{r eval=F}
+##Heatmap of sig.DEG Viable genes in GO term and its children
+
+hmd=meancpmdata[intersect(go.genes,sCV),c(1:7,10,13,16,19,8,11,14,17,20,9,12,15,18,21)]
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+heatmaply(hmd,scale="row",trace="none",Colv = F,cexRow = .1,main="sigDEG Viable Genes in Apoptosis GO term and all child GO terms",col=hmcolors, dendrogram = "both")
+
+```
+
+```{r eval=F}
+##Heatmap of sig.DEG Nonviable genes in GO term and its children
+
+hmd=meancpmdata[intersect(go.genes,sCN),c(1:7,10,13,16,19,8,11,14,17,20,9,12,15,18,21)]
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+heatmaply(hmd,scale="row",trace="none",Colv = F,cexRow = .1,main="sigDEG Nonviable Genes in Apoptosis GO term and all child GO terms",col=hmcolors, dendrogram = "both")
+
+```
+
+```{r eval=F}
+##Heatmap of sig.DEG Apoptosis genes in GO term and its children
+
+hmd=meancpmdata[intersect(go.genes,sEM),c(1:7,10,13,16,19,8,11,14,17,20,9,12,15,18,21)]
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+heatmaply(hmd,scale="row",trace="none",Colv = F,cexRow = .1,main="sigDEG Apoptosis Genes in Apoptosis GO term and all child GO terms",col=hmcolors, dendrogram = "both")
+
+```
+
+```{r  eval=F}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+##refset=unique(c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05]))
+refset=allsGO
+originaledges=edges
+tempedges=originaledges
+i=1
+while(i<=nrow(tempedges)){
+  tempedges[i,2]=length(intersect(c(tempedges[i,1]),refset))
+  tempedges[i,4]=length(intersect(c(tempedges[i,3]),refset))
+  
+  i=i+1
+}
+
+newedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+##maybeedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+##i=1
+##keepedges=intersect(maybeedges[maybeedges[,2]<1,1],maybeedges[maybeedges[,4]<1,3])
+##while(i<=length(keepedges)){
+  ##newedges=rbind(newedges,maybeedges[maybeedges[,1]==keepedges[i]|maybeedges[,3]==keepedges[i],])
+  ##i=i+1
+##}
+
+
+motifs <- unique(as.character(newedges[,1]))
+##genes <- unique(as.character(gooiedges[,3]))
+genes <- unique(as.character(newedges[,3]))
+parents=c(setdiff(motifs,genes))
+nodeid=unique(c(genes,motifs))
+
+nodegroups=rep("not sig",length(nodeid))
+i=1
+while(i<=length(nodegroups)){
+  if(length(intersect(nodeid[i],refset))>0){
+    nodegroups[i]="sig"
+  }
+  i=i+1
+}
+
+i=1
+while(i<=length(nodeid)){
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>0){
+    nodegroups[i]="Apoptosis"
+  }
+  if(length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>0){
+    nodegroups[i]="Nonviable"
+  }  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))>0){
+    nodegroups[i]="Viable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Nonviable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Apoptosis"
+  }   
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Nonviable + Apoptosis"
+  }   
+  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>2){
+    nodegroups[i]="All Conditions"
+  }     
+ i=i+1 
+}
+
+nodegroups[nodeid==Term(term[[as.character(specificGO)]])]="Parent Term"
+
+
+
+
+nodes=data.frame(id=nodeid,group=nodegroups)
+##visedges=as.data.frame(gooiedges[,c(1,3)])
+visedges=as.data.frame(edges[,c(1,3)])
+colnames(visedges)=c("from","to")
+visNetwork(nodes,visedges)%>%
+  visNodes(shape="box",mass=3)%>%
+  visLayout(hierarchical=F, improvedLayout=T)%>%
+  
+  visGroups(groupname = "Parent Term", shape = "box", color = list(background = "firebrick", border="black"),font=list(color="white",size=30),physics=F,mass=20)%>%
+  
+  visGroups(groupname = "Apoptosis", shape = "box", color = list(background = "blue", border="black"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable", shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=30),physics=T)%>%  
+  
+  visGroups(groupname = "Viable + Apoptosis", shape = "box", color = list(background = "green", border="white"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable + Nonviable", shape = "box", color = list(background = "orange", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable + Apoptosis", shape = "box", color = list(background = "mediumorchid", border="black"),font=list(color="white",size=30),physics=T)%>% 
+  
+  
+  visGroups(groupname = "All Conditions", shape = "box", color = list(background = "black", border="black"),font=list(color="pink",size=30),physics=T)%>%  
+  visGroups(groupname = "not sig", shape = "dot", color = list(background = "white", border="black"),font=list(color="black"),physics=T)%>%
+  
+  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50),enabled = T)%>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)%>%
+  visEdges(arrows='to')%>%
+  visLegend(useGroups=T)
+
+
+```
+
+```{r include=F}
+##Apoptosis Subgroup 1: 
+####inflammatory cell apoptotic process GO:0006925,
+####myeloid cell apoptotic process GO:0033028, 
+####leukocyte apoptotic process GO:0071887,
+####intrinsic apoptotic signaling pathway GO:0097193 
+
+specificGO=c("GO:0006925","GO:0033028","GO:0071887","GO:0097193")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+ApoptosisSubgroup1.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+ApoptosisSubgroup1.goterms=unique(c(edges[,1],edges[,3]))
+
+edges=edges[c(1,1,1,1:nrow(edges)),]
+edges[1:4,1]="apoptotic process"
+edges[1:4,3]=c("inflammatory cell apoptotic process","myeloid cell apoptotic process","leukocyte apoptotic process","intrinsic apoptotic signaling pathway")
+
+```
+
+```{r  eval=F}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+##refset=unique(c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05]))
+refset=allsGO
+originaledges=edges
+tempedges=originaledges
+i=1
+while(i<=nrow(tempedges)){
+  tempedges[i,2]=length(intersect(c(tempedges[i,1]),refset))
+  tempedges[i,4]=length(intersect(c(tempedges[i,3]),refset))
+  
+  i=i+1
+}
+
+newedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+##maybeedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+##i=1
+##keepedges=intersect(maybeedges[maybeedges[,2]<1,1],maybeedges[maybeedges[,4]<1,3])
+##while(i<=length(keepedges)){
+  ##newedges=rbind(newedges,maybeedges[maybeedges[,1]==keepedges[i]|maybeedges[,3]==keepedges[i],])
+  ##i=i+1
+##}
+
+
+motifs <- unique(as.character(newedges[,1]))
+##genes <- unique(as.character(gooiedges[,3]))
+genes <- unique(as.character(newedges[,3]))
+parents=c(setdiff(motifs,genes))
+nodeid=unique(c(genes,motifs))
+
+nodegroups=rep("not sig",length(nodeid))
+i=1
+while(i<=length(nodegroups)){
+  if(length(intersect(nodeid[i],refset))>0){
+    nodegroups[i]="sig"
+  }
+  i=i+1
+}
+
+i=1
+while(i<=length(nodeid)){
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>0){
+    nodegroups[i]="Apoptosis"
+  }
+  if(length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>0){
+    nodegroups[i]="Nonviable"
+  }  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))>0){
+    nodegroups[i]="Viable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Nonviable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Apoptosis"
+  }   
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Nonviable + Apoptosis"
+  }   
+  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>2){
+    nodegroups[i]="All Conditions"
+  }     
+ i=i+1 
+}
+
+##i=1
+##while(i<=length(specificGO)){
+  ##nodegroups[nodeid==Term(term[[as.character(specificGO[i])]])]="Parent Term"
+  ##i=i+1
+##}
+nodegroups[nodeid=="apoptotic process"]="Parent Term"
+
+
+nodes=data.frame(id=nodeid,group=nodegroups)
+##visedges=as.data.frame(gooiedges[,c(1,3)])
+visedges=as.data.frame(edges[,c(1,3)])
+colnames(visedges)=c("from","to")
+visNetwork(nodes,visedges)%>%
+  visNodes(shape="box",mass=3)%>%
+  visLayout(hierarchical=F, improvedLayout=T)%>%
+  
+  visGroups(groupname = "Parent Term", shape = "box", color = list(background = "firebrick", border="black"),font=list(color="white",size=30),physics=F,mass=20)%>%
+  
+  visGroups(groupname = "Apoptosis", shape = "box", color = list(background = "blue", border="black"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable", shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=30),physics=T)%>%  
+  
+  visGroups(groupname = "Viable + Apoptosis", shape = "box", color = list(background = "green", border="white"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable + Nonviable", shape = "box", color = list(background = "orange", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable + Apoptosis", shape = "box", color = list(background = "mediumorchid", border="black"),font=list(color="white",size=30),physics=T)%>% 
+  
+  
+  visGroups(groupname = "All Conditions", shape = "box", color = list(background = "black", border="black"),font=list(color="pink",size=30),physics=T)%>%  
+  visGroups(groupname = "not sig", shape = "dot", color = list(background = "white", border="black"),font=list(color="black"),physics=T)%>%
+  
+  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50),enabled = T)%>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)%>%
+  visEdges(arrows='to')%>%
+  visLegend(useGroups=T)
+
+
+```
+
+```{r include=F}
+##Apoptosis Subgroup 2: extrinsic apoptotic signaling pathway GO:0097191, epithelial cell apoptotic process GO:1904019, protein insertion into mitochondrial membrane involved in apoptotic signaling pathway GO:0001844
+
+specificGO=c("GO:0097191","GO:1904019","GO:0001844")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+ApoptosisSubgroup2.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+ApoptosisSubgroup2.goterms=unique(c(edges[,1],edges[,3]))
+
+
+edges=edges[c(1,1,1:nrow(edges)),]
+edges[1:2,1]="apoptotic process"
+edges[1:2,3]=c("extrinsic apoptotic signaling pathway","epithelial cell apoptotic process")
+
+```
+
+```{r eval=F}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+##refset=unique(c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05]))
+refset=allsGO
+originaledges=edges
+tempedges=originaledges
+i=1
+while(i<=nrow(tempedges)){
+  tempedges[i,2]=length(intersect(c(tempedges[i,1]),refset))
+  tempedges[i,4]=length(intersect(c(tempedges[i,3]),refset))
+  
+  i=i+1
+}
+
+newedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+##maybeedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+##i=1
+##keepedges=intersect(maybeedges[maybeedges[,2]<1,1],maybeedges[maybeedges[,4]<1,3])
+##while(i<=length(keepedges)){
+  ##newedges=rbind(newedges,maybeedges[maybeedges[,1]==keepedges[i]|maybeedges[,3]==keepedges[i],])
+  ##i=i+1
+##}
+
+
+motifs <- unique(as.character(newedges[,1]))
+##genes <- unique(as.character(gooiedges[,3]))
+genes <- unique(as.character(newedges[,3]))
+parents=c(setdiff(motifs,genes))
+nodeid=unique(c(genes,motifs))
+
+nodegroups=rep("not sig",length(nodeid))
+i=1
+while(i<=length(nodegroups)){
+  if(length(intersect(nodeid[i],refset))>0){
+    nodegroups[i]="sig"
+  }
+  i=i+1
+}
+
+i=1
+while(i<=length(nodeid)){
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>0){
+    nodegroups[i]="Apoptosis"
+  }
+  if(length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>0){
+    nodegroups[i]="Nonviable"
+  }  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))>0){
+    nodegroups[i]="Viable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Nonviable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Apoptosis"
+  }   
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Nonviable + Apoptosis"
+  }   
+  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>2){
+    nodegroups[i]="All Conditions"
+  }     
+ i=i+1 
+}
+
+##i=1
+##while(i<=length(specificGO)){
+  ##nodegroups[nodeid==Term(term[[as.character(specificGO[i])]])]="Parent Term"
+  ##i=i+1
+##}
+nodegroups[nodeid=="apoptotic process"]="Parent Term"
+
+
+nodes=data.frame(id=nodeid,group=nodegroups)
+##visedges=as.data.frame(gooiedges[,c(1,3)])
+visedges=as.data.frame(edges[,c(1,3)])
+colnames(visedges)=c("from","to")
+visNetwork(nodes,visedges)%>%
+  visNodes(shape="box",mass=3)%>%
+  visLayout(hierarchical=F, improvedLayout=T)%>%
+  
+  visGroups(groupname = "Parent Term", shape = "box", color = list(background = "firebrick", border="black"),font=list(color="white",size=30),physics=F,mass=20)%>%
+  
+  visGroups(groupname = "Apoptosis", shape = "box", color = list(background = "blue", border="black"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable", shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=30),physics=T)%>%  
+  
+  visGroups(groupname = "Viable + Apoptosis", shape = "box", color = list(background = "green", border="white"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable + Nonviable", shape = "box", color = list(background = "orange", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable + Apoptosis", shape = "box", color = list(background = "mediumorchid", border="black"),font=list(color="white",size=30),physics=T)%>% 
+  
+  
+  visGroups(groupname = "All Conditions", shape = "box", color = list(background = "black", border="black"),font=list(color="pink",size=30),physics=T)%>%  
+  visGroups(groupname = "not sig", shape = "dot", color = list(background = "white", border="black"),font=list(color="black"),physics=T)%>%
+  
+  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50),enabled = T)%>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)%>%
+  visEdges(arrows='to')%>%
+  visLegend(useGroups=T)
+
+
+```
+
+
+
+```{r, fig.height=10, fig.width=15}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+group1=intersect(allsGO,ApoptosisSubgroup1.goterms)
+group2=intersect(allsGO,ApoptosisSubgroup2.goterms)
+group3=setdiff(intersect(allsGO,Apoptosis.goterms),c(group1,group2))
+group1
+group2
+group3
+
+dotplotterms=c(group1,group2,group3)[56:1]
+groups=rep(c(rep("General Apoptosis",18),rep("Extrinsic Apoptosis",14),rep("Intrinsic Apoptosis",23),"Apoptosis"),3)
+
+
+num.genes=rbind(CV2GO[dotplotterms,],CV3GO[dotplotterms,],CN2GO[dotplotterms,],CN3GO[dotplotterms,],EM2GO[dotplotterms,],EM3GO[dotplotterms,])
+
+num.genes$neg.log10.adjp=-(log(num.genes$adjp,base=10))
+num.genes$neg.log10.adjp[num.genes$adjp>.05]=NA
+num.genes$groups=factor(groups,levels=c("Apoptosis","Intrinsic Apoptosis","Extrinsic Apoptosis","General Apoptosis"))
+
+num.genes$term=factor(num.genes$term, levels = num.genes$term[1:56])
+num.genes$sample=factor(num.genes$condition)
+
+
+dotplot=ggplot(data=num.genes, aes(x= sample, y=term, color=numDEInCat,size=neg.log10.adjp)) +
+  geom_point(alpha = 0.9) + 
+  scale_color_gradient(low = "blue",high = "red3", space = "Lab", name="Num DE in Cat") +
+  geom_vline(xintercept = c(2.5,4.5)) +
+   facet_wrap(~groups,  ncol=1, strip.position = "left",scales="free")
+dotplot
+
+```
+
+```{r  eval=F}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+refset=allsGO
+originaledges=ApoptosisEdges
+tempedges=originaledges
+i=1
+while(i<=nrow(tempedges)){
+  tempedges[i,2]=length(intersect(c(tempedges[i,1]),refset))
+  tempedges[i,4]=length(intersect(c(tempedges[i,3]),refset))
+  
+  i=i+1
+}
+
+newedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+
+
+
+motifs <- unique(as.character(newedges[,1]))
+##genes <- unique(as.character(gooiedges[,3]))
+genes <- unique(as.character(newedges[,3]))
+parents=c(setdiff(motifs,genes))
+nodeid=unique(c(genes,motifs))
+
+nodegroups=rep("not sig",length(nodeid))
+i=1
+while(i<=length(nodegroups)){
+  if(length(intersect(nodeid[i],group1))>0){
+    nodegroups[i]="Intrinsic Apoptosis"
+  }
+    if(length(intersect(nodeid[i],group2))>0){
+    nodegroups[i]="Extrinsic Apoptosis" 
+    }
+    if(length(intersect(nodeid[i],group3))>0){
+    nodegroups[i]="General Apoptosis"
+    }
+  i=i+1
+}
+
+
+
+nodegroups[nodeid=="extrinsic apoptotic signaling pathway"]="Extrinsic Apoptosis Parent"
+nodegroups[nodeid=="epithelial cell apoptotic process"]="Extrinsic Apoptosis Parent"
+nodegroups[nodeid=="leukocyte apoptotic process"]="Intrinsic Apoptosis Parent"
+nodegroups[nodeid=="myeloid cell apoptotic process"]="Intrinsic Apoptosis Parent"
+nodegroups[nodeid=="intrinsic apoptotic signaling pathway"]="Intrinsic Apoptosis Parent"
+
+
+nodegroups[nodeid=="apoptotic process"]="Parent Term"
+
+
+
+
+nodes=data.frame(id=nodeid,group=nodegroups)
+visedges=as.data.frame(edges[,c(1,3)])
+colnames(visedges)=c("from","to")
+visNetwork(nodes,visedges)%>%
+  visNodes(shape="box",mass=3)%>%
+  visLayout(hierarchical=F, improvedLayout=T)%>%
+  
+  visGroups(groupname = "Parent Term", shape = "box", color = list(background = "firebrick", border="black"),font=list(color="white",size=50),physics=F,mass=20)%>%
+  visGroups(groupname = "Intrinsic Apoptosis Parent", shape = "box", color = list(background = "dodgerblue", border="black"),font=list(color="black",size=50),physics=F)%>%
+  
+    visGroups(groupname = "Extrinsic Apoptosis Parent", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=50),physics=F)%>%
+  
+  visGroups(groupname = "Intrinsic Apoptosis", shape = "box", color = list(background = "dodgerblue", border="black"),font=list(color="black",size=30),physics=T)%>%
+  
+  visGroups(groupname = "Extrinsic Apoptosis", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=30),physics=T)%>%
+  
+  visGroups(groupname = "General Apoptosis", shape = "box", color = list(background = "green", border="black"),font=list(color="white",size=30),physics=T)%>%  
+  
+  visGroups(groupname = "not sig", shape = "dot", color = list(background = "white", border="black"),font=list(color="black"),physics=T)%>%
+  
+  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50),enabled = T)%>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)%>%
+  visEdges(arrows='to')%>%
+  visLegend(useGroups=T)
+
+
+```
+
+
+
+

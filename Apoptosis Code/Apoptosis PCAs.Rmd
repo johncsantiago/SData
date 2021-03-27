@@ -771,12 +771,13 @@ view3d(theta = -45, phi = 25)
 
 text3d(x=xcoords,y=ycoords,z=zcoords,texts=meangr,add=T,col=pcacolors)
 points3d(x=xcoords,y=ycoords,z=zcoords,texts=meangr,add=T,col=pcacolors)
-lines3d(y=0,x=c(-125,125),z=0,lty=1,add=T)
-lines3d(y=0,x=0,z=c(-100,100),lty=1,add=T)
+
+lines3d(y=c(-50,100),x=0,z=0,lty=1,add=T)
+lines3d(y=0,x=c(-75,125),z=0,lty=1,add=T)
+lines3d(y=0,x=0,z=c(-50,50),lty=1,add=T)
 
 lines3d(x=xcoords[c(1,2,3)],y=ycoords[c(1,2,3)],z=zcoords[c(1,2,3)],col=pcacolors.pal[1],add=T,lty=1)
 lines3d(x=xcoords[c(4,5,6)],y=ycoords[c(4,5,6)],z=zcoords[c(4,5,6)],col=pcacolors.pal[2],add=T,lty=1)
-
 lines3d(x=xcoords[c(7,8,9)],y=ycoords[c(7,8,9)],z=zcoords[c(7,8,9)],col=pcacolors.pal[3],add=T,lty=1)
 
 normalxcoords=xcoords
