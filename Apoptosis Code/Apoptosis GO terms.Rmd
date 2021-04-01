@@ -88,6 +88,9 @@ CN3GO$condition="CN3"
 EM2GO$condition="EM2"
 EM3GO$condition="EM3"
 
+
+allsiggenes=unique(c(sCV,sCN,sEM))
+
 ```
 
 ```{r include=F}
@@ -333,7 +336,7 @@ edges[1,3]=c("extrinsic apoptotic signaling pathway")
 ```
 
 ```{r include=F}
-##Apoptosis Subgroup 3: "epithelial cell apoptotic process" GO:1904019
+##Apoptosis Subgroup 4: "epithelial cell apoptotic process" GO:1904019
 
 specificGO=c("GO:1904019")
 temp=bpchild[specificGO[1]]
@@ -458,7 +461,7 @@ edges[1,3]=c("protein insertion into mitochondrial membrane involved in apoptoti
 
 
 
-```{r, fig.height=10, fig.width=20}
+```{r, fig.height=15, fig.width=10}
 allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
 
 group1=intersect(allsGO,ApoptosisSubgroup1.goterms)
@@ -561,7 +564,7 @@ nodegroups[nodeid=="apoptotic process"]="Parent Term"
 
 
 nodes=data.frame(id=nodeid,group=nodegroups)
-visedges=as.data.frame(edges[,c(1,3)])
+visedges=as.data.frame(newedges[,c(1,3)])
 colnames(visedges)=c("from","to")
 visNetwork(nodes,visedges)%>%
   visNodes(shape="box",mass=3)%>%
@@ -573,7 +576,7 @@ visNetwork(nodes,visedges)%>%
   
   visGroups(groupname = "Inflammatory cell apoptotic process parent", shape = "box", color = list(background = "green", border="black"),font=list(color="white",size=50),physics=F)%>%
   
-    visGroups(groupname = "Extrinsic apoptotic signaling pathway parent", shape = "box", color = list(background = "red", border="black"),font=list(color="black",size=50),physics=F)%>%  
+    visGroups(groupname = "Extrinsic apoptotic signaling pathway parent", shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=50),physics=F)%>%  
   
     visGroups(groupname = "Epithelial cell apoptotic process parent", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=50),physics=F)%>%
   
@@ -581,9 +584,9 @@ visNetwork(nodes,visedges)%>%
   
     visGroups(groupname = "Intrinsic apoptotic signaling pathway", shape = "box", color = list(background = "dodgerblue", border="black"),font=list(color="black",size=50),physics=T)%>%
   
-  visGroups(groupname = "Inflammatory cell apoptotic process", shape = "box", color = list(background = "green", border="black"),font=list(color="black",size=50),physics=T)%>%
+  visGroups(groupname = "Inflammatory cell apoptotic process", shape = "box", color = list(background = "green", border="black"),font=list(color="white",size=50),physics=T)%>%
   
-    visGroups(groupname = "Extrinsic apoptotic signaling pathway", shape = "box", color = list(background = "red", border="black"),font=list(color="black",size=50),physics=T)%>%  
+    visGroups(groupname = "Extrinsic apoptotic signaling pathway", shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=50),physics=T)%>%  
   
     visGroups(groupname = "Epithelial cell apoptotic process", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=50),physics=T)%>%
   
@@ -593,11 +596,11 @@ visNetwork(nodes,visedges)%>%
   
   visGroups(groupname = "not sig", shape = "dot", color = list(background = "white", border="black"),font=list(color="black"),physics=T)%>%
   
-  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50),enabled = T)%>%
+  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50, avoidOverlap=.1),enabled = T)%>%
   visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)%>%
   visEdges(arrows='to')%>%
   visLegend(addNodes = list(list(label = "Intrinsic apoptotic signaling pathway parent", shape = "box", color = list(background = "dodgerblue", border="black"),font=list(color="black",size=50)),
-                            list(label= "Inflammatory cell apoptotic process parent", shape = "box", color = list(background = "green", border="black"),font=list(color="black",size=50)),
+                            list(label= "Inflammatory cell apoptotic process parent", shape = "box", color = list(background = "green", border="black"),font=list(color="white",size=50)),
                             list(label="Extrinsic apoptotic signaling pathway parent", shape = "box", color = list(background = "red", border="black"),font=list(color="black",size=50)),
                             list(label="Epithelial cell apoptotic process parent", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=50)),
                             list(label="Mitochondrial membrane associated apoptosis pathway parent", shape = "box", color = list(background = "tan", border="black"),font=list(color="black",size=50)),
@@ -606,3 +609,202 @@ visNetwork(nodes,visedges)%>%
 
 
 ```
+
+```{r include=F}
+ApoptosisHMs=function(geneset,hmtitle){
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+
+return(order)
+}
+```
+
+```{r}
+geneset=intersect(Apoptosis.gogenes,allsiggenes)
+hmtitle="Apoptotic Process GO terms"
+sg1hmd=ApoptosisHMs(geneset,hmtitle)
+
+hmcolors=colorpanel(100,"royalblue4","lightyellow","firebrick4")
+heatmaply(sg1hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+
+```
+
+
+```{r}
+geneset=intersect(Apoptosis.gogenes,allsiggenes)
+hmtitle="Apoptotic Process GO terms"
+
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="row",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+AllApoptosisDEG.meancpmdata=order
+heatmaply(AllApoptosisDEG.meancpmdata,scale="none",trace="none",Colv = T,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+```
+
+
+```{r}
+geneset=intersect(ApoptosisSubgroup1.gogenes,allsiggenes)
+hmtitle="Inflammatory cell apoptotic process"
+sg1hmd=ApoptosisHMs(geneset,hmtitle)
+heatmaply(sg1hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+```
+
+```{r}
+geneset=intersect(ApoptosisSubgroup2.gogenes,allsiggenes)
+hmtitle="Intrinsic apoptotic signaling pathway"
+sg2hmd=ApoptosisHMs(geneset,hmtitle)
+
+heatmaply(sg2hmd,scale="none",trace="none",Colv = T,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+```
+
+```{r}
+geneset=intersect(ApoptosisSubgroup3.gogenes,allsiggenes)
+hmtitle="Extrinsic apoptotic signaling pathway"
+sg3hmd=ApoptosisHMs(geneset,hmtitle)
+
+heatmaply(sg3hmd,scale="none",trace="none",Colv = T,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+```
+
+```{r}
+geneset=intersect(ApoptosisSubgroup4.gogenes,allsiggenes)
+hmtitle="Epithelial cell apoptotic process"
+sg4hmd=ApoptosisHMs(geneset,hmtitle)
+
+heatmaply(sg4hmd,scale="none",trace="none",Colv = T,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+```
+
+```{r}
+geneset=intersect(ApoptosisSubgroup5.gogenes,allsiggenes)
+hmtitle="Mitochondrial membrane associated apoptosis pathway"
+sg5hmd=ApoptosisHMs(geneset,hmtitle)
+
+heatmaply(sg5hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+```
+
+```{r}
+geneset=setdiff(intersect(allsiggenes,Apoptosis.gogenes),c(ApoptosisSubgroup1.gogenes,ApoptosisSubgroup2.gogenes,ApoptosisSubgroup3.gogenes,ApoptosisSubgroup4.gogenes,ApoptosisSubgroup5.gogenes))
+hmtitle="General Apoptosis"
+sg6hmd=ApoptosisHMs(geneset,hmtitle)
+
+heatmaply(sg6hmd,scale="none",trace="none",Colv = T,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+```
+
+```{r fig.width=5, fig.height=10}
+totalhmd=rbind(rbind(rbind(sg1hmd,sg2hmd), rbind(sg3hmd,sg4hmd)), rbind(sg5hmd,sg6hmd))
+
+
+
+
+hmtitle="Apoptosis GO terms"
+
+side=c(rep("Inflammatory cell apoptotic process", nrow(sg1hmd)),
+       rep("Intrinsic apoptotic signaling pathway",nrow(sg2hmd)),
+       rep("Extrinsic apoptotic signaling pathway",nrow(sg3hmd)),
+       rep("Epithelial cell apoptotic process",nrow(sg4hmd)),
+       rep("Mitochondrial membrane associated apoptosis pathway",nrow(sg5hmd)),
+       rep("General Apoptosis",nrow(sg6hmd)))
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+      heatmaply(totalhmd,scale="none",trace="none",Colv = T,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,row_side_colors=side, limits=c(-10, 10))
+
+
+
+##scale_fill_gradient_fun = ggplot2::scale_fill_gradientn( colours = c("blue", "yellow", "red"), values = scales::rescale(c(-1, 0, 1))))
+      
+      
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,73 @@
+---
+title: "Apoptosis Total DEG"
+author: "John Santiago"
+date: "11/5/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(rgl)
+knitr::opts_chunk$set(echo = FALSE, fig.align="center")
+knitr::knit_hooks$set(webgl = hook_webgl)
+```
+
+```{r include=F}
+##Load Libraries
+library(edgeR)
+library(VennDiagram)
+library(heatmaply)
+library(gplots)
+
+```
+
+```{r include=F}
+##Load Libraries
+library(org.Hs.eg.db)
+library(PANDA)
+library(heatmaply)
+library(goseq)
+library(GO.db)
+library(edgeR)
+library(topGO)
+library(gplots)
+library(visNetwork)
+library(clusterProfiler)
+
+x1=as.list(org.Hs.egENSEMBL2EG)
+x2=as.list(org.Hs.egSYMBOL)
+x3=as.list(org.Hs.egENSEMBL)
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+meancpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/meancpmtable.csv",row.names=1)
+
+CV2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCV=unique(c(row.names(sCV2),row.names(sCV3)))
+
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sCN=unique(c(row.names(sCN2),row.names(sCN3)))
+
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+sEM=unique(c(row.names(sEM2),row.names(sEM3)))
+
+
+
+
+allsiggenes=unique(c(sCV,sCN,sEM))
+
+```
+
+

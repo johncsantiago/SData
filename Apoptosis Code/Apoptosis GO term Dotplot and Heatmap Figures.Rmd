@@ -1,0 +1,463 @@
+---
+title: "Apoptosis GO Term Dotplot and Heatmap"
+author: "John Santiago"
+date: "3/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##Load Libraries
+library(org.Hs.eg.db)
+library(PANDA)
+library(heatmaply)
+library(goseq)
+library(GO.db)
+library(edgeR)
+library(topGO)
+library(gplots)
+library(visNetwork)
+
+xx=as.list(org.Hs.egGO2ALLEGS)
+xxx=as.list(org.Hs.egPATH2EG)
+x1=as.list(org.Hs.egENSEMBL2EG)
+x2=as.list(org.Hs.egSYMBOL)
+x3=as.list(org.Hs.egENSEMBL)
+
+ccpar=as.list(GOCCPARENTS)
+ccchild=as.list(GOCCCHILDREN)
+
+bppar=as.list(GOBPPARENTS)
+bpchild=as.list(GOBPCHILDREN)
+
+mfpar=as.list(GOMFPARENTS)
+mfchild=as.list(GOMFCHILDREN)
+
+term=as.list(GOTERM)
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+meancpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/meancpmtable.csv",row.names=1)
+
+CV2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+CV2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCV=unique(c(row.names(sCV2),row.names(sCV3)))
+
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sCN=unique(c(row.names(sCN2),row.names(sCN3)))
+
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+sEM=unique(c(row.names(sEM2),row.names(sEM3)))
+
+row.names(CV2GO)=CV2GO$term
+row.names(CV3GO)=CV3GO$term
+
+row.names(CN2GO)=CN2GO$term
+row.names(CN3GO)=CN3GO$term
+
+row.names(EM2GO)=EM2GO$term
+row.names(EM3GO)=EM3GO$term
+
+CV2GO$condition="CV2"
+CV3GO$condition="CV3"
+
+CN2GO$condition="CN2"
+CN3GO$condition="CN3"
+
+EM2GO$condition="EM2"
+EM3GO$condition="EM3"
+
+
+allsiggenes=unique(c(sCV,sCN,sEM))
+
+```
+
+```{r include=F}
+##Find all children for the GO term "apoptotic process" GO:0006915
+
+specificGO="GO:0006915"
+temp=bpchild[specificGO]
+edges=matrix(specificGO,nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=temp[[1]]
+tested=specificGO
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+GO.wall=CV2GO
+row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+go.genes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+Apoptosis.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+Apoptosis.goterms=unique(c(edges[,1],edges[,3]))
+ApoptosisEdges=edges
+
+```
+
+
+```{r include=F}
+##Apoptosis Subgroup 1: "inflammatory cell apoptotic process" GO:0006925, "myeloid cell apoptotic process" GO:0033028, "leukocyte apoptotic process" GO:0071887, "intrinsic apoptotic signaling pathway" GO:0097193, "protein insertion into mitochondrial membrane involved in apoptotic signaling pathway" GO:0001844
+
+specificGO=c("GO:0006925","GO:0033028","GO:0071887", "GO:0097193", "GO:0001844")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+ApoptosisSubgroup1.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+ApoptosisSubgroup1.goterms=unique(c(edges[,1],edges[,3]))
+
+edges=edges[c(1,1,1,1,1,1:nrow(edges)),]
+edges[1:5,1]="apoptotic process"
+edges[1:5,3]=c("inflammatory cell apoptotic process","myeloid cell apoptotic process","leukocyte apoptotic process", "intrinsic apoptotic signaling pathway", "protein insertion into mitochondrial membrane involved in apoptotic signaling pathway")
+
+```
+
+
+```{r include=F}
+##Apoptosis Subgroup 2: extrinsic apoptotic signaling pathway GO:0097191
+
+specificGO=c("GO:0097191")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+ApoptosisSubgroup2.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+ApoptosisSubgroup2.goterms=unique(c(edges[,1],edges[,3]))
+
+
+edges=edges[c(1,1:nrow(edges)),]
+edges[1,1]="apoptotic process"
+edges[1,3]=c("extrinsic apoptotic signaling pathway")
+
+```
+
+```{r include=F}
+##Apoptosis Subgroup 3: "epithelial cell apoptotic process" GO:1904019
+
+specificGO=c("GO:1904019")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+ApoptosisSubgroup3.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+ApoptosisSubgroup3.goterms=unique(c(edges[,1],edges[,3]))
+
+
+edges=edges[c(1,1:nrow(edges)),]
+edges[1,1]="apoptotic process"
+edges[1,3]=c("epithelial cell apoptotic process")
+
+```
+
+
+```{r  fig.align="center"}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+group1=intersect(allsGO,ApoptosisSubgroup1.goterms)
+names(group1)=c(rep("Intrinsic apoptotic signaling pathway",length(group1)))
+
+group2=intersect(allsGO,ApoptosisSubgroup2.goterms)
+names(group2)=c(rep("Extrinsic apoptotic signaling pathway",length(group2)))
+
+group3=intersect(allsGO,ApoptosisSubgroup3.goterms)
+names(group3)=c(rep("Epithelial cell apoptotic process",length(group3)))
+
+group4=setdiff(intersect(allsGO,Apoptosis.goterms),c(group1,group2,group3))
+names(group4)=c(rep("General Apoptosis",length(group4)))
+
+
+dotplotterms=c(group1,group2,group3,group4)[56:1]
+groups=names(dotplotterms)
+
+
+num.genes=rbind(CV2GO[dotplotterms,],CV3GO[dotplotterms,],CN2GO[dotplotterms,],CN3GO[dotplotterms,],EM2GO[dotplotterms,],EM3GO[dotplotterms,])
+
+num.genes$neg.log10.adjp=-(log(num.genes$adjp,base=10))
+num.genes$neg.log10.adjp[num.genes$adjp>.05]=NA
+num.genes$groups=factor(groups,levels=c("Intrinsic apoptotic signaling pathway","Extrinsic apoptotic signaling pathway","Epithelial cell apoptotic process","General Apoptosis"))
+
+num.genes$term=factor(num.genes$term, levels = num.genes$term[1:56])
+num.genes$sample=factor(num.genes$condition)
+
+
+dotplot=ggplot(data=num.genes, aes(x= sample, y=term, color=numDEInCat,size=neg.log10.adjp)) +
+  geom_point(alpha = 0.9) + 
+  scale_color_gradient(low = "blue",high = "red3", space = "Lab", name="Num DE in Cat") +
+  geom_vline(xintercept = c(2.5,4.5)) +
+   facet_wrap(~groups,  ncol=1, strip.position = "left",scales="free")
+dotplot
+
+
+```
+
+
+```{r fig.align="center"}
+geneset=intersect(allsiggenes,Apoptosis.gogenes)
+hmtitle="Sig. DEG in Apoptosis GO terms"
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+AllApoptosis.hmd=order
+
+```
+
+```{r fig.width=5, fig.height=10}
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+heatmaply(AllApoptosis.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,
+  ##row_side_colors=side, 
+  limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

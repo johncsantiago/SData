@@ -1,0 +1,1222 @@
+---
+title: "Response to Stress and UPR GO terms"
+author: "John Santiago"
+date: "3/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##Load Libraries
+library(org.Hs.eg.db)
+library(PANDA)
+library(heatmaply)
+library(goseq)
+library(GO.db)
+library(edgeR)
+library(topGO)
+library(gplots)
+library(visNetwork)
+library(clusterProfiler)
+
+xx=as.list(org.Hs.egGO2ALLEGS)
+xxx=as.list(org.Hs.egPATH2EG)
+x1=as.list(org.Hs.egENSEMBL2EG)
+x2=as.list(org.Hs.egSYMBOL)
+x3=as.list(org.Hs.egENSEMBL)
+
+ccpar=as.list(GOCCPARENTS)
+ccchild=as.list(GOCCCHILDREN)
+
+bppar=as.list(GOBPPARENTS)
+bpchild=as.list(GOBPCHILDREN)
+
+mfpar=as.list(GOMFPARENTS)
+mfchild=as.list(GOMFCHILDREN)
+
+term=as.list(GOTERM)
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+meancpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/meancpmtable.csv",row.names=1)
+
+CV2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+CV2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCV=unique(c(row.names(sCV2),row.names(sCV3)))
+
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sCN=unique(c(row.names(sCN2),row.names(sCN3)))
+
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+sEM=unique(c(row.names(sEM2),row.names(sEM3)))
+
+row.names(CV2GO)=CV2GO$term
+row.names(CV3GO)=CV3GO$term
+
+row.names(CN2GO)=CN2GO$term
+row.names(CN3GO)=CN3GO$term
+
+row.names(EM2GO)=EM2GO$term
+row.names(EM3GO)=EM3GO$term
+
+CV2GO$condition="CV2"
+CV3GO$condition="CV3"
+
+CN2GO$condition="CN2"
+CN3GO$condition="CN3"
+
+EM2GO$condition="EM2"
+EM3GO$condition="EM3"
+
+
+allsiggenes=unique(c(sCV,sCN,sEM))
+
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+```
+
+```{r include=F}
+##response to unfolded protein [GO:0006986] 
+##response to stress [GO:0006950]
+specificGO=c("GO:0006950")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+children=children[-2]
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+##row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+Stress.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+Stress.goterms=unique(c(edges[,1],edges[,3]))
+Stress.edges=edges
+```
+
+```{r  eval=F}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+
+refset=intersect(Stress.goterms,allsGO)
+originaledges=edges
+tempedges=originaledges
+i=1
+while(i<=nrow(tempedges)){
+  tempedges[i,2]=length(intersect(c(tempedges[i,1]),refset))
+  tempedges[i,4]=length(intersect(c(tempedges[i,3]),refset))
+  
+  i=i+1
+}
+
+newedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+
+motifs <- unique(as.character(newedges[,1]))
+##genes <- unique(as.character(gooiedges[,3]))
+genes <- unique(as.character(newedges[,3]))
+parents=c(setdiff(motifs,genes))
+nodeid=unique(c(genes,motifs))
+
+nodegroups=rep("not sig",length(nodeid))
+i=1
+while(i<=length(nodegroups)){
+  if(length(intersect(nodeid[i],refset))>0){
+    nodegroups[i]="sig"
+  }
+  i=i+1
+}
+
+i=1
+while(i<=length(nodeid)){
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>0){
+    nodegroups[i]="Apoptosis"
+  }
+  if(length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>0){
+    nodegroups[i]="Nonviable"
+  }  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))>0){
+    nodegroups[i]="Viable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Nonviable"
+  }    
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>1){
+    nodegroups[i]="Viable + Apoptosis"
+  }   
+  if(length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))>1){
+    nodegroups[i]="Nonviable + Apoptosis"
+  }   
+  
+  if(length(intersect(nodeid[i],c(CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])))+length(intersect(nodeid[i],c(CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05])))+length(intersect(nodeid[i],c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05])))>2){
+    nodegroups[i]="All Conditions"
+  }     
+ i=i+1 
+}
+
+nodegroups[nodeid==Term(term[[as.character(specificGO)]])]="Parent Term"
+
+
+
+
+nodes=data.frame(id=nodeid,group=nodegroups)
+##visedges=as.data.frame(gooiedges[,c(1,3)])
+visedges=as.data.frame(edges[,c(1,3)])
+colnames(visedges)=c("from","to")
+visNetwork(nodes,visedges)%>%
+  visNodes(shape="box",mass=3)%>%
+  visLayout(hierarchical=F, improvedLayout=T)%>%
+  
+  visGroups(groupname = "Parent Term", shape = "box", color = list(background = "firebrick", border="black"),font=list(color="white",size=30),physics=F,mass=20)%>%
+  
+  visGroups(groupname = "Apoptosis", shape = "box", color = list(background = "blue", border="black"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable", shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=30),physics=T)%>%  
+  
+  visGroups(groupname = "Viable + Apoptosis", shape = "box", color = list(background = "green", border="white"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = "Viable + Nonviable", shape = "box", color = list(background = "orange", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = "Nonviable + Apoptosis", shape = "box", color = list(background = "mediumorchid", border="black"),font=list(color="white",size=30),physics=T)%>% 
+  
+  
+  visGroups(groupname = "All Conditions", shape = "box", color = list(background = "black", border="black"),font=list(color="pink",size=30),physics=T)%>%  
+  visGroups(groupname = "not sig", shape = "dot", color = list(background = "white", border="black"),font=list(color="black"),physics=T)%>%
+  
+  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50),enabled = T)%>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)%>%
+  visEdges(arrows='to')%>%
+  visLegend(useGroups=T)
+
+
+```
+
+
+```{r  eval=F}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+##group1=intersect(allsGO,ApoptosisSubgroup1.goterms)
+##names(group1)=c(rep("Intrinsic apoptotic signaling pathway",length(group1)))
+
+##group2=intersect(allsGO,ApoptosisSubgroup2.goterms)
+##names(group2)=c(rep("Extrinsic apoptotic signaling pathway",length(group2)))
+
+##group3=intersect(allsGO,ApoptosisSubgroup3.goterms)
+##names(group3)=c(rep("Epithelial cell apoptotic process",length(group3)))
+
+##group4=setdiff(intersect(allsGO,Apoptosis.goterms),c(group1,group2,group3))
+##names(group4)=c(rep("General Apoptosis",length(group4)))
+
+
+dotplotterms=intersect(allsGO,Stress.goterms)
+##groups=names(dotplotterms)
+
+
+num.genes=rbind(CV2GO[dotplotterms,],CV3GO[dotplotterms,],CN2GO[dotplotterms,],CN3GO[dotplotterms,],EM2GO[dotplotterms,],EM3GO[dotplotterms,])
+
+num.genes$neg.log10.adjp=-(log(num.genes$adjp,base=10))
+num.genes$neg.log10.adjp[num.genes$adjp>.05]=NA
+##num.genes$groups=factor(groups,levels=c("Intrinsic apoptotic signaling pathway","Extrinsic apoptotic signaling pathway","Epithelial cell apoptotic process","General Apoptosis"))
+
+num.genes$term=factor(num.genes$term, levels = num.genes$term[1:56])
+num.genes$sample=factor(num.genes$condition)
+
+
+dotplot=ggplot(data=num.genes, aes(x= sample, y=term, color=numDEInCat,size=neg.log10.adjp)) +
+  geom_point(alpha = 0.9) + 
+  scale_color_gradient(low = "blue",high = "red3", space = "Lab", name="Num DE in Cat") +
+  geom_vline(xintercept = c(2.5,4.5))## +
+   ##facet_wrap(~groups,  ncol=1, strip.position = "left",scales="free")
+dotplot
+
+
+```
+
+
+```{r include=F}
+geneset=intersect(allsiggenes,Stress.gogenes)
+hmtitle="Response to Stress GO terms"
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+sym.order=bitr(row.names(order),fromType = "ENSEMBL", toType = "SYMBOL",  OrgDb="org.Hs.eg.db")
+i=1
+while(i<=nrow(order)){
+row.names(order)[i]=sym.order[sym.order[,1]==row.names(order)[i],2][1]
+i=i+1
+}
+
+Stress.hmd=order[unique(row.names(order)),]
+
+```
+
+```{r fig.width=5, fig.height=10, include=F}
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+heatmaply(Stress.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+```
+
+```{r include=F}
+##response to unfolded protein [GO:0006986] 
+##response to stress [GO:0006950]
+specificGO=c("GO:0006986")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+children=children[-2]
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+##row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+UPR.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+UPR.goterms=unique(c(edges[,1],edges[,3]))
+```
+
+```{r include=F}
+geneset=intersect(allsiggenes,UPR.gogenes)
+hmtitle="UPR GO terms"
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+sym.order=bitr(row.names(order),fromType = "ENSEMBL", toType = "SYMBOL",  OrgDb="org.Hs.eg.db")
+i=1
+while(i<=nrow(order)){
+row.names(order)[i]=sym.order[sym.order[,1]==row.names(order)[i],2][1]
+i=i+1
+}
+
+UPR.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=10, include=F}
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+heatmaply(UPR.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+```
+
+
+```{r include=F}
+##response to oxidative stress [GO:0006979]
+##response to unfolded protein [GO:0006986] 
+##response to stress [GO:0006950]
+specificGO=c("GO:0006979")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+children=children[-2]
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+##row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+OxidativeStress.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+OxidativeStress=unique(c(edges[,1],edges[,3]))
+```
+
+```{r include=F}
+geneset=intersect(allsiggenes,OxidativeStress.gogenes)
+hmtitle="response to oxidative stress GO terms"
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+sym.order=bitr(row.names(order),fromType = "ENSEMBL", toType = "SYMBOL",  OrgDb="org.Hs.eg.db")
+i=1
+while(i<=nrow(order)){
+row.names(order)[i]=sym.order[sym.order[,1]==row.names(order)[i],2][1]
+i=i+1
+}
+
+OxidativeStress.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=10, include=F}
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+heatmaply(OxidativeStress.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+```
+
+
+```{r include=F}
+##stress-activated protein kinase signaling cascade [GO:0031098]
+##response to oxidative stress [GO:0006979]
+##response to unfolded protein [GO:0006986] 
+##response to stress [GO:0006950]
+specificGO=c("GO:0031098")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+children=children[-2]
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+##row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+StressKinaseCascade.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+StressKinaseCascade=unique(c(edges[,1],edges[,3]))
+```
+
+```{r include=F}
+geneset=intersect(allsiggenes,StressKinaseCascade.gogenes)
+hmtitle="stress-activated protein kinase signaling cascade GO terms"
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+sym.order=bitr(row.names(order),fromType = "ENSEMBL", toType = "SYMBOL",  OrgDb="org.Hs.eg.db")
+i=1
+while(i<=nrow(order)){
+row.names(order)[i]=sym.order[sym.order[,1]==row.names(order)[i],2][1]
+i=i+1
+}
+
+StressKinaseCascade.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=10, include=F}
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+heatmaply(StressKinaseCascade.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+```
+
+```{r include=F}
+##signal transduction in response to DNA damage [GO:0042770]
+##stress-activated protein kinase signaling cascade [GO:0031098]
+##response to oxidative stress [GO:0006979]
+##response to unfolded protein [GO:0006986] 
+##response to stress [GO:0006950]
+specificGO=c("GO:0042770")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+children=children[-2]
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+##row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+DNADamage.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+DNADamage=unique(c(edges[,1],edges[,3]))
+```
+
+```{r include=F}
+geneset=intersect(allsiggenes,DNADamage.gogenes)
+hmtitle="DNA damage response signaling GO terms"
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+sym.order=bitr(row.names(order),fromType = "ENSEMBL", toType = "SYMBOL",  OrgDb="org.Hs.eg.db")
+i=1
+while(i<=nrow(order)){
+row.names(order)[i]=sym.order[sym.order[,1]==row.names(order)[i],2][1]
+i=i+1
+}
+
+DNADamage.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=10, include=F}
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+heatmaply(DNADamage.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+```
+
+
+
+
+
+```{r include=F}
+##defense response [GO:0006952]
+##signal transduction in response to DNA damage [GO:0042770]
+##stress-activated protein kinase signaling cascade [GO:0031098]
+##response to oxidative stress [GO:0006979]
+##response to unfolded protein [GO:0006986] 
+##response to stress [GO:0006950]
+specificGO=c("GO:0006952")
+temp=bpchild[specificGO[1]]
+edges=matrix(specificGO[1],nrow=length(temp[[1]]),ncol=4)
+edges[,2]=names(temp[[1]])
+edges[,3]=temp[[1]]
+edges[,4]=1
+children=c(specificGO[-1],temp[[1]])
+children=children[-2]
+tested=specificGO[1]
+names(children)=rep(2,length(children))
+
+while(length(children)>0){
+  tested=c(tested,children[1])
+  temp=bpchild[children[1]]
+  if(length(names(temp[[1]]))>0){
+  tempedges=matrix(children[1],nrow=length(temp[[1]]),ncol=4)
+  tempedges[,2]=names(temp[[1]])
+  tempedges[,3]=temp[[1]]
+  tempedges[,4]=names(children[1])
+  edges=rbind(edges,tempedges)
+  tempchildren=temp[[1]]
+  names(tempchildren)=rep((as.numeric(names(children[1]))+1),length(tempchildren))
+  children=c(children[-1],tempchildren)
+  }else{
+    children=children[-1]
+  }
+  i=1
+  while(i<=length(children)){
+  if(length(intersect(children[i],tested))==1){
+    children=children[-i]
+  }else{
+    i=i+1
+  }
+  }
+}
+
+allchildren=unique(c(edges[,1],edges[,2]))
+
+##row.names(GO.wall)=GO.wall[,1]
+i=1
+while(i<=nrow(edges)){
+  edges[i,1]=Term(term[[as.character(edges[i,1])]])
+  edges[i,3]=Term(term[[as.character(edges[i,3])]])
+  i=i+1
+}
+
+
+genesinallchildren=as.character(xx[[allchildren[1]]])
+DefenseResponse.gogenes=intersect(as.character(unlist(x3[genesinallchildren])),row.names(cpmdata))
+
+DefenseResponse=unique(c(edges[,1],edges[,3]))
+```
+
+```{r include=F}
+geneset=intersect(allsiggenes,DefenseResponse.gogenes)
+hmtitle="defense response"
+hmd=CN2[geneset,rep(1,6)]
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2[geneset,"logFC"]
+hmd[,2]=CN3[geneset,"logFC"]
+hmd[,3]=CV2[geneset,"logFC"]
+hmd[,4]=CV3[geneset,"logFC"]
+hmd[,5]=EM2[geneset,"logFC"]
+hmd[,6]=EM3[geneset,"logFC"]
+
+hmcolors=colorpanel(100,"royalblue4","grey","firebrick4")
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),row.names(sCN2)),1]=NA
+order[setdiff(row.names(order),row.names(sCN3)),2]=NA
+order[setdiff(row.names(order),row.names(sCV2)),3]=NA
+order[setdiff(row.names(order),row.names(sCV3)),4]=NA
+order[setdiff(row.names(order),row.names(sEM2)),5]=NA
+order[setdiff(row.names(order),row.names(sEM3)),6]=NA
+
+sym.order=bitr(row.names(order),fromType = "ENSEMBL", toType = "SYMBOL",  OrgDb="org.Hs.eg.db")
+i=1
+while(i<=nrow(order)){
+row.names(order)[i]=sym.order[sym.order[,1]==row.names(order)[i],2][1]
+i=i+1
+}
+
+DefenseResponse.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=10, include=F}
+
+hmcolors=colorpanel(100,"royalblue4","lightgrey","firebrick4")
+
+heatmaply(DefenseResponse.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+```
+
+
+```{r  fig.align="center", fig.width=15,fig.height=15}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+group1=intersect(allsGO,UPR.goterms)
+names(group1)=c(rep("Unfolded protein response",length(group1)))
+
+group2=intersect(allsGO,OxidativeStress)
+names(group2)=c(rep("Response to oxidative stress",length(group2)))
+
+group3=intersect(allsGO,StressKinaseCascade)
+names(group3)=c(rep("Stress-activated protein kinase signaling cascade",length(group3)))
+
+group4=intersect(allsGO,DNADamage)
+names(group4)=c(rep("Signal transduction in response to DNA damage",length(group4)))
+
+group5=intersect(allsGO,DefenseResponse)
+names(group5)=c(rep("Defense response",length(group5)))
+
+group6=setdiff(intersect(allsGO,Stress.goterms),c(group1,group2,group3,group4,group5))
+names(group6)=c(rep("Response to stress",length(group6)))
+
+
+dotplotterms=c(group1,group2,group3,group4,group5,group6)
+groups=rep(names(dotplotterms),6)
+
+
+num.genes=rbind(CV2GO[dotplotterms,],CV3GO[dotplotterms,],CN2GO[dotplotterms,],CN3GO[dotplotterms,],EM2GO[dotplotterms,],EM3GO[dotplotterms,])
+
+num.genes$neg.log10.adjp=-(log(num.genes$adjp,base=10))
+num.genes$log10.numDE=(log(num.genes$numDEInCat,base=10))
+num.genes$neg.log10.adjp[num.genes$adjp>.05]=NA
+num.genes$groups=factor(groups,levels=c("Unfolded protein response","Response to oxidative stress","Stress-activated protein kinase signaling cascade","Signal transduction in response to DNA damage","Defense response","Response to stress"))
+
+num.genes$term=factor(num.genes$term, levels = num.genes$term[1:length(unique(num.genes$term))])
+num.genes$sample=factor(num.genes$condition)
+
+
+dotplot=ggplot(data=num.genes, aes(x= sample, y=term, color=log10.numDE,size=neg.log10.adjp)) +
+  geom_point(alpha = 0.9) + 
+  scale_color_gradient(low = "blue", high = "red3", space = "Lab", name="Num DE in Cat (log10)",n.breaks=4) +
+  geom_vline(xintercept = c(2.5,4.5)) +
+  facet_wrap(~groups,  ncol=1, strip.position = "left",scales="free")
+dotplot
+
+
+```
+
+```{r fig.width=10, fig.height=15}
+
+complete.hmd=rbind(UPR.hmd,OxidativeStress.hmd[setdiff(row.names(OxidativeStress.hmd),row.names(DefenseResponse.hmd)),])
+complete.hmd=rbind(complete.hmd,OxidativeStress.hmd[intersect(row.names(OxidativeStress.hmd),row.names(DefenseResponse.hmd)),])
+complete.hmd=rbind(complete.hmd,DefenseResponse.hmd[setdiff(row.names(DefenseResponse.hmd),row.names(StressKinaseCascade.hmd)),])
+complete.hmd=rbind(complete.hmd,DefenseResponse.hmd[intersect(row.names(DefenseResponse.hmd),row.names(StressKinaseCascade.hmd)),])
+complete.hmd=rbind(complete.hmd,StressKinaseCascade.hmd[setdiff(row.names(StressKinaseCascade.hmd),row.names(DefenseResponse.hmd)),])
+complete.hmd=rbind(complete.hmd,DNADamage.hmd)
+temp=nrow(Stress.hmd[setdiff(row.names(Stress.hmd),c(row.names(complete.hmd))),])
+complete.hmd=rbind(complete.hmd,Stress.hmd[setdiff(row.names(Stress.hmd),c(row.names(complete.hmd))),])
+
+
+side=c(rep("UPR", nrow(UPR.hmd)),
+       rep("Oxidative Stress",nrow(OxidativeStress.hmd[setdiff(row.names(OxidativeStress.hmd),row.names(DefenseResponse.hmd)),])),
+       rep("Oxidative Stress/Defense Response",nrow(OxidativeStress.hmd[intersect(row.names(OxidativeStress.hmd),row.names(DefenseResponse.hmd)),])),
+       rep("Defense Response",nrow(DefenseResponse.hmd[setdiff(row.names(DefenseResponse.hmd),row.names(StressKinaseCascade.hmd)),])),
+       rep("Defense Response/Stress Kinase Cascade",nrow(DefenseResponse.hmd[intersect(row.names(DefenseResponse.hmd),row.names(StressKinaseCascade.hmd)),])),
+       rep("Stress Kinase Cascade",nrow(StressKinaseCascade.hmd[setdiff(row.names(StressKinaseCascade.hmd),row.names(DefenseResponse.hmd)),])),
+       rep("DNA Damage", nrow(DNADamage.hmd)),
+       rep("General Stress Response",temp)
+       )
+
+hmcolors=colorpanel(100,"royalblue4","ivory","firebrick4")
+
+
+heatmaply(complete.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main="Cellular Stress Response Pathways",col=hmcolors,
+  row_side_colors=side, 
+  ##limits=c(-10, 10),
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    name="log2 Fold Change",
+    low = "royalblue4",
+    mid = "ivory",
+    high = "firebrick4",
+    midpoint = 0, position="bottom"))
+
+```
+
+
+```{r  eval=F}
+allsGO=c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05])
+
+
+refset=intersect(Stress.goterms,allsGO)
+originaledges=Stress.edges
+tempedges=originaledges
+i=1
+while(i<=nrow(tempedges)){
+  tempedges[i,2]=length(intersect(c(tempedges[i,1]),refset))
+  tempedges[i,4]=length(intersect(c(tempedges[i,3]),refset))
+  
+  i=i+1
+}
+
+newedges=tempedges[tempedges[,2]>0|tempedges[,4]>0,]
+
+motifs <- unique(as.character(newedges[,1]))
+##genes <- unique(as.character(gooiedges[,3]))
+genes <- unique(as.character(newedges[,3]))
+parents=c(setdiff(motifs,genes))
+nodeid=unique(c(genes,motifs))
+
+nodegroups=rep("not sig",length(nodeid))
+i=1
+while(i<=length(nodegroups)){
+  if(length(intersect(nodeid[i],refset))>0){
+    nodegroups[i]="sig"
+  }
+  i=i+1
+}
+
+i=1
+while(i<=length(nodeid)){
+  if(length(intersect(nodeid[i],group1))>0){
+    nodegroups[i]=names(group1)[1]
+  }
+  if(length(intersect(nodeid[i],group2))>0){
+    nodegroups[i]=names(group2)[1]
+  }  
+  if(length(intersect(nodeid[i],group3))>0){
+    nodegroups[i]=names(group3)[1]
+  }    
+  if(length(intersect(nodeid[i],group4))>0){
+    nodegroups[i]=names(group4)[1]
+  }    
+  if(length(intersect(nodeid[i],group5))>0){
+    nodegroups[i]=names(group5)[1]
+  }   
+  if(length(intersect(nodeid[i],group6))>0){
+    nodegroups[i]=names(group6)[1]
+  }   
+  
+  if(nodeid[i]=="defense response"){
+    nodegroups[i]="group5 parent"
+  }
+
+  if(nodeid[i]=="stress-activated protein kinase signaling cascade"){
+    nodegroups[i]="group3 parent"
+  }
+  
+  if(nodeid[i]=="response to oxidative stress"){
+    nodegroups[i]="group2 parent"
+  }
+  
+  if(nodeid[i]=="response to unfolded protein"){
+    nodegroups[i]="group1 parent"
+  }
+  
+  if(nodeid[i]=="response to stress"){
+    nodegroups[i]="group6 parent"
+  }
+  
+  if(nodeid[i]=="Signal transduction in response to DNA damage"){
+    nodegroups[i]="group4 parent"
+  }
+
+ i=i+1 
+}
+
+##nodegroups[nodeid==Term(term[[as.character(specificGO)]])]="Parent Term"
+
+
+
+
+nodes=data.frame(id=nodeid,group=nodegroups)
+##visedges=as.data.frame(gooiedges[,c(1,3)])
+visedges=as.data.frame(edges[,c(1,3)])
+colnames(visedges)=c("from","to")
+visNetwork(nodes,visedges)%>%
+  visNodes(shape="box",mass=3)%>%
+  visLayout(hierarchical=F, improvedLayout=T)%>%
+
+  
+    visGroups(groupname = "group1 parent", shape = "box", color = list(background = "blue", border="black"),font=list(color="white",size=30),physics=F)%>%
+    visGroups(groupname = "group2 parent", shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=30),physics=F)%>%
+    visGroups(groupname = "group3 parent", shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=30),physics=F)%>% 
+    visGroups(groupname = "group4 parent", shape = "box", color = list(background = "green", border="black"),font=list(color="white",size=30),physics=F)%>% 
+    visGroups(groupname = "group5 parent", shape = "box", color = list(background = "deeppink", border="black"),font=list(color="black",size=30),physics=F)%>% 
+    visGroups(groupname = "group6 parent", shape = "box", color = list(background = "black", border="black"),font=list(color="white",size=30),physics=F)%>% 
+  
+  visGroups(groupname = names(group1)[1], shape = "box", color = list(background = "blue", border="black"),font=list(color="white",size=30),physics=T)%>%
+  visGroups(groupname = names(group2)[1], shape = "box", color = list(background = "yellow", border="black"),font=list(color="black",size=30),physics=T)%>%
+  visGroups(groupname = names(group3)[1], shape = "box", color = list(background = "red", border="black"),font=list(color="white",size=30),physics=T)%>% 
+    visGroups(groupname = names(group4)[1], shape = "box", color = list(background = "green", border="black"),font=list(color="white",size=30),physics=T)%>% 
+    visGroups(groupname = names(group5)[1], shape = "box", color = list(background = "deeppink", border="black"),font=list(color="black",size=30),physics=T)%>% 
+    visGroups(groupname = names(group6)[1], shape = "box", color = list(background = "black", border="black"),font=list(color="white",size=30),physics=T)%>% 
+
+  
+  
+
+  visGroups(groupname = "not sig", shape = "dot", color = list(background = "white", border="black"),font=list(color="black"),physics=T)%>%
+  
+  ##visPhysics(solver="forceAtlas2Based", forceAtlas2Based = list(gravitationalConstant=-50),enabled = T)%>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE)%>%
+  visEdges(arrows='to')%>%
+  visLegend(addNodes = list(
+  list(label = names(group1)[1], shape = "box", 
+       color = list(background = "blue", border="black"),font=list(color="white",size=30)),
+  list(label = names(group2)[1], shape = "box", 
+       color = list(background = "yellow", border="black"),font=list(color="black",size=30)),
+  list(label = names(group3)[1], shape = "box", 
+       color = list(background = "red", border="black"),font=list(color="white",size=30)),
+  list(label = names(group4)[1], shape = "box", 
+       color = list(background = "green", border="black"),font=list(color="white",size=30)),
+  list(label = names(group5)[1], shape = "box", 
+       color = list(background = "deeppink", border="black"),font=list(color="black",size=30)),
+  list(label = names(group6)[1], shape = "box", 
+       color = list(background = "black", border="black"),font=list(color="white",size=30))
+ ),useGroups=F)
+
+
+```

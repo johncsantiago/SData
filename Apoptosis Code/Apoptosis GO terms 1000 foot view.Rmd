@@ -101,7 +101,7 @@ y <- y[keep,,keep.lib.sizes=FALSE]
 z <- calcNormFactors(y, method = "TMM") 
 cpmdata=cpm(z)
 
-meancpmdata=cpmdata[,c(1:6,30:44)]
+meancpmdata=cpmdata[,c(1:9)]
 i=1
 while(i<=nrow(cpmdata)){
   meancpmdata[i,1]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="N1"])
@@ -110,9 +110,13 @@ while(i<=nrow(cpmdata)){
   meancpmdata[i,4]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="V1"])
   meancpmdata[i,5]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="V2"])
   meancpmdata[i,6]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="V3"])
+  meancpmdata[i,7]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="M1"])
+  meancpmdata[i,8]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="M2"])
+  meancpmdata[i,9]=mean(cpmdata[i,substring(colnames(cpmdata),2,3)=="M3"])  
+  
   i=i+1
 }
-colnames(meancpmdata)[1:6]=c("CN1","CN2","CN3","CV1","CV2","CV3")
+colnames(meancpmdata)[1:9]=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
 
 design<-model.matrix(~0+groups$Group)
 colnames(design) <- levels(group)
@@ -286,6 +290,7 @@ EM3GO=GO.wall
 ##Find all child GO terms from a specific GO ID
 
 specificGO="GO:0006915"
+
 temp=bpchild[specificGO]
 edges=matrix(specificGO,nrow=length(temp[[1]]),ncol=4)
 edges[,2]=names(temp[[1]])
