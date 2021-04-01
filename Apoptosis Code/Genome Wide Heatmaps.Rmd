@@ -17,7 +17,7 @@ library(edgeR)
 library(VennDiagram)
 library(heatmaply)
 library(gplots)
-
+library(MBCluster.Seq)
 ```
 
 ```{r include=F}
@@ -69,5 +69,178 @@ sEM=unique(c(row.names(sEM2),row.names(sEM3)))
 allsiggenes=unique(c(sCV,sCN,sEM))
 
 ```
+
+
+```{r fig.width=5, fig.height=10, include=F}
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+groups=groups[order(groups$Library.ID),]
+counts=countdata[,row.names(groups)]
+groupdata=groups
+colnames(counts)=groups$Library.ID
+row.names(groupdata)=groups$Library.ID
+geneset=allsiggenes
+hmd=counts[allsiggenes,]
+
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+
+heatmaply(hmd,scale="row",trace="none",Colv = F,Rowv=T,cexRow = .25,main=hmtitle,col=hmcolors)
+
+
+```
+
+```{r fig.width=5, fig.height=10, include=F}
+
+geneset=allsiggenes
+hmd=meancpmdata[allsiggenes,]
+
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+
+heatmaply(hmd,scale="row",trace="none",Colv = F,Rowv=T,cexRow = .25,main=hmtitle,col=hmcolors)
+
+
+```
+
+
+
+
+```{r}
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+groups=groups[order(groups$Library.ID),]
+counts=countdata[,row.names(groups)]
+groupdata=groups
+colnames(counts)=groups$Library.ID
+row.names(groupdata)=groups$Library.ID
+
+
+x <- counts
+group <- factor(groupdata$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+
+
+
+
+##create heatmaps and files
+geneset=allsiggenes
+
+counts=z$counts[geneset,]
+
+groups=z$samples
+
+
+counts=counts
+groups=groups
+groups$Time=groupdata$Time
+groups$Treat=groupdata$Group
+groups$Group=groupdata$Library.ID
+GeneID=row.names(counts)  
+Normalizer=groups$norm.factors
+Treatment=groups$Group
+
+mydata=RNASeq.Data(counts,Normalizer,Treatment,GeneID) 
+
+c0=KmeansPlus.RNASeq(mydata,nK=20)$centers
+
+cls=Cluster.RNASeq(data=mydata,model="nbinom",centers=c0,method="DA")$cluster
+
+tr=Hybrid.Tree(data=mydata,cluster0 =cls,model="nbinom") 
+
+image=plotHybrid.Tree(merge=tr,cluster=cls,logFC=mydata$logFC,tree.title=NULL,colorful=T)
+
+logFCdata=cbind(mydata[[6]],cls) 
+colnames(logFCdata)=c(levels(as.factor(Treatment)),"Cluster")
+##pdf("AllSignificantGenes_forcolors_MBClusterSeq_Heatmap.pdf")
+plotHybrid.Tree(merge=tr,cluster=cls,logFC=mydata$logFC,tree.title=NULL,colorful=F)
+##dev.off()
+
+##dir.create("AllSignificantGenes_forcolors_MBClusterSeq_data")
+##setwd("AllSignificantGenes_forcolors_MBClusterSeq_data/")
+##save(mydata,file="AllSignificantGenes_forcolors_MBClusterSeqOutput_mydata.RData")
+##write.csv(c0,"AllSignificantGenes_forcolors_MBClusterSeqOutput_c0.csv")
+##write.csv(cls,"AllSignificantGenes_forcolors_MBClusterSeqOutput_cls.csv")
+##write.csv(tr,"AllSignificantGenes_forcolors_MBClusterSeqOutput_tr.csv")
+##write.csv(logFCdata,"AllSignificantGenes_forcolors_MBClusterSeqOutput_logFCdata.csv")
+
+individualconditions=logFCdata
+icmerge=tr
+iccluster=cls
+iclogFC=mydata$logFC
+plotHybrid.Tree(merge=icmerge,cluster=iccluster,logFC=iclogFC,tree.title=NULL,colorful=F)
+
+```
+
+
+
+```{r}
+clusternumber=10
+clusterdata=individualconditions
+plotcluster=function(clusterdata,clusternumber){
+cluster=clusterdata[clusterdata[,"Cluster"]==clusternumber,]
+line1=c(rep(0,44))
+i=1
+while(i<45){
+  line1[i]=mean(cluster[,i])
+  i=i+1
+}
+
+plot(x=c(0,3,6),y=line1[c(15,20,25)],type="l",col="firebrick",ylim=c(min(line1),max(line1)))
+  lines(x=c(0,3,6),y=line1[c(16,21,26)],type="l",col="firebrick")
+  lines(x=c(0,3,6),y=line1[c(17,22,27)],type="l",col="firebrick")
+  lines(x=c(0,3,6),y=line1[c(18,23,28)],type="l",col="firebrick")
+  lines(x=c(0,3,6),y=line1[c(19,24,29)],type="l",col="firebrick")
+  
+  lines(x=c(0,3),y=line1[c(1,6)],type="l",col="green3")
+  lines(x=c(0,3,6),y=line1[c(2,7,11)],type="l",col="green3")
+  lines(x=c(0,3,6),y=line1[c(3,8,12)],type="l",col="green3")
+  lines(x=c(0,3,6),y=line1[c(4,9,13)],type="l",col="green3")
+  lines(x=c(0,3,6),y=line1[c(5,10,14)],type="l",col="green3")
+
+  lines(x=c(0,3,6),y=line1[c(30,35,40)],type="l",col="royalblue3")
+  lines(x=c(0,3,6),y=line1[c(31,36,41)],type="l",col="royalblue3")
+  lines(x=c(0,3,6),y=line1[c(32,37,42)],type="l",col="royalblue3")
+  lines(x=c(0,3,6),y=line1[c(33,38,43)],type="l",col="royalblue3")
+  lines(x=c(0,3,6),y=line1[c(34,39,44)],type="l",col="royalblue3")
+  
+  abline(h=0,lty=2,lwd=.5)
+}
+```
+
+```{r}
+i=1
+while(i<21){
+clusternumber=i
+clusterdata=individualconditions
+plotcluster(clusterdata,clusternumber)
+i=i+1
+}
+
+
+```
+
+
+
+
+```{r}
+
+phys.data=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20functional%20data%20for%20John-2.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+
+plotdata=cpmdata
+colnames(cpmdata)=groups[colnames(plotdata),"Group"]
+cpmdata[row.names(sCV2[1,]),]
+
+
+```
+
+
+
 
 
