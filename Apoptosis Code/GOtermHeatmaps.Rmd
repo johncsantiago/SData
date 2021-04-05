@@ -1,0 +1,322 @@
+---
+title: "Unfolded Protein Response GO terms"
+author: "John Santiago"
+date: "3/29/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##Load Libraries
+library(org.Hs.eg.db)
+library(PANDA)
+library(heatmaply)
+library(goseq)
+library(GO.db)
+library(edgeR)
+library(topGO)
+library(gplots)
+library(visNetwork)
+library(clusterProfiler)
+
+xx=as.list(org.Hs.egGO2ALLEGS)
+xxx=as.list(org.Hs.egPATH2EG)
+x1=as.list(org.Hs.egENSEMBL2EG)
+x2=as.list(org.Hs.egSYMBOL)
+x3=as.list(org.Hs.egENSEMBL)
+
+ccpar=as.list(GOCCPARENTS)
+ccchild=as.list(GOCCCHILDREN)
+
+bppar=as.list(GOBPPARENTS)
+bpchild=as.list(GOBPCHILDREN)
+
+mfpar=as.list(GOMFPARENTS)
+mfchild=as.list(GOMFCHILDREN)
+
+term=as.list(GOTERM)
+
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+meancpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/meancpmtable.csv",row.names=1)
+
+CV2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/EdgeROuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+CV2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_3Hvs0H.csv",row.names=1)
+CV3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Viable_6Hvs0H.csv",row.names=1)
+CN2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_3Hvs0H.csv",row.names=1)
+CN3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Nonviable_6Hvs0H.csv",row.names=1)
+EM2GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_3Hvs0H.csv",row.names=1)
+EM3GO=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/GOseqOuptut_Apoptosis_6Hvs0H.csv",row.names=1)
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCV=unique(c(row.names(sCV2),row.names(sCV3)))
+
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sCN=unique(c(row.names(sCN2),row.names(sCN3)))
+
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+sEM=unique(c(row.names(sEM2),row.names(sEM3)))
+
+row.names(CV2GO)=CV2GO$term
+row.names(CV3GO)=CV3GO$term
+
+row.names(CN2GO)=CN2GO$term
+row.names(CN3GO)=CN3GO$term
+
+row.names(EM2GO)=EM2GO$term
+row.names(EM3GO)=EM3GO$term
+
+CV2GO$condition="CV2"
+CV3GO$condition="CV3"
+
+CN2GO$condition="CN2"
+CN3GO$condition="CN3"
+
+EM2GO$condition="EM2"
+EM3GO$condition="EM3"
+
+
+allsiggenes=unique(c(sCV,sCN,sEM))
+
+allsGO=unique(c(EM3GO$term[EM3GO$adjp<.05],EM2GO$term[EM2GO$adjp<.05],CN3GO$term[CN3GO$adjp<.05],CN2GO$term[CN2GO$adjp<.05],CV3GO$term[CV3GO$adjp<.05],CV2GO$term[CV2GO$adjp<.05]))
+
+```
+
+```{r include=F}
+GOset=(allsGO)
+hmtitle="All Sig. Enriched Biological ProcessGO terms"
+hmd=CN2GO[GOset,]
+hmd=hmd[hmd$ontology=="BP",]
+hmd=hmd[,rep(1,6)]
+GOset=row.names(hmd)
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2GO[GOset,"adjp"]
+hmd[,2]=CN3GO[GOset,"adjp"]
+hmd[,3]=CV2GO[GOset,"adjp"]
+hmd[,4]=CV3GO[GOset,"adjp"]
+hmd[,5]=EM2GO[GOset,"adjp"]
+hmd[,6]=EM3GO[GOset,"adjp"]
+hmd=-log(hmd,base=10)
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+row.names(hmd)=CN2GO[GOset,"category"]
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,15)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],42,53))
+order[,2]=as.numeric(substring(order[,2],42,53))
+order[,3]=as.numeric(substring(order[,3],42,53))
+order[,4]=as.numeric(substring(order[,4],42,53))
+order[,5]=as.numeric(substring(order[,5],42,53))
+order[,6]=as.numeric(substring(order[,6],42,53))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),CN2GO[CN2GO$adjp<.05,"category"]),1]=NA
+order[setdiff(row.names(order),CN3GO[CN3GO$adjp<.05,"category"]),2]=NA
+order[setdiff(row.names(order),CV2GO[CV2GO$adjp<.05,"category"]),3]=NA
+order[setdiff(row.names(order),CV3GO[CV3GO$adjp<.05,"category"]),4]=NA
+order[setdiff(row.names(order),EM2GO[EM2GO$adjp<.05,"category"]),5]=NA
+order[setdiff(row.names(order),EM3GO[EM3GO$adjp<.05,"category"]),6]=NA
+
+GOnames=CV2GO[,c("category","term")]
+row.names(GOnames)=GOnames$category
+row.names(order)=GOnames[row.names(order),"term"]
+
+AllGO.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=80, fig.width=15, include=T}
+
+hmcolors=colorpanel(10,"blue","gold","red3")
+
+heatmaply(AllGO.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+##,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  ##scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    ##name="adj. p-value (-log10)",
+    ##low = "gold",
+    ##mid = "red",
+    ##high = "darkred",
+    ##midpoint = 20,
+    ##na.value = "grey50"),
+    ##limit=c(0,40))
+
+```
+
+
+```{r include=F}
+GOset=(allsGO)
+hmtitle="All Sig. Enriched Cell Component GO terms"
+hmd=CN2GO[GOset,]
+hmd=hmd[hmd$ontology=="CC",]
+hmd=hmd[,rep(1,6)]
+GOset=row.names(hmd)
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2GO[GOset,"adjp"]
+hmd[,2]=CN3GO[GOset,"adjp"]
+hmd[,3]=CV2GO[GOset,"adjp"]
+hmd[,4]=CV3GO[GOset,"adjp"]
+hmd[,5]=EM2GO[GOset,"adjp"]
+hmd[,6]=EM3GO[GOset,"adjp"]
+hmd=-log(hmd,base=10)
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+row.names(hmd)=CN2GO[GOset,"category"]
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,15)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],42,53))
+order[,2]=as.numeric(substring(order[,2],42,53))
+order[,3]=as.numeric(substring(order[,3],42,53))
+order[,4]=as.numeric(substring(order[,4],42,53))
+order[,5]=as.numeric(substring(order[,5],42,53))
+order[,6]=as.numeric(substring(order[,6],42,53))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),CN2GO[CN2GO$adjp<.05,"category"]),1]=NA
+order[setdiff(row.names(order),CN3GO[CN3GO$adjp<.05,"category"]),2]=NA
+order[setdiff(row.names(order),CV2GO[CV2GO$adjp<.05,"category"]),3]=NA
+order[setdiff(row.names(order),CV3GO[CV3GO$adjp<.05,"category"]),4]=NA
+order[setdiff(row.names(order),EM2GO[EM2GO$adjp<.05,"category"]),5]=NA
+order[setdiff(row.names(order),EM3GO[EM3GO$adjp<.05,"category"]),6]=NA
+
+GOnames=CV2GO[,c("category","term")]
+row.names(GOnames)=GOnames$category
+row.names(order)=GOnames[row.names(order),"term"]
+
+
+AllGO.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=10, include=T}
+
+hmcolors=colorpanel(10,"blue","gold","red3")
+
+heatmaply(AllGO.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+##,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  ##scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    ##name="adj. p-value (-log10)",
+    ##low = "gold",
+    ##mid = "red",
+    ##high = "darkred",
+    ##midpoint = 20,
+    ##na.value = "grey50"),
+    ##limit=c(0,40))
+
+```
+
+
+
+
+```{r include=F}
+GOset=(allsGO)
+hmtitle="All Sig. Enriched Molecular Function GO terms"
+hmd=CN2GO[GOset,]
+hmd=hmd[hmd$ontology=="MF",]
+hmd=hmd[,rep(1,6)]
+GOset=row.names(hmd)
+colnames(hmd)=c("CN3H","CN6H","CV3H","CV6H","EM3H","EM6H")
+hmd[,1]=CN2GO[GOset,"adjp"]
+hmd[,2]=CN3GO[GOset,"adjp"]
+hmd[,3]=CV2GO[GOset,"adjp"]
+hmd[,4]=CV3GO[GOset,"adjp"]
+hmd[,5]=EM2GO[GOset,"adjp"]
+hmd[,6]=EM3GO[GOset,"adjp"]
+hmd=-log(hmd,base=10)
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+row.names(hmd)=CN2GO[GOset,"category"]
+hm=heatmaply(hmd,scale="none",trace="none",Colv = F,main=hmtitle,col=hmcolors, dendrogram = "row")
+
+
+order=hm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,15)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],42,53))
+order[,2]=as.numeric(substring(order[,2],42,53))
+order[,3]=as.numeric(substring(order[,3],42,53))
+order[,4]=as.numeric(substring(order[,4],42,53))
+order[,5]=as.numeric(substring(order[,5],42,53))
+order[,6]=as.numeric(substring(order[,6],42,53))
+
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+order[setdiff(row.names(order),CN2GO[CN2GO$adjp<.05,"category"]),1]=NA
+order[setdiff(row.names(order),CN3GO[CN3GO$adjp<.05,"category"]),2]=NA
+order[setdiff(row.names(order),CV2GO[CV2GO$adjp<.05,"category"]),3]=NA
+order[setdiff(row.names(order),CV3GO[CV3GO$adjp<.05,"category"]),4]=NA
+order[setdiff(row.names(order),EM2GO[EM2GO$adjp<.05,"category"]),5]=NA
+order[setdiff(row.names(order),EM3GO[EM3GO$adjp<.05,"category"]),6]=NA
+
+GOnames=CV2GO[,c("category","term")]
+row.names(GOnames)=GOnames$category
+row.names(order)=GOnames[row.names(order),"term"]
+
+
+AllGO.hmd=order[unique(row.names(order)),]
+
+
+
+```
+
+```{r fig.width=5, fig.height=10, fig.width=10,include=T}
+
+hmcolors=colorpanel(10,"blue","gold","red3")
+
+heatmaply(AllGO.hmd,scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,main=hmtitle,col=hmcolors)
+##,
+  ##row_side_colors=side, 
+  ##limits=c(-10, 10),
+  ##scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    ##name="adj. p-value (-log10)",
+    ##low = "gold",
+    ##mid = "red",
+    ##high = "darkred",
+    ##midpoint = 20,
+    ##na.value = "grey50"),
+    ##limit=c(0,40))
+
+```
