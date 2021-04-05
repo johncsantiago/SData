@@ -232,5 +232,53 @@ sizeGrWindow(9,9)
 TOMplot(plotTOM, geneTree, moduleColors, main = "Network heatmap plot, all genes")
 
 
+# Recalculate module eigengenes
+MEs = moduleEigengenes(datExpr, moduleColors)$eigengenes
+# Isolate weight from the clinical traits
+weight = as.data.frame(datTraits$weight_g);
+names(weight) = "weight"
+# Add the weight to existing module eigengenes
+
+MET = orderMEs(cbind(MEs, weight))
+# Plot the relationships among the eigengenes and the trait
+sizeGrWindow(5,7.5);
+par(cex = 0.9)
+plotEigengeneNetworks(MET, "", marDendro = c(0,4,1,2), marHeatmap = c(3,4,1,2), cex.lab = 0.8, xLabelsAngle = 90)
+
+par(cex = 1.0)
+plotEigengeneNetworks(MET, "Eigengene dendrogram", marDendro = c(0,4,2,0),
+                      plotHeatmaps = FALSE)
+# Plot the heatmap matrix (note: this plot will overwrite the dendrogram plot)
+par(cex = 1.0)
+plotEigengeneNetworks(MET, "Eigengene adjacency heatmap", marHeatmap = c(3,4,2,2),
+                      plotDendrograms = FALSE, xLabelsAngle = 90)
+
+##VisAnt networks
+lnames = load(file = "FemaleLiver-01-dataInput.RData");
+#The variable lnames contains the names of loaded variables.
+lnames
+# Load network data saved in the second part.
+lnames = load(file = "FemaleLiver-02-networkConstruction-auto.RData");
+lnames
+
+# Recalculate topological overlap
+TOM = TOMsimilarityFromExpr(datExpr, power = 6);
+# Read in the annotation file
+annot = read.csv(file = "GeneAnnotation.csv");
+# Select module
+module = "brown";
+# Select module probes
+probes = names(datExpr)
+inModule = (moduleColors==module);
+modProbes = probes[inModule];
+# Select the corresponding Topological Overlap
+modTOM = TOM[inModule, inModule];
+dimnames(modTOM) = list(modProbes, modProbes)
+# Export the network into an edge list file VisANT can read
+vis = exportNetworkToVisANT(modTOM,
+                            file = paste("VisANTInput-", module, ".txt", sep=""),
+                            weighted = TRUE,
+                            threshold = 0,
+                            probeToGene = data.frame(annot$substanceBXH, annot$gene_symbol) )
 
 
