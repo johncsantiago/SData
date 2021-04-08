@@ -1,0 +1,433 @@
+---
+title: "Apoptosis WGCNA"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
+setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
+library(WGCNA)
+library(visNetwork)
+options(stringsAsFactors = FALSE)
+enableWGCNAThreads()
+
+##Step 1: Clean Data
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+datExpr0 = as.data.frame(t(cpmdata))
+names(datExpr0) = row.names(cpmdata)
+rownames(datExpr0) = names(cpmdata)
+gsg = goodSamplesGenes(datExpr0, verbose = 3)
+if (!gsg$allOK)
+{
+  datExpr0 = datExpr0[gsg$goodSamples, gsg$goodGenes]
+}
+sampleTree = hclust(dist(datExpr0), method = "average")
+```
+
+```{r}
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+     cex.axis = 1.5, cex.main = 2)
+abline(h = 80000, col = "red")
+
+```
+
+
+```{r include=F}
+# Determine cluster under the line
+clust = cutreeStatic(sampleTree, cutHeight = 80000, minSize = 10)
+##table(clust)
+# clust 1 contains the samples we want to keep.
+keepSamples = (clust==1)
+datExpr = datExpr0[keepSamples, ]
+nGenes = ncol(datExpr)
+nSamples = nrow(datExpr)
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+allTraits = traitData
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+rownames(datTraits) = allTraits[traitRows, 1]
+collectGarbage()
+sampleTree2 = hclust(dist(datExpr), method = "average")
+# Convert traits to a color representation: white means low, red means high, grey means missing entry
+traitColors = numbers2colors(datTraits, signed = FALSE)
+
+```
+
+```{r}
+
+# Plot the sample dendrogram and the colors underneath.
+plotDendroAndColors(sampleTree2, traitColors,
+                    groupLabels = names(datTraits),
+                    main = "Sample dendrogram and trait heatmap")
+
+```
+
+```{r include=F}
+save(datExpr, datTraits, file = "Liver-01-dataInput.RData")
+##1 step network CLustering
+lnames = load(file = "Liver-01-dataInput.RData")
+powers = c(c(1:10), seq(from = 12, to=20, by=2))
+sft = pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
+
+```
+
+```{r}
+par(mfrow = c(1,2))
+cex1 = 0.9
+# Scale-free topology fit index as a function of the soft-thresholding power
+plot(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+     xlab="Soft Threshold (power)",ylab="Scale Free Topology Model Fit,signed R^2",type="n",
+     main = paste("Scale independence"))
+text(sft$fitIndices[,1], -sign(sft$fitIndices[,3])*sft$fitIndices[,2],
+     labels=powers,cex=cex1,col="red")
+# this line corresponds to using an R^2 cut-off of h
+abline(h=0.90,col="red")
+
+# Mean connectivity as a function of the soft-thresholding power
+plot(sft$fitIndices[,1], sft$fitIndices[,5],
+     xlab="Soft Threshold (power)",ylab="Mean Connectivity", type="n",
+     main = paste("Mean connectivity"))
+text(sft$fitIndices[,1], sft$fitIndices[,5], labels=powers, cex=cex1,col="red")
+
+```
+
+```{r include=F}
+
+net = blockwiseModules(datExpr, power = 5,
+                       TOMType = "unsigned", minModuleSize = 30,maxBlockSize=20000,
+                       reassignThreshold = 0, mergeCutHeight = 0.25,
+                       numericLabels = TRUE, pamRespectsDendro = FALSE,
+                       saveTOMs = TRUE,
+                       saveTOMFileBase = "LiverTOM",
+                       verbose = 3)
+
+
+```
+
+```{r}
+table(net$colors)
+# Convert labels to colors for plotting
+mergedColors = labels2colors(net$colors)
+
+# Plot the dendrogram and the module colors underneath
+plotDendroAndColors(net$dendrograms[[1]], mergedColors[net$blockGenes[[1]]],
+                    "Module colors",
+                    dendroLabels = FALSE, hang = 0.03,
+                    addGuide = TRUE, guideHang = 0.05)
+
+moduleLabels = net$colors
+moduleColors = labels2colors(net$colors)
+MEs = net$MEs;
+geneTree = net$dendrograms[[1]];
+save(MEs, moduleLabels, moduleColors, geneTree,
+     file = "Liver-02-networkConstruction-auto.RData")
+
+
+```
+
+```{r}
+
+par(mar=c(8,4,4,2))
+barplot(height=table(mergedColors),col=names(table(mergedColors)),border="black", las=3,ylim=c(0,5000))
+
+```
+
+
+```{r include=F}
+
+
+##Relating modules to physiological data
+# Load the expression and trait data saved in the first part
+lnames = load(file = "Liver-01-dataInput.RData")
+#The variable lnames contains the names of loaded variables.
+lnames
+# Load network data saved in the second part.
+lnames = load(file = "Liver-02-networkConstruction-auto.RData")
+lnames
+
+
+# Define numbers of genes and samples
+nGenes = ncol(datExpr);
+nSamples = nrow(datExpr);
+# Recalculate MEs with color labels
+MEs0 = moduleEigengenes(datExpr, moduleColors)$eigengenes
+
+MEs = orderMEs(MEs0)
+moduleTraitCor = cor(MEs, datTraits, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+
+
+
+# Will display correlations and their p-values
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
+                   signif(moduleTraitPvalue, 1), ")", sep = "");
+dim(textMatrix) = dim(moduleTraitCor)
+
+```
+
+```{r}
+##lact.data=allTraits$alactate
+##names(lact.data)=allTraits[,1]
+##lact.data=lact.data[row.names(MEs0)]
+##lactdata=lact.data[order(lact.data)]
+
+i=1
+while(i<=35){
+##plot(x=lactdata, y=MEs0[names(lactdata),i], type="l",main=colnames(MEs0)[i])
+  bpcol=MEs0[,i]
+  bpcol[MEs0[,i]>0]="red"
+  bpcol[MEs0[,i]<0]="royalblue"
+  
+  barplot(height=MEs0[,i],main=colnames(MEs0)[i],col=bpcol,names.arg=row.names(MEs0), las=3,ylim=c(-(max(MEs0[,i])),max(MEs0[,i])))
+i=i+1
+}
+
+```
+
+```{r}
+
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+
+heatmaply(t(MEs0),scale="none",trace="none",Colv = F,Rowv=F,cexRow = .5,cexCol=.5,main="Eigengenes",col=hmcolors,
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+```
+
+
+```{r}
+
+par(mar = c(6, 8.5, 3, 3));
+# Display the correlation values within a heatmap plot
+labeledHeatmap(Matrix = moduleTraitCor,
+               xLabels = names(datTraits),
+               yLabels = names(MEs),
+               ySymbols = names(MEs),
+               colorLabels = FALSE,
+               colors = greenWhiteRed(50),
+               textMatrix = textMatrix,
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships"))
+
+```
+  
+  
+```{r}
+
+# Define variable weight containing the weight column of datTrait
+alactate = as.data.frame(datTraits$alactate);
+names(alactate) = "alactate"
+# names (colors) of the modules
+modNames = substring(names(MEs), 3)
+geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
+MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples));
+
+names(geneModuleMembership) = paste("MM", modNames, sep="");
+names(MMPvalue) = paste("p.MM", modNames, sep="");
+geneTraitSignificance = as.data.frame(cor(datExpr, alactate, use = "p"));
+GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples));
+names(geneTraitSignificance) = paste("GS.", names(alactate), sep="");
+names(GSPvalue) = paste("p.GS.", names(alactate), sep="");
+
+module = "red"
+column = match(module, modNames);
+moduleGenes = moduleColors==module;
+
+```
+
+```{r}
+
+par(mfrow = c(1,1));
+verboseScatterplot(abs(geneModuleMembership[moduleGenes, column]),
+abs(geneTraitSignificance[moduleGenes, 1]),
+xlab = paste("Module Membership in", module, "module"),
+ylab = "Gene significance for alactate",
+main = paste("Module membership vs. gene significance\n"),
+cex.main = 1.2, cex.lab = 1.2, cex.axis = 1.2, col = module)
+
+```
+
+```{r include=F}
+
+##names(datExpr)
+
+##names(datExpr)[moduleColors=="red"]
+
+
+annot =read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/AnnotationData.csv",row.names=1)
+
+names(annot)=c("ensembl","symbol")
+annot=as.data.frame(annot)
+ensembl = names(datExpr)
+ensembl2annot = annot[ensembl,2]
+
+
+# The following is the number or probes without annotation:
+sum(is.na(ensembl2annot))
+# Should return 0.
+
+
+```
+
+
+```{r include =F}
+# Create the starting data frame
+geneInfo0 = data.frame(genes = ensembl,
+                       geneSymbol = ensembl2annot,
+                       moduleColor = moduleColors,
+                       geneTraitSignificance,
+                       GSPvalue)
+# Order modules by their significance for weight
+modOrder = order(-abs(cor(MEs, alactate, use = "p")));
+# Add module membership information in the chosen order
+for (mod in 1:ncol(geneModuleMembership))
+{
+  oldNames = names(geneInfo0)
+  geneInfo0 = data.frame(geneInfo0, geneModuleMembership[, modOrder[mod]],
+                         MMPvalue[, modOrder[mod]]);
+  names(geneInfo0) = c(oldNames, paste("MM.", modNames[modOrder[mod]], sep=""),
+                       paste("p.MM.", modNames[modOrder[mod]], sep=""))
+}
+# Order the genes in the geneInfo variable first by module color, then by geneTraitSignificance
+geneOrder = order(geneInfo0$moduleColor, -abs(geneInfo0$GS.alactate));
+geneInfo = geneInfo0[geneOrder, ]
+
+write.csv(geneInfo, file = "Liver.geneInfo.csv")
+
+
+##Visualizing Network
+
+# Load the expression and trait data saved in the first part
+lnames = load(file = "Liver-01-dataInput.RData");
+#The variable lnames contains the names of loaded variables.
+lnames
+# Load network data saved in the second part.
+lnames = load(file = "Liver-02-networkConstruction-auto.RData");
+lnames
+nGenes = ncol(datExpr)
+nSamples = nrow(datExpr)
+
+```
+
+
+```{r include=F}
+
+# Calculate topological overlap anew: this could be done more efficiently by saving the TOM
+# calculated during module detection, but let us do it again here.
+dissTOM = 1-TOMsimilarityFromExpr(datExpr, power = 6);
+# Transform dissTOM with a power to make moderately strong connections more visible in the heatmap
+plotTOM = dissTOM^7;
+# Set diagonal to NA for a nicer plot
+diag(plotTOM) = NA;
+# Call the plot function
+
+```
+
+```{r}
+
+TOMplot(plotTOM, geneTree, moduleColors, main = "Network heatmap plot, all genes")
+
+```
+
+```{r fig.height=7, fig.width=7}
+# Recalculate module eigengenes
+MEs = moduleEigengenes(datExpr, moduleColors)$eigengenes
+# Isolate weight from the clinical traits
+alactate = as.data.frame(datTraits$alactate);
+names(alactate) = "alactate"
+# Add the weight to existing module eigengenes
+
+MET = orderMEs(cbind(MEs, alactate))
+# Plot the relationships among the eigengenes and the trait
+
+par(cex = 0.9)
+plotEigengeneNetworks(MET, "", marDendro = c(0,4,1,2), marHeatmap = c(3,4,1,2), cex.lab = 0.8, xLabelsAngle = 90)
+
+##par(cex = 1.0)
+##plotEigengeneNetworks(MET, "Eigengene dendrogram", marDendro = c(0,4,2,0),plotHeatmaps = FALSE)
+# Plot the heatmap matrix (note: this plot will overwrite the dendrogram plot)
+##par(cex = 1.0)
+##plotEigengeneNetworks(MET, "Eigengene adjacency heatmap", marHeatmap = c(3,4,2,2), plotDendrograms = FALSE, xLabelsAngle = 90)
+
+```
+
+
+```{r include=F}
+##VisAnt networks
+lnames = load(file = "Liver-01-dataInput.RData");
+#The variable lnames contains the names of loaded variables.
+lnames
+# Load network data saved in the second part.
+lnames = load(file = "Liver-02-networkConstruction-auto.RData");
+lnames
+```
+
+```{r}
+# Recalculate topological overlap
+TOM = TOMsimilarityFromExpr(datExpr, power = 6);
+
+# Select module
+module = "red";
+# Select module probes
+annot=as.data.frame(annot)
+ensembl = names(datExpr)
+inModule = (moduleColors==module);
+modGenes = ensembl[inModule];
+# Select the corresponding Topological Overlap
+modTOM = TOM[inModule, inModule];
+dimnames(modTOM) = list(modGenes, modGenes)
+# Export the network into an edge list file VisANT can read
+```
+
+
+```{r}
+
+vis = exportNetworkToVisANT(modTOM, file = paste("Liver.VisANTInput-", module, ".txt", sep=""), weighted = TRUE, threshold = 0, probeToGene = data.frame(annot$ensembl, annot$symbol) )
+
+
+visedges=data.frame(vis[vis$weight>.18,c(1:2,5)])
+colnames(visedges)[3]="value"
+nodes=data.frame(id=unique(c(visedges[,1],visedges[,2])))
+visNetwork(nodes,visedges) %>%
+  visNodes(shape="box", color = list(background = "red", border="black"),font=list(color="white"), mass=3, physics = T) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLayout(hierarchical=F, improvedLayout=T)
+
+##igraph
+
+```
+
+
+```{r}
+
+
+nTop = 10;
+IMConn = softConnectivity(datExpr[, modGenes]);
+top = (rank(-IMConn) <= nTop)
+vis = exportNetworkToVisANT(modTOM[top, top], file = paste("Liver.VisANTInput-", module, ".txt", sep=""), weighted = TRUE, threshold = 0.1, probeToGene = data.frame(annot$ensembl, annot$symbol) )
+
+
+visedges=data.frame(vis[,1:2])
+nodes=data.frame(id=unique(c(visedges[,1],visedges[,2])))
+visNetwork(nodes,visedges) %>%
+  visNodes(shape="box", color = list(background = "red", border="black"),font=list(color="white"), mass=3, physics = T) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLayout(hierarchical=F, improvedLayout=T)
+
+
+
+```
