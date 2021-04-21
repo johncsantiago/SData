@@ -187,7 +187,9 @@ while(i<=35){
   bpcol[MEs0[,i]>0]="red"
   bpcol[MEs0[,i]<0]="royalblue"
   
-  barplot(height=MEs0[,i],main=colnames(MEs0)[i],col=bpcol,names.arg=row.names(MEs0), las=3,ylim=c(-(max(MEs0[,i])),max(MEs0[,i])))
+  ##barplot(height=MEs0[,i],main=colnames(MEs0)[i],col=bpcol,names.arg=row.names(MEs0), las=3,ylim=c(-(max(MEs0[,i])),max(MEs0[,i])))
+  plot(MEs0[,i],main=colnames(MEs0)[i],type="l",ylim=c(-(max(MEs0[,i])),max(MEs0[,i])), ylab="eigengene expression", xlab="library")
+  abline(h=0,col="red",lty=2)
 i=i+1
 }
 
@@ -308,7 +310,25 @@ geneInfo = geneInfo0[geneOrder, ]
 
 write.csv(geneInfo, file = "Liver.geneInfo.csv")
 
+sig.lact.genes=geneInfo[,1:5]
+sig.lact.genes=sig.lact.genes[order(sig.lact.genes$p.GS.alactate, decreasing=F),]
+sig.lact.genes$adjp=p.adjust(sig.lact.genes$p.GS.alactate,method="BH")
 
+```
+
+```{r}
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+
+heatmaply(cpmdata[sig.lact.genes$genes[1:100],],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=.5,main="Top 100 Lactate Genes",col=hmcolors,
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",d
+    midpoint = 0,
+    na.value = "grey50"))
+```
+
+```{r}
 ##Visualizing Network
 
 # Load the expression and trait data saved in the first part
@@ -396,10 +416,12 @@ dimnames(modTOM) = list(modGenes, modGenes)
 
 ```{r}
 
-vis = exportNetworkToVisANT(modTOM, file = paste("Liver.VisANTInput-", module, ".txt", sep=""), weighted = TRUE, threshold = 0, probeToGene = data.frame(annot$ensembl, annot$symbol) )
+##vis = exportNetworkToVisANT(modTOM, file = paste("Liver.VisANTInput-", module, ".txt", sep=""), weighted = TRUE, threshold = 0, probeToGene = data.frame(annot$ensembl, annot$symbol) )
 
 
-visedges=data.frame(vis[vis$weight>.18,c(1:2,5)])
+
+visedges=data.frame(vis[order(vis$weight),1:3])
+visedges=visedges[1:100,]
 colnames(visedges)[3]="value"
 nodes=data.frame(id=unique(c(visedges[,1],visedges[,2])))
 visNetwork(nodes,visedges) %>%
