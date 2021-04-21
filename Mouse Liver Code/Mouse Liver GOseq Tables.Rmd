@@ -1,0 +1,230 @@
+---
+title: "Mouse GOseq Example"
+author: "John Santiago"
+date: "2/25/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+library(rgl)
+knitr::opts_chunk$set(echo = FALSE, fig.align="center")
+knitr::knit_hooks$set(webgl = hook_webgl)
+
+```
+
+```{r include=F}
+
+library(edgeR)
+library(gplots)
+library(goseq)
+library(GO.db)
+library(org.Mm.eg.db)
+
+```
+
+##EdgeR comparisons
+```{r include=F}
+lcounts=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Liver_CountData.csv",row.names=1,header=T)
+
+lgroups=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Mouse_Liver_Metadata.csv",row.names=1,header=T)
+
+mcounts=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Muscle_CountData.csv",row.names=1,header=T)
+
+mgroups=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Mouse_Muscle_Metadata.csv",row.names=1,header=T)
+
+x <- lcounts[,row.names(lgroups)]
+group <- factor(lgroups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+lz=z
+lcpmdata=cpm(z,base=2)
+
+design<-model.matrix(~0+group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+
+##C2 vs C1
+compare = makeContrasts(C2-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C2=G_X_E$table
+sC2=C2[C2$FDR<.05,]
+
+##C3 vs C1
+compare = makeContrasts(C3-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C3=G_X_E$table
+sC3=C3[C3$FDR<.05,]
+
+##C4 vs C1
+compare = makeContrasts(C4-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C4=G_X_E$table
+sC4=C4[C4$FDR<.05,]
+
+##C5 vs C1
+compare = makeContrasts(C5-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C5=G_X_E$table
+sC5=C5[C5$FDR<.05,]
+
+###
+
+##R2 vs C1
+compare = makeContrasts(R2-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R2=G_X_E$table
+sR2=R2[R2$FDR<.05,]
+
+##R3 vs C1
+compare = makeContrasts(R3-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R3=G_X_E$table
+sR3=R3[R3$FDR<.05,]
+
+##R4 vs C1
+compare = makeContrasts(R4-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R4=G_X_E$table
+sR4=R4[R4$FDR<.05,]
+
+
+##R5 vs C1
+compare = makeContrasts(R5-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R5=G_X_E$table
+sR5=R5[R5$FDR<.05,]
+
+##R2 vs C2
+compare = makeContrasts(R2-C2, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC2=G_X_E$table
+sRC2=RC2[RC2$FDR<.05,]
+
+##R3 vs C3
+compare = makeContrasts(R3-C3, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC3=G_X_E$table
+sRC3=RC3[RC3$FDR<.05,]
+
+##R4 vs C4
+compare = makeContrasts(R4-C4, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC4=G_X_E$table
+sRC4=RC4[RC4$FDR<.05,]
+
+##R4 vs C4
+compare = makeContrasts(R5-C5, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC5=G_X_E$table
+sRC5=RC5[RC5$FDR<.05,]
+
+##write.csv(C5,"/Users/johncsantiago/Documents/GitHub/Mouse-Muscle-Liver-Data-/EdgeROutput_LiverControl_4Hvs0H.csv")
+
+
+lcpmdata=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Liver_CPM_Data.csv",row.names=1)
+
+lmeancpm=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Mean_Liver_CPM_Data.csv",row.names=1)
+
+x <- mcounts[,row.names(mgroups)]
+group <- factor(mgroups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+mz=z
+mcpmdata=cpm(mz,base=2)
+
+```
+
+##Sig. DEG Subsets
+```{r}
+
+sL=length(unique(c(row.names(sC2),row.names(sC3),row.names(sC4),row.names(sC5),
+                row.names(sR2),row.names(sR3),row.names(sR4),row.names(sR5))))
+sRC=unique(c(row.names(sRC2),row.names(sRC3),row.names(sRC4),row.names(sRC5)))
+sCL=unique(c(row.names(sC2),row.names(sC3),row.names(sC4),row.names(sC5)))
+CL=unique(c(row.names(C2),row.names(C3),row.names(C4),row.names(C5)))
+sRL=unique(c(row.names(sR2),row.names(sR3),row.names(sR4),row.names(sR5)))
+sCLonly=setdiff(sCL,sRL)
+sRLonly=setdiff(sRL,sCL)
+sCLandRL=intersect(sCL,sRL)
+sCLandRL=setdiff(sCLandRL,sRC)
+allrapaeffect=unique(c(sRC,sCLonly,sRLonly))
+
+
+```
+
+##GOseq
+```{r include=F}
+sigs=sCL
+bg=lcpmdata[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"mm9","ensGene")
+head(pwf)
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+sCLGO=GO.wall
+##write.csv(sCLGO, "/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/Mouse Muscle Liver/Liver Contol GO.csv")
+
+```
+
+##GOseq
+```{r include=F}
+sigs=sRL
+bg=lcpmdata[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"mm9","ensGene")
+head(pwf)
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+sRLGO=GO.wall
+##write.csv(sRLGO, "/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/Mouse Muscle Liver/Liver Rapa GO.csv")
+
+```
+
+##GOseq
+```{r include=F}
+sigs=allrapaeffect
+bg=lcpmdata[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+table(genes)
+pwf=nullp(genes,"mm9","ensGene")
+head(pwf)
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+sRCLGO=GO.wall
+##write.csv(sRCLGO, "/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/Mouse Muscle Liver/Liver Rapa vs Control GO2.csv")
+
+```

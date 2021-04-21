@@ -1,0 +1,341 @@
+---
+title: "Alignment Comparison Summary"
+author: "John Santiago"
+date: "1/23/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+library(rgl)
+knitr::opts_chunk$set(echo = FALSE, fig.align="center")
+knitr::knit_hooks$set(webgl = hook_webgl)
+```
+
+```{r include=F}
+##Load Libraries
+library(edgeR)
+library(gplots)
+library(heatmaply)
+
+```
+
+```{r include =F}
+countdata=read.csv("/Users/johncsantiago/Documents/GitHub/SandersLab/MGH_2020/RNA-Seq Data Files/mgh_raw_countdata.csv",row.names=1)
+groups=read.csv("/Users/johncsantiago/Documents/GitHub/SandersLab/MGH_2020/RNA-Seq Data Files/mgh_metadata.csv",row.names=1)
+##groups=read.csv("/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/All Code/apmetadata.csv",row.names=1)
+##countdata=read.csv("/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/All Code/apcountdata.csv",row.names=1)
+
+##EdgeR comparisons
+countdata=countdata[,row.names(groups)]
+##countdata=countdata[,groups$fat=="F"]
+##groups=groups[groups$fat=="F",]
+countdata=countdata[,row.names(groups)]
+x <- countdata
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+design<-model.matrix(~0+groups$Group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+##comparisons
+##3 hour NV vs 0 hour NV
+compare = makeContrasts((LN2-LN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LN2=G_X_E$table
+
+##6 hour NV vs 0 hour NV
+compare = makeContrasts((LN3-LN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LN3=G_X_E$table
+
+##3 hour V vs 0 hour V
+compare = makeContrasts((LV2-LV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LV2=G_X_E$table
+
+##6 hour V vs 0 hour V
+compare = makeContrasts((LV3-LV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LV3=G_X_E$table
+
+##0 hour V vs 0 hour NV
+compare = makeContrasts((LV1-LN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+L1=G_X_E$table
+
+##3 hour V vs 3 hour NV
+compare = makeContrasts((LV2-LN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+L2=G_X_E$table
+
+##6 hour V vs 6 hour NV
+compare = makeContrasts((LV3-LN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+L3=G_X_E$table
+
+sLV2=LV2[LV2$FDR<.05,]
+sLV3=LV3[LV3$FDR<.05,]
+sLN2=LN2[LN2$FDR<.05,]
+sLN3=LN3[LN3$FDR<.05,]
+sL1=L1[L1$FDR<.05,]
+sL2=L2[L2$FDR<.05,]
+sL3=L3[L3$FDR<.05,]
+
+```
+
+```{r include =F}
+##countdata2=read.csv("/Users/johncsantiago/Downloads/MGH_STAR_all_counts.csv",row.names=1)
+
+countdata2=read.csv("/Users/johncsantiago/Downloads/MGH_TRIM_STAR_SUBREAD_all_counts.csv",row.names=1, header=T)
+
+##countdata2=read.csv("/Users/johncsantiago/Downloads/MGH_TRIM_STAR_273a_all_counts.csv",row.names=1, header=T)
+
+groups=read.csv("/Users/johncsantiago/Downloads/mgh_metadata.csv")
+
+countdata2=na.omit(countdata2)
+temp2=unlist(strsplit(colnames(countdata2),split ="_"))
+
+if(length(temp2[substr(temp2,1,1)=="X"])==ncol(countdata2)){
+temp2=temp2[substr(temp2,1,1)=="X"]
+}
+if(length(temp2[substr(temp2,1,1)=="X"|substr(temp2,1,1)=="J"])==ncol(countdata2)){
+  temp2=temp2[substr(temp2,1,1)=="X"|substr(temp2,1,1)=="J"]
+}
+row.names(groups)=groups$identifier
+row.names(groups=Li)
+temp3=groups[temp2,"sample"]
+row.names(groups)=groups$sample
+colnames(countdata2)=temp3
+rawcountdata2=countdata2
+
+groups=groups[intersect(colnames(countdata),colnames(countdata2)),]
+countdata2=countdata2[,intersect(colnames(countdata),colnames(countdata2))]
+
+##EdgeR comparisons
+countdata2=countdata2[,row.names(groups)]
+##countdata2=countdata2[,groups$fat=="F"]
+##groups=groups[groups$fat=="F",]
+countdata2=countdata2[,row.names(groups)]
+x <- countdata2
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+design<-model.matrix(~0+groups$Group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+##comparisons
+##3 hour NV vs 0 hour NV
+compare = makeContrasts((LN2-LN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LN2=G_X_E$table
+
+##6 hour NV vs 0 hour NV
+compare = makeContrasts((LN3-LN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LN3=G_X_E$table
+
+##3 hour V vs 0 hour V
+compare = makeContrasts((LV2-LV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LV2=G_X_E$table
+
+##6 hour V vs 0 hour V
+compare = makeContrasts((LV3-LV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+LV3=G_X_E$table
+
+##0 hour V vs 0 hour NV
+compare = makeContrasts((LV1-LN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+L1=G_X_E$table
+
+##3 hour V vs 3 hour NV
+compare = makeContrasts((LV2-LN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+L2=G_X_E$table
+
+##6 hour V vs 6 hour NV
+compare = makeContrasts((LV3-LN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+L3=G_X_E$table
+
+newsLV2=LV2[LV2$FDR<.05,]
+newsLV3=LV3[LV3$FDR<.05,]
+newsLN2=LN2[LN2$FDR<.05,]
+newsLN3=LN3[LN3$FDR<.05,]
+newsL1=L1[L1$FDR<.05,]
+newsL2=L2[L2$FDR<.05,]
+newsL3=L3[L3$FDR<.05,]
+
+```
+
+```{r}
+ve=c(nrow(sL1), nrow(sL2),nrow(sL3))
+
+barplot(height=ve,names.arg = c("0 Hours", "3 Hours", "6 Hours"), xlab="Hours Perfused", ylab="Total DEG", main="Viable vs. Non-Viable Livers GeneWiz Aligned", col="royalblue", ylim=c(0,70))
+
+ve=c(nrow(newsL1), nrow(newsL2),nrow(newsL3))
+
+barplot(height=ve,names.arg = c("0 Hours", "3 Hours", "6 Hours"), xlab="Hours Perfused", ylab="Total DEG", main="Viable vs. Non-Viable Livers Lab Aligned", col="royalblue", ylim=c(0,70))
+
+```
+
+```{r fig.height=5, fig.width=5}
+ve=c(nrow(sLV2), nrow(sLV3),NA,nrow(sLN2),nrow(sLN3))
+
+barplot(height=ve,names.arg = c("Viable 3 Hours", "Viable 6 Hours",NA, "Non-Viable 3 Hours","Non-Viable 6 Hours"), xlab="Hours NMP", ylab="Total DEG", main="Total DEG Induced by NMP GeneWiz Aligned", col=c("green3","green3",NA,"red","red"),cex.names = 1,ylim=c(0,4000))
+
+ve=c(nrow(newsLV2), nrow(newsLV3),NA,nrow(newsLN2),nrow(newsLN3))
+
+barplot(height=ve,names.arg = c("Viable 3 Hours", "Viable 6 Hours",NA, "Non-Viable 3 Hours","Non-Viable 6 Hours"), xlab="Hours NMP", ylab="Total DEG", main="Total DEG Induced by NMP Lab Aligned", col=c("green3","green3",NA,"red","red"),cex.names = 1,ylim=c(0,4000))
+
+```
+
+
+
+```{r}
+##Venn Code
+library(VennDiagram)
+
+set1="GeneWiz LV3 vs 0"
+set2="Our Method LV3 vs 0"
+
+s1=row.names(sLV2)
+s2=row.names(newsLV2)
+
+##2-way Venn
+  grid.newpage()
+draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("red","blue"),cex=1.5,cat.cex = 1,category = c(set1,set2))
+
+
+```
+
+```{r}
+
+set1="GeneWiz LV6 vs 0"
+set2="Our Method LV6 vs 0"
+
+s1=row.names(sLV3)
+s2=row.names(newsLV3)
+
+##2-way Venn
+  grid.newpage()
+draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("red","blue"),cex=1.5,cat.cex = 1,category = c(set1,set2))
+
+```
+
+```{r}
+
+set1="GeneWiz LN3 vs 0"
+set2="Our Method LN3 vs 0"
+
+s1=row.names(sLN2)
+s2=row.names(newsLN2)
+
+##2-way Venn
+  grid.newpage()
+draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("red","blue"),cex=1.5,cat.cex = 1,category = c(set1,set2))
+
+```
+
+```{r}
+
+set1="GeneWiz LN6 vs 0"
+set2="Our Method LN6 vs 0"
+
+s1=row.names(sLN3)
+s2=row.names(newsLN3)
+
+##2-way Venn
+  grid.newpage()
+draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("red","blue"),cex=1.5,cat.cex = 1,category = c(set1,set2))
+
+```
+
+```{r}
+
+allsamples=intersect(colnames(countdata),colnames(countdata2))
+sample=allsamples[1]
+xdata=countdata[,sample]
+ydata=as.numeric(countdata2[row.names(countdata),sample])
+xlabel="GeneWiz"
+ylabel="Lab Aligned"
+plot(x=xdata,y=ydata,cex=.1,ylim=c(0,25000),xlim=c(0,25000),col="royalblue",xlab=xlabel,ylab=ylabel, main= "All Libraries")
+
+
+i=2
+while(i<=length(allsamples)){
+  sample=allsamples[i]
+  xdata=countdata[,sample]
+  ydata=as.numeric(countdata2[row.names(countdata),sample])
+  points(x=xdata,y=ydata,cex=.1,col="royalblue")
+  i=i+1
+}
+abline(a=0,b=1,lty=2,col="black")
+abline(lm(ydata~xdata), col="red") 
+
+```
+```{r}
+countdata=read.csv("/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/All Code/apcountdata.csv",row.names=1)
+groups=read.csv("/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/All Code/apmetadata.csv",row.names=1)
+groups=groups[colnames(countdata),]
+countdata2=
+
+x <- countdata[,row.names(groups)]
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+##write.csv(cpmdata,"/Users/johncsantiago/Google Drive File Stream/My Drive/Sanders Lab Files/All Code/apcpmdata.csv")
+
+pca <- prcomp(t(cpmdata), scale.=TRUE) 
+gr=factor(groups$Library.ID)
+
+design<-model.matrix(~0+group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+compare = makeContrasts((EM1-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV1=G_X_E$table
+
+hmdata=cbind(countdata[row.names(EMCV1)[1:500],],rawcountdata2[row.names(EMCV1)[1:500],])
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+heatmaply(hmdata,scale="row",col=hmcolors,Colv = F)
+```
+

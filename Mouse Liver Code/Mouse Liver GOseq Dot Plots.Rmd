@@ -1,0 +1,145 @@
+---
+title: "Mouse GOseq Dot Plots"
+author: "John Santiago"
+date: "2/25/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library(rgl)
+knitr::opts_chunk$set(echo = FALSE, fig.align="center")
+knitr::knit_hooks$set(webgl = hook_webgl)
+
+```
+
+```{r include=F}
+
+
+library(ggplot2)
+library(tidyverse)
+
+```
+
+##EdgeR comparisons
+```{r include=F}
+
+LCGO=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Liver%20Contol%20GO.csv",row.names=1, header=T)
+
+LRGO=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Liver%20Rapa%20GO.csv",row.names=1, header=T)
+
+LRCGO=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Liver%20Rapa%20vs%20Control%20GO.csv",row.names=1, header=T)
+
+
+row.names(LCGO)=LCGO$term
+row.names(LRGO)=LRGO$term
+row.names(LRCGO)=LRCGO$term
+
+LCGO$sample="LCGO"
+LRGO$sample="LRGO"
+LRCGO$sample="LRCGO"
+
+
+MCGO=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Muscle%20Control%20GO.csv",row.names=1, header=T)
+
+MRGO=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Muscle%20Rapa%20GO.csv",row.names=1, header=T)
+
+MRCGO=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Muscle%20Rapa%20vs%20Conrtol%20GO.csv",row.names=1, header=T)
+
+```
+
+##Sig. DEG Subsets
+```{r}
+
+sLCGO=LCGO[LCGO$adjp<.05,]
+  sLC.CC=sLCGO[sLCGO$ontology=="CC",]
+  sLC.BP=sLCGO[sLCGO$ontology=="BP",]
+  sLC.MF=sLCGO[sLCGO$ontology=="MF",]
+
+sLRGO=LRGO[LRGO$adjp<.05,]
+  sLR.CC=sLRGO[sLRGO$ontology=="CC",]
+  sLR.BP=sLRGO[sLRGO$ontology=="BP",]
+  sLR.MF=sLRGO[sLRGO$ontology=="MF",]
+
+sLRCGO=LRCGO[LRCGO$adjp<.05,]
+  sLRC.CC=sLRCGO[sLRCGO$ontology=="CC",]
+  sLRC.BP=sLRCGO[sLRCGO$ontology=="BP",]
+  sLRC.MF=sLRCGO[sLRCGO$ontology=="MF",]
+
+```
+
+```{r fig.width=8, fig.height=10}
+
+cc=unique(c(sLC.CC$term,sLR.CC$term,sLRC.CC$term))
+
+num.genes=rbind(rbind(LCGO[cc,],LRGO[cc,]),LRCGO[cc,])
+num.genes$adjpval=-(log(num.genes$adjp,base=10))
+
+
+num.genes$percent.of.total=(num.genes$numDEInCat/num.genes$numInCat)*100
+
+##num.genes$pval=-(log(num.genes$Gene.P.Value,base=10))
+
+##num.genes$adjpval[num.genes$adjp>.05]=NA
+
+num.genes$sample=factor(num.genes$sample, levels=c("LCGO","LRGO","LRCGO"))
+
+
+plotOverlap <- ggplot(num.genes, aes(x= sample, y=term, size=numDEInCat,color=adjpval)) +
+geom_point(alpha = 0.9) + 
+theme_classic()
+plotOverlap <- plotOverlap + scale_color_gradient(low = "blue",high = "red3", space = "Lab", name="-log10 Adj. p value", limits=c(-log(.05,base=10),max(num.genes$adjpval)))
+plotOverlap
+
+
+```
+
+```{r fig.width=12, fig.height=50, fig.align="center"}
+
+bp=unique(c(sLC.BP$term,sLR.BP$term,sLRC.BP$term))
+
+num.genes=rbind(rbind(LCGO[bp,],LRGO[bp,]),LRCGO[bp,])
+num.genes$adjpval=-(log(num.genes$adjp,base=10))
+
+
+num.genes$percent.of.total=(num.genes$numDEInCat/num.genes$numInCat)*100
+
+##num.genes$pval=-(log(num.genes$Gene.P.Value,base=10))
+
+##num.genes$adjpval[num.genes$adjp>.05]=NA
+
+num.genes$sample=factor(num.genes$sample, levels=c("LCGO","LRGO","LRCGO"))
+
+
+plotOverlap <- ggplot(num.genes, aes(x= sample, y=term, size=numDEInCat,color=adjpval)) +
+geom_point(alpha = 0.9) + 
+theme_classic()
+plotOverlap <- plotOverlap + scale_color_gradient(low = "blue",high = "red3", space = "Lab", name="-log10 Adj. p value", limits=c(-log(.05,base=10),max(num.genes$adjpval)))
+plotOverlap
+
+```
+
+
+```{r fig.width=10, fig.height=10, fig.align="center"}
+
+mf=unique(c(sLC.MF$term,sLR.MF$term,sLRC.MF$term))
+
+num.genes=rbind(rbind(LCGO[mf,],LRGO[mf,]),LRCGO[mf,])
+num.genes$adjpval=-(log(num.genes$adjp,base=10))
+
+
+num.genes$percent.of.total=(num.genes$numDEInCat/num.genes$numInCat)*100
+
+##num.genes$pval=-(log(num.genes$Gene.P.Value,base=10))
+
+##num.genes$adjpval[num.genes$adjp>.05]=NA
+
+num.genes$sample=factor(num.genes$sample, levels=c("LCGO","LRGO","LRCGO"))
+
+
+plotOverlap <- ggplot(num.genes, aes(x= sample, y=term, size=numDEInCat,color=adjpval)) +
+geom_point(alpha = 0.9) + 
+theme_classic()
+plotOverlap <- plotOverlap + scale_color_gradient(low = "blue",high = "red3", space = "Lab", name="-log10 Adj. p value", limits=c(-log(.05,base=10),max(num.genes$adjpval)))
+plotOverlap
+
+```
