@@ -8,10 +8,12 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r include=F}
-##setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
-setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
+setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
+##setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
 library(WGCNA)
 library(visNetwork)
+library(gplots)
+library(heatmaply)
 options(stringsAsFactors = FALSE)
 enableWGCNAThreads(nThreads = NULL)
 
@@ -147,12 +149,12 @@ barplot(height=table(mergedColors),col=names(table(mergedColors)),border="black"
 
 ##Relating modules to physiological data
 # Load the expression and trait data saved in the first part
-lnames = load(file = "Liver-01-dataInput.RData")
+##lnames = load(file = "Liver-01-dataInput.RData")
 #The variable lnames contains the names of loaded variables.
-lnames
+##lnames
 # Load network data saved in the second part.
-lnames = load(file = "Liver-02-networkConstruction-auto.RData")
-lnames
+##lnames = load(file = "Liver-02-networkConstruction-auto.RData")
+##lnames
 
 
 # Define numbers of genes and samples
@@ -218,7 +220,7 @@ labeledHeatmap(Matrix = moduleTraitCor,
                yLabels = names(MEs),
                ySymbols = names(MEs),
                colorLabels = FALSE,
-               colors = greenWhiteRed(50),
+               colors = hmcolors,
                textMatrix = textMatrix,
                setStdMargins = FALSE,
                cex.text = 0.5,
@@ -231,8 +233,8 @@ labeledHeatmap(Matrix = moduleTraitCor,
 ```{r}
 
 # Define variable weight containing the weight column of datTrait
-alactate = as.data.frame(datTraits$alactate);
-names(alactate) = "alactate"
+alactate0H = as.data.frame(datTraits$alactate..no.0H.);
+names(alactate0H) = "alactate..no.0H."
 # names (colors) of the modules
 modNames = substring(names(MEs), 3)
 geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
@@ -240,12 +242,12 @@ MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamp
 
 names(geneModuleMembership) = paste("MM", modNames, sep="");
 names(MMPvalue) = paste("p.MM", modNames, sep="");
-geneTraitSignificance = as.data.frame(cor(datExpr, alactate, use = "p"));
+geneTraitSignificance = as.data.frame(cor(datExpr, alactate0H, use = "p"));
 GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples));
-names(geneTraitSignificance) = paste("GS.", names(alactate), sep="");
-names(GSPvalue) = paste("p.GS.", names(alactate), sep="");
+names(geneTraitSignificance) = paste("GS.", names(alactate0H), sep="");
+names(GSPvalue) = paste("p.GS.", names(alactate0H), sep="");
 
-module = "red"
+module = "brown"
 column = match(module, modNames);
 moduleGenes = moduleColors==module;
 
@@ -294,7 +296,7 @@ geneInfo0 = data.frame(genes = ensembl,
                        geneTraitSignificance,
                        GSPvalue)
 # Order modules by their significance for weight
-modOrder = order(-abs(cor(MEs, alactate, use = "p")));
+modOrder = order(-abs(cor(MEs, alactate0H, use = "p")));
 # Add module membership information in the chosen order
 for (mod in 1:ncol(geneModuleMembership))
 {
@@ -305,43 +307,110 @@ for (mod in 1:ncol(geneModuleMembership))
                        paste("p.MM.", modNames[modOrder[mod]], sep=""))
 }
 # Order the genes in the geneInfo variable first by module color, then by geneTraitSignificance
-geneOrder = order(geneInfo0$moduleColor, -abs(geneInfo0$GS.alactate));
+geneOrder = order(geneInfo0$moduleColor, -abs(geneInfo0$GS.alactate..no.0H.));
 geneInfo = geneInfo0[geneOrder, ]
 
 write.csv(geneInfo, file = "Liver.geneInfo.csv")
 
 sig.lact.genes=geneInfo[,1:5]
-sig.lact.genes=sig.lact.genes[order(sig.lact.genes$p.GS.alactate, decreasing=F),]
-sig.lact.genes$adjp=p.adjust(sig.lact.genes$p.GS.alactate,method="BH")
+sig.lact.genes=sig.lact.genes[order(sig.lact.genes$p.GS.alactate..no.0H., decreasing=F),]
+sig.lact.genes$adjp=p.adjust(sig.lact.genes$p.GS.alactate..no.0H.,method="BH")
 
 ```
 
 ```{r}
 hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
 
-heatmaply(cpmdata[sig.lact.genes$genes[1:100],],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=.5,main="Top 100 Lactate Genes",col=hmcolors,
+hm=heatmaply(cpmdata[sig.lact.genes$genes[1:500],],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=.5,main="Top 100 Lactate (no 0H) Genes",col=hmcolors, dendrogram = "column",
   scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
     low = "royalblue4",
     mid = "white",
-    high = "firebrick4",d
+    high = "firebrick4",
     midpoint = 0,
     na.value = "grey50"))
+
+sample.order=substring((hm$x$data[[3]][[4]])[1,],33,36)
+sample.order=rbind(rbind(sample.order,sample.order),rbind(sample.order,sample.order))
+row.names(sample.order)=c("Emricasan", "Viability","Time","Replicate")
+colnames(sample.order)=sample.order[1,]
+sample.order[1,substring(sample.order[1,],1,1)!="E"]=1
+sample.order[1,substring(sample.order[1,],1,1)=="E"]=3
+sample.order[2,substring(sample.order[2,],2,2)=="M"]=NA
+sample.order[2,substring(sample.order[2,],2,2)=="V"]=3
+sample.order[2,substring(sample.order[2,],2,2)=="N"]=1
+sample.order[3,substring(sample.order[3,],3,3)==1]=1
+sample.order[3,substring(sample.order[3,],3,3)==2]=2
+sample.order[3,substring(sample.order[3,],3,3)==3]=3
+sample.order[4,substring(sample.order[4,],4,4)==1]=1
+sample.order[4,substring(sample.order[4,],4,4)==2]=1.5
+sample.order[4,substring(sample.order[4,],4,4)==3]=2
+sample.order[4,substring(sample.order[4,],4,4)==4]=2.5
+sample.order[4,substring(sample.order[4,],4,4)==5]=3
+hmsample.order=matrix(as.numeric(sample.order),nrow = 4)
+colnames(hmsample.order)=solnames(sample.order)
+row.names(hmsample.order)=row.names(sample.order)
+heatmaply(hmsample.order,scale="none",trace="none",Rowv = F,Colv = F,colors = hmcolors)
+
 ```
+
 
 ```{r}
-##Visualizing Network
 
-# Load the expression and trait data saved in the first part
-lnames = load(file = "Liver-01-dataInput.RData");
-#The variable lnames contains the names of loaded variables.
-lnames
-# Load network data saved in the second part.
-lnames = load(file = "Liver-02-networkConstruction-auto.RData");
-lnames
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+cpmdata=cpmdata[sig.lact.genes$genes[1:500],]
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+datExpr0 = as.data.frame(t(cpmdata))
+names(datExpr0) = row.names(cpmdata)
+rownames(datExpr0) = names(cpmdata)
+gsg = goodSamplesGenes(datExpr0, verbose = 3)
+if (!gsg$allOK)
+{
+  datExpr0 = datExpr0[gsg$goodSamples, gsg$goodGenes]
+}
+sampleTree = hclust(dist(datExpr0), method = "average")
+
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+     cex.axis = 1.5, cex.main = 2)
+abline(h = 5000, col = "red")
+
+# Determine cluster under the line
+clust = cutreeStatic(sampleTree, cutHeight = 5000, minSize = 3)
+##table(clust)
+# clust 1 contains the samples we want to keep.
+keepSamples = (clust!=0)
+datExpr = datExpr0[keepSamples, ]
 nGenes = ncol(datExpr)
 nSamples = nrow(datExpr)
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+traitData$Viability=substring(traitData$liver,2,2)
+traitData$Viability[traitData$Viability=="M"]=NA
+traitData$Viability[traitData$Viability=="N"]=-1
+traitData$Viability[traitData$Viability=="V"]=1
+traitData$Viability=as.numeric(traitData$Viability)
+allTraits = traitData[,c(1,3,8,30,31)]
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+rownames(datTraits) = allTraits[traitRows, 1]
+collectGarbage()
+sampleTree2 = hclust(dist(datExpr), method = "average")
+# Convert traits to a color representation: white means low, red means high, grey means missing entry
+traitColors = numbers2colors(datTraits, signed = FALSE)
+
+
+# Plot the sample dendrogram and the colors underneath.
+plotDendroAndColors(sampleTree2, traitColors,
+                    groupLabels = names(datTraits),
+                    main = "Sample dendrogram and trait heatmap")
+
+
 
 ```
+
 
 
 ```{r include=F}
