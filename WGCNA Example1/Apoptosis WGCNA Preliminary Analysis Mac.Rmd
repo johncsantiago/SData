@@ -8,8 +8,8 @@ knitr::opts_chunk$set(echo = FALSE)
 ```
 
 ```{r include=F}
-setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
-##setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
+##setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
+setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
 library(WGCNA)
 library(visNetwork)
 library(gplots)
@@ -72,7 +72,7 @@ plotDendroAndColors(sampleTree2, traitColors,
                     main = "Sample dendrogram and trait heatmap")
 
 ```
-
+##can skip if done before (just need the threshold)
 ```{r include=F}
 save(datExpr, datTraits, file = "Liver-01-dataInput.RData")
 ##1 step network CLustering
@@ -81,7 +81,7 @@ powers = c(c(1:10), seq(from = 12, to=20, by=2))
 sft = pickSoftThreshold(datExpr, powerVector = powers, verbose = 5)
 
 ```
-
+##can skip if done before
 ```{r}
 par(mfrow = c(1,2))
 cex1 = 0.9
@@ -233,8 +233,12 @@ labeledHeatmap(Matrix = moduleTraitCor,
 ```{r}
 
 # Define variable weight containing the weight column of datTrait
-alactate0H = as.data.frame(datTraits$alactate..no.0H.);
-names(alactate0H) = "alactate..no.0H."
+
+
+trait="alactate..no.0H."
+module = "brown"
+trait.var = as.data.frame(datTraits[,trait]);
+names(trait.var) = "trait"
 # names (colors) of the modules
 modNames = substring(names(MEs), 3)
 geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
@@ -242,12 +246,12 @@ MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamp
 
 names(geneModuleMembership) = paste("MM", modNames, sep="");
 names(MMPvalue) = paste("p.MM", modNames, sep="");
-geneTraitSignificance = as.data.frame(cor(datExpr, alactate0H, use = "p"));
+geneTraitSignificance = as.data.frame(cor(datExpr, trait.var, use = "p"));
 GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples));
-names(geneTraitSignificance) = paste("GS.", names(alactate0H), sep="");
-names(GSPvalue) = paste("p.GS.", names(alactate0H), sep="");
+names(geneTraitSignificance) = paste("GS.", names(trait.var), sep="");
+names(GSPvalue) = paste("p.GS.", names(trait.var), sep="");
 
-module = "brown"
+
 column = match(module, modNames);
 moduleGenes = moduleColors==module;
 
@@ -296,7 +300,7 @@ geneInfo0 = data.frame(genes = ensembl,
                        geneTraitSignificance,
                        GSPvalue)
 # Order modules by their significance for weight
-modOrder = order(-abs(cor(MEs, alactate0H, use = "p")));
+modOrder = order(-abs(cor(MEs, trait.var, use = "p")));
 # Add module membership information in the chosen order
 for (mod in 1:ncol(geneModuleMembership))
 {
@@ -307,21 +311,21 @@ for (mod in 1:ncol(geneModuleMembership))
                        paste("p.MM.", modNames[modOrder[mod]], sep=""))
 }
 # Order the genes in the geneInfo variable first by module color, then by geneTraitSignificance
-geneOrder = order(geneInfo0$moduleColor, -abs(geneInfo0$GS.alactate..no.0H.));
+geneOrder = order(geneInfo0$moduleColor, -abs(geneInfo0$GS.trait));
 geneInfo = geneInfo0[geneOrder, ]
 
-write.csv(geneInfo, file = "Liver.geneInfo.csv")
+##write.csv(geneInfo, file = "Liver.geneInfo.csv")
 
-sig.lact.genes=geneInfo[,1:5]
-sig.lact.genes=sig.lact.genes[order(sig.lact.genes$p.GS.alactate..no.0H., decreasing=F),]
-sig.lact.genes$adjp=p.adjust(sig.lact.genes$p.GS.alactate..no.0H.,method="BH")
+sig.trait.genes=geneInfo[,1:5]
+sig.trait.genes=sig.trait.genes[order(sig.trait.genes$p.GS.trait, decreasing=F),]
+sig.trait.genes$adjp=p.adjust(sig.trait.genes$p.GS.trait,method="BH")
 
 ```
 
 ```{r}
 hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
 
-hm=heatmaply(cpmdata[sig.lact.genes$genes[1:500],],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=.5,main="Top 100 Lactate (no 0H) Genes",col=hmcolors, dendrogram = "column",
+heatmaply(cpmdata[sig.trait.genes$genes[1:100],substring(colnames(cpmdata),3,3)!=1],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main="Top 100 Lactate (no 0H) Genes",col=hmcolors, dendrogram = "column",
   scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
     low = "royalblue4",
     mid = "white",
@@ -329,6 +333,11 @@ hm=heatmaply(cpmdata[sig.lact.genes$genes[1:500],],scale="row",trace="none",Colv
     midpoint = 0,
     na.value = "grey50"))
 
+
+```
+##
+
+```{r}
 sample.order=substring((hm$x$data[[3]][[4]])[1,],33,36)
 sample.order=rbind(rbind(sample.order,sample.order),rbind(sample.order,sample.order))
 row.names(sample.order)=c("Emricasan", "Viability","Time","Replicate")
