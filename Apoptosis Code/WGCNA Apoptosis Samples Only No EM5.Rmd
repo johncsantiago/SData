@@ -1,0 +1,755 @@
+---
+title: "Streamlining WGCNA"
+author: "John Santiago"
+date: "4/22/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
+setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
+library(WGCNA)
+library(visNetwork)
+library(gplots)
+library(heatmaply)
+library("biomaRt")
+library("goseq")
+library(plot3D)
+library(edgeR)
+ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+go_slim=getBM(attributes="goslim_goa_accession",mart=ensembl)
+reactome=getBM(attributes = "reactome",mart=ensembl)
+kegg_enzyme=getBM(attributes="kegg_enzyme", mart=ensembl)
+
+options(stringsAsFactors = FALSE)
+##enableWGCNAThreads(nThreads = NULL)
+##disableWGCNAThreads()
+
+
+
+##Step 1: Clean Data
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+annot =read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/AnnotationData.csv",row.names=1)
+
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+##EdgeR comparisons
+countdata=countdata[,row.names(groups)]
+x <- countdata
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+design<-model.matrix(~0+groups$Group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+##comparisons
+##3 hour CN vs 0 hour CN
+compare = makeContrasts((CN2-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN2=G_X_E$table
+
+##6 hour CN vs 0 hour CN
+compare = makeContrasts((CN3-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN3=G_X_E$table
+
+##3 hour CV vs 0 hour CV
+compare = makeContrasts((CV2-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV2=G_X_E$table
+
+##6 hour CV vs 0 hour CV
+compare = makeContrasts((CV3-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV3=G_X_E$table
+
+##3 hour EM vs 0 hour EM
+compare = makeContrasts((EM2-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM2=G_X_E$table
+
+##6 hour EM vs 0 hour EM
+compare = makeContrasts((EM3-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM3=G_X_E$table
+
+##0 hour CV vs 0 hour CN
+compare = makeContrasts((CV1-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN1=G_X_E$table
+
+##0 hour EM vs 0 hour CN
+compare = makeContrasts((EM1-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN1=G_X_E$table
+
+##0 hour EM vs 0 hour CV
+compare = makeContrasts((EM1-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV1=G_X_E$table
+
+##3 hour CV vs 3 hour CN
+compare = makeContrasts((CV2-CN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN2=G_X_E$table
+
+##3 hour EM vs 3 hour CN
+compare = makeContrasts((EM2-CN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN2=G_X_E$table
+
+##3 hour EM vs 3 hour CV
+compare = makeContrasts((EM2-CV2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV2=G_X_E$table
+
+##6 hour CV vs 6 hour CN
+compare = makeContrasts((CV3-CN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN3=G_X_E$table
+
+##6 hour EM vs 6 hour CN
+compare = makeContrasts((EM3-CN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN3=G_X_E$table
+
+##6 hour EM vs 6 hour CV
+compare = makeContrasts((EM3-CV3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV3=G_X_E$table
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+
+sCVCN1=CVCN1[CVCN1$FDR<.05,]
+sEMCN1=EMCN1[EMCN1$FDR<.05,]
+sEMCV1=EMCV1[EMCV1$FDR<.05,]
+
+sCVCN2=CVCN2[CVCN2$FDR<.05,]
+sEMCN2=EMCN2[EMCN2$FDR<.05,]
+sEMCV2=EMCV2[EMCV2$FDR<.05,]
+
+sCVCN3=CVCN3[CVCN3$FDR<.05,]
+sEMCN3=EMCN3[EMCN3$FDR<.05,]
+sEMCV3=EMCV3[EMCV3$FDR<.05,]
+
+sCVgenes=unique(c(row.names(sCV2),row.names(sCV3)))
+sCNgenes=unique(c(row.names(sCN2),row.names(sCN3)))
+sCVCNgenes=unique(c(row.names(sCVCN1),row.names(sCVCN2),row.names(sCVCN3)))
+
+sEMgenes=unique(c(row.names(sEM2),row.names(sEM3)))
+
+```
+
+```{r}
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+groups=groups[substring(groups$Library.ID,1,2)=="EM",]
+cpmdata=cpmdata[,row.names(groups)]
+traitData=traitData[substring(traitData$liver,1,2)=="EM",]
+traitData=traitData[,substring(colnames(traitData),1,2)!="Em"]
+
+traitData$NegCon1=sample(1:100,size=nrow(traitData))
+traitData$NegCon2=sample(1:100,size=nrow(traitData))
+traitData$NegCon3=sample(1:100,size=nrow(traitData))
+traitData$NegCon4=sample(1:100,size=nrow(traitData))
+traitData$NegCon5=sample(1:100,size=nrow(traitData))
+
+
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+datExpr0 = as.data.frame(t(cpmdata))
+names(datExpr0) = row.names(cpmdata)
+rownames(datExpr0) = names(cpmdata)
+gsg = goodSamplesGenes(datExpr0, verbose = 3)
+sampleTree = hclust(dist(datExpr0), method = "average")
+clust = cutreeStatic(sampleTree, cutHeight = 80000, minSize = 10)
+##keepSamples = (clust==1)
+##datExpr = datExpr0[keepSamples, ]
+datExpr = datExpr0[,gsg$goodGenes]
+
+##only for emricasan only samples
+datExpr=datExpr[,-18102]
+
+
+nGenes = ncol(datExpr)
+nSamples = nrow(datExpr)
+allTraits = traitData
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+rownames(datTraits) = allTraits[traitRows, 1]
+collectGarbage()
+
+```
+
+```{r}
+sampleTree = hclust(dist(datExpr0), method = "average")
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+     cex.axis = 1.5, cex.main = 2)
+##abline(h = 80000, col = "red")
+
+```
+
+
+```{r}
+
+# Plot the sample dendrogram and the colors underneath.
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+traitColors = numbers2colors(datTraits, signed = FALSE)
+plotDendroAndColors(sampleTree, traitColors,
+                    groupLabels = names(datTraits),
+                    main = "Sample dendrogram and trait heatmap")
+
+ap.datExpr=datExpr
+
+```
+
+
+```{r}
+
+cor <- WGCNA::cor
+net = blockwiseModules(datExpr, power = 5,
+                       TOMType = "unsigned", 
+                       minModuleSize = 30,maxBlockSize=20000,
+                       reassignThreshold = 0, mergeCutHeight = 0.25,
+                       numericLabels = TRUE, pamRespectsDendro = FALSE,
+                       saveTOMs = TRUE,
+                       saveTOMFileBase = "LiverTOM",
+                       verbose = 3)
+ap.datExpr=datExpr
+```
+
+```{r include=F}
+moduleColors = labels2colors(net$colors)
+nGenes = ncol(datExpr);
+nSamples = nrow(datExpr);
+MEs0 = moduleEigengenes(datExpr, moduleColors)$eigengenes
+MEs = orderMEs(MEs0)
+moduleTraitCor = cor(MEs, datTraits, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
+                   signif(moduleTraitPvalue, 1), ")", sep = "");
+dim(textMatrix) = dim(moduleTraitCor)
+
+```
+
+```{r}
+mostsig=moduleTraitPvalue[1,]
+mostsig.color=mostsig
+for(i in names(mostsig)){
+  mostsig[i]=min(moduleTraitPvalue[,i])
+  mostsig.color[i]=row.names(moduleTraitPvalue)[moduleTraitPvalue[,i]==mostsig[i]]
+}
+mostsig=-log(mostsig)
+mostsig.color=substring(mostsig.color,3)
+
+barplot(height=mostsig, col=mostsig.color,border="black", las=3)
+abline(h=-log(0.05),col="red",lty=2,lwd=2)
+
+```
+
+```{r}
+
+i=1
+while(i<=nrow(moduleTraitCor)){
+  moduleTraitCor[i,moduleTraitPvalue[i,]>.05]=NA
+  textMatrix[i,moduleTraitPvalue[i,]>.05]=NA
+  i=i+1
+}
+
+hm=heatmaply(moduleTraitPvalue,scale="none",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,col=hmcolors, dendrogram = "both")
+
+temp=unlist(strsplit((hm$x$data[[4]][[4]])[1,],split ="<br>"))
+temp=temp[substring(temp,1,3)=="col"]
+col.order=substring(temp,9,)
+
+temp=unlist(strsplit((hm$x$data[[4]][[4]])[,1],split ="<br>"))
+temp=temp[substring(temp,1,3)=="row"]
+row.order=substring(temp,6,)
+
+colnames(textMatrix)=colnames(moduleTraitCor)
+row.names(textMatrix)=row.names(moduleTraitCor)
+
+```
+
+```{r}
+par(mar = c(10, 13.5, 5, 5));
+ap.modtraitheatmap=labeledHeatmap(Matrix = moduleTraitCor[row.order,col.order],
+               xLabels = col.order,
+               yLabels = row.order,
+               ySymbols = row.order,
+               colorLabels = FALSE,
+               colors = hmcolors,
+               textMatrix = textMatrix[row.order,col.order],
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships"))
+ap.modtraitheatmap
+
+```
+
+
+```{r}
+
+##generates a correlation and correlation p-value matrix for each gene with each trait and module
+  trait.var = as.data.frame(datTraits);
+  
+  ##MEs are the Module Eigengenes
+  modNames = substring(names(MEs), 3)
+  ##calculations correlation of each gene with each module eigengene
+  geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
+  ##calculates the correlation p-value for each gene with each module eigengene
+  MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples));
+  names(geneModuleMembership) = modNames;
+  names(MMPvalue) = paste("p.", modNames, sep="");
+
+  ##calculates the correlation of each gene with the trait
+  geneTraitSignificance = as.data.frame(cor(datExpr, trait.var, use = "p"));
+  ##calculates the correlation p-value for each gene with the trait
+  GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples));
+  names(geneTraitSignificance) = names(trait.var);
+  names(GSPvalue) = paste("p.", names(trait.var), sep="");
+
+  names(annot)=c("ensembl","symbol")
+  annot=as.data.frame(annot)
+  ensembl = names(datExpr)
+  ensembl2annot = annot[ensembl,2]
+
+  geneInfo = data.frame(genes = ensembl,
+                       geneSymbol = ensembl2annot,
+                       moduleColor = moduleColors,
+                       geneTraitSignificance,
+                       GSPvalue,
+                       geneModuleMembership,
+                       MMPvalue)
+
+sig.trait.genes=geneInfo
+sig.data=c(names(MMPvalue),names(GSPvalue))
+for(i in sig.data){
+sig.trait.genes[,paste("adj",i,sep="")]=p.adjust(sig.trait.genes[,i],method="BH")
+}
+ap.sigtraitgenes=sig.trait.genes
+ap.cpmdata=cpmdata
+cor<-stats::cor
+```
+
+```{r}
+
+adjp.data=colnames(sig.trait.genes)[substring(colnames(sig.trait.genes),1,4)=="adjp"]
+totalsig=c(1:length(adjp.data))
+names(totalsig)=adjp.data
+for(i in adjp.data){
+ totalsig[i]=length(sig.trait.genes[,i][sig.trait.genes[,i]<.05]) 
+}
+
+par(mar = c(10, 5, 5, 5));
+barplot(height=totalsig,las=3)
+
+```
+
+
+
+```{r}
+
+##trait="male"
+trait="alactate"
+##trait="height"
+##trait="Emricasan"
+##trait = "violet"
+
+maxgenes=100000
+hmtitle=""
+hmgenes=ap.sigtraitgenes[,c(trait,paste("adjp.",trait,sep=""))]
+hmgenes=hmgenes[hmgenes[,2]<.05,]
+hmgene.names=row.names(hmgenes[order(hmgenes[,2]),])[1:min(nrow(hmgenes),maxgenes)]
+hmplotdata=ap.cpmdata[hmgene.names,]
+heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+ap.lactgenes=hmgene.names
+```
+
+
+
+```{r}
+s.hmplotdata=cpmdata[intersect(hmgene.names, c(sCVgenes,sCNgenes,sCVCNgenes)),]
+temp=groups
+row.names(temp)=temp$Old.ID
+
+
+colnames(s.hmplotdata)
+heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+
+```
+
+```{r}
+
+##same data with 0H data excluded
+heatmaply(hmplotdata[,substring(colnames(hmplotdata),3,3)!=1],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+
+```
+
+
+```{r}
+
+sCV.hmplotdata=cpmdata[intersect(hmgene.names, setdiff(sCVgenes,sCNgenes)),substring(colnames(hmplotdata),3,3)!=1]
+sCV.hm=heatmaply(sCV.hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+sCV.hm
+
+```
+
+```{r}
+
+sCN.hmplotdata=cpmdata[intersect(hmgene.names, setdiff(sCNgenes,sCVgenes)),substring(colnames(hmplotdata),3,3)!=1]
+sCN.hm=heatmaply(sCN.hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+sCN.hm
+
+```
+
+```{r}
+sCVCN.hmplotdata=cpmdata[intersect(hmgene.names, intersect(sCNgenes,sCVgenes)),substring(colnames(hmplotdata),3,3)!=1]
+sCVCN.hm=heatmaply(sCVCN.hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+sCVCN.hm
+
+```
+
+
+```{r}
+
+sCV.order=sCV.hm$x$data[[3]][4]
+sCV.ordernames=substring(sCV.order[[1]][,1],6,20)
+
+sCVCN.order=sCVCN.hm$x$data[[3]][4]
+sCVCN.ordernames=substring(sCVCN.order[[1]][,1],6,20)
+
+sCN.order=sCN.hm$x$data[[3]][4]
+sCN.ordernames=substring(sCN.order[[1]][,1],6,20)
+
+```
+
+```{r}
+all.hmplotdata=cpmdata[c(sCV.ordernames,sCVCN.ordernames,sCN.ordernames),substring(colnames(hmplotdata),3,3)!=1]
+all.hm=heatmaply(all.hmplotdata,scale="row",trace="none",Colv = T,Rowv=F,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+all.hm
+
+```
+
+```{r fig.height=7.5, fig.width=7.5}
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+row.names(groups)=groups$Library.ID
+groups=groups[substring(row.names(groups),1,2)!="EM",]
+cpmdata=cpmdata[,substring(colnames(cpmdata),1,2)!="EM"]
+
+hmgene.pca=row.names(all.hmplotdata)
+
+pca <- prcomp(t(cpmdata[c(sCV.ordernames,sCVCN.ordernames,sCN.ordernames),]), scale.=TRUE) 
+gr=factor(groups$Library.ID)
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+row.names(groups)=groups$Library.ID
+pcalabels=paste(groups[names(xcoords),"Group"],groups[names(xcoords),"replicate"],sep="")
+
+pcacolors.pal=c("red3","darkgreen","royalblue")
+pcacolors = sapply(as.character(substring(gr,1,2)), switch, "CN" = "red3", "CV" = "darkgreen", "EM" = "royalblue", USE.NAMES = F)
+
+text2D(x=xcoords,y=ycoords,labels = pcalabels, 
+       col=pcacolors,
+       xlab="PC1",ylab="PC2")
+
+lines2D(x=xcoords[c(1,2)],y=ycoords[c(1,2)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(3,4,5)],y=ycoords[c(3,4,5)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(6,7,8)],y=ycoords[c(6,7,8)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(9,10,11)],y=ycoords[c(9,10,11)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(12,13,14)],y=ycoords[c(12,13,14)],col=pcacolors.pal[1],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(15,16,17)],y=ycoords[c(15,16,17)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(18,19,20)],y=ycoords[c(18,19,20)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(21,22,23)],y=ycoords[c(21,22,23)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(24,25,26)],y=ycoords[c(24,25,26)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(27,28,29)],y=ycoords[c(27,28,29)],col=pcacolors.pal[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(30,31,32)],y=ycoords[c(30,31,32)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(33,34,35)],y=ycoords[c(33,34,35)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(36,37,38)],y=ycoords[c(36,37,38)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(39,40,41)],y=ycoords[c(39,40,41)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(42,43,44)],y=ycoords[c(42,43,44)],col=pcacolors.pal[3],add=T,lty=1)
+
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+```
+
+
+
+```{r}
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],49,58))
+order[,2]=as.numeric(substring(order[,2],49,58))
+order[,3]=as.numeric(substring(order[,3],49,58))
+order[,4]=as.numeric(substring(order[,4],49,58))
+order[,5]=as.numeric(substring(order[,5],49,58))
+order[,6]=as.numeric(substring(order[,6],49,58))
+order[,7]=as.numeric(substring(order[,7],49,58))
+order[,8]=as.numeric(substring(order[,8],49,58))
+order[,9]=as.numeric(substring(order[,9],49,58))
+
+
+colnames(order)=colnames(hmdata)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+
+```
+
+
+
+
+
+##top negatively correlated
+```{r}
+
+hmgene.names=row.names(hmgenes[order(hmgenes[,1]),])[1:min(nrow(hmgenes),500)]
+hmplotdata=cpmdata[hmgene.names,]
+heatmaply(hmplotdata[,substring(colnames(hmplotdata),3,3)!=1],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+top.neg.cor=hmgene.names
+
+```
+
+
+##top postively correlated
+```{r}
+
+hmgene.names=row.names(hmgenes[order(hmgenes[,1], decreasing=T),])[1:min(nrow(hmgenes),500)]
+hmplotdata=cpmdata[hmgene.names,]
+heatmaply(hmplotdata[,substring(colnames(hmplotdata),3,3)!=1],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+top.pos.cor=hmgene.names
+```
+
+
+
+```{r fig.height=7.5, fig.width=7.5}
+
+
+cpmdata1=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups1=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+cpmdata1=cpmdata1[row.names(groups1)]
+colnames(cpmdata1)=groups1$Library.ID
+row.names(groups1)=groups1$Library.ID
+
+cpmdata2=cpmdata
+groups2=groups
+
+
+hmgene.pca=row.names(hmgenes[order(abs(hmgenes[,1]), decreasing=T),])
+pca <- prcomp(t(cpmdata[hmgene.pca,]), scale.=TRUE) 
+gr=factor(groups$Library.ID)
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+zcoords=pca$x[,3]
+row.names(groups)=groups$Library.ID
+pcalabels=paste(groups[names(xcoords),"Group"],groups[names(xcoords),"replicate"],sep="")
+
+pcacolors.pal=c("red3","darkgreen","royalblue")
+pcacolors = sapply(as.character(substring(gr,1,2)), switch, "CN" = "red3", "CV" = "darkgreen", "EM" = "royalblue", USE.NAMES = F)
+
+text2D(x=xcoords,y=ycoords,labels = pcalabels, 
+       col=pcacolors,
+       xlab="PC1",ylab="PC2")
+
+lines2D(x=xcoords[c(1,2)],y=ycoords[c(1,2)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(3,4,5)],y=ycoords[c(3,4,5)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(6,7,8)],y=ycoords[c(6,7,8)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(9,10,11)],y=ycoords[c(9,10,11)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(12,13,14)],y=ycoords[c(12,13,14)],col=pcacolors.pal[1],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(15,16,17)],y=ycoords[c(15,16,17)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(18,19,20)],y=ycoords[c(18,19,20)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(21,22,23)],y=ycoords[c(21,22,23)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(24,25,26)],y=ycoords[c(24,25,26)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(27,28,29)],y=ycoords[c(27,28,29)],col=pcacolors.pal[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(30,31,32)],y=ycoords[c(30,31,32)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(33,34,35)],y=ycoords[c(33,34,35)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(36,37,38)],y=ycoords[c(36,37,38)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(39,40,41)],y=ycoords[c(39,40,41)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(42,43,44)],y=ycoords[c(42,43,44)],col=pcacolors.pal[3],add=T,lty=1)
+
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+```
+
+
+```{r fig.height=7.5, fig.width=7.5}
+
+hmgene.pca=row.names(hmgenes[order(abs(hmgenes[,1]), decreasing=T),])
+pca <- prcomp(t(cpmdata[hmgene.pca,]), scale.=TRUE) 
+gr=factor(groups$Library.ID)
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,3]
+
+row.names(groups)=groups$Library.ID
+pcalabels=paste(groups[names(xcoords),"Group"],groups[names(xcoords),"replicate"],sep="")
+
+pcacolors.pal=c("red3","darkgreen","royalblue")
+pcacolors = sapply(as.character(substring(gr,1,2)), switch, "CN" = "red3", "CV" = "darkgreen", "EM" = "royalblue", USE.NAMES = F)
+
+text2D(x=xcoords,y=ycoords,labels = pcalabels, 
+       col=pcacolors,
+       xlab="PC1",ylab="PC3")
+
+lines2D(x=xcoords[c(1,2)],y=ycoords[c(1,2)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(3,4,5)],y=ycoords[c(3,4,5)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(6,7,8)],y=ycoords[c(6,7,8)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(9,10,11)],y=ycoords[c(9,10,11)],col=pcacolors.pal[1],add=T,lty=1)
+lines2D(x=xcoords[c(12,13,14)],y=ycoords[c(12,13,14)],col=pcacolors.pal[1],add=T,lty=1)
+
+
+lines2D(x=xcoords[c(15,16,17)],y=ycoords[c(15,16,17)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(18,19,20)],y=ycoords[c(18,19,20)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(21,22,23)],y=ycoords[c(21,22,23)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(24,25,26)],y=ycoords[c(24,25,26)],col=pcacolors.pal[2],add=T,lty=1)
+lines2D(x=xcoords[c(27,28,29)],y=ycoords[c(27,28,29)],col=pcacolors.pal[2],add=T,lty=1)
+
+lines2D(x=xcoords[c(30,31,32)],y=ycoords[c(30,31,32)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(33,34,35)],y=ycoords[c(33,34,35)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(36,37,38)],y=ycoords[c(36,37,38)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(39,40,41)],y=ycoords[c(39,40,41)],col=pcacolors.pal[3],add=T,lty=1)
+lines2D(x=xcoords[c(42,43,44)],y=ycoords[c(42,43,44)],col=pcacolors.pal[3],add=T,lty=1)
+
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+```
+
+
+```{r}
+
+sigs=row.names(hmgenes)
+bg=cpmdata[,1:2]
+bg[,1]=0
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+
+
+
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+
+
+
+
+```

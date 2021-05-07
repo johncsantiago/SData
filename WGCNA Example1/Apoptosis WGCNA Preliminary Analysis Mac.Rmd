@@ -15,7 +15,8 @@ library(visNetwork)
 library(gplots)
 library(heatmaply)
 options(stringsAsFactors = FALSE)
-enableWGCNAThreads(nThreads = NULL)
+##enableWGCNAThreads(nThreads = NULL)
+##disableWGCNAThreads()
 
 ##Step 1: Clean Data
 cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
