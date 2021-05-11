@@ -1,0 +1,351 @@
+---
+title: "Consensus Modules"
+author: "John Santiago"
+date: "5/5/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
+setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
+library(WGCNA)
+library(visNetwork)
+library(gplots)
+library(heatmaply)
+library("biomaRt")
+library("goseq")
+library(plot3D)
+library(edgeR)
+ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+go_slim=getBM(attributes="goslim_goa_accession",mart=ensembl)
+reactome=getBM(attributes = "reactome",mart=ensembl)
+kegg_enzyme=getBM(attributes="kegg_enzyme", mart=ensembl)
+
+options(stringsAsFactors = FALSE)
+##enableWGCNAThreads(nThreads = NULL)
+##disableWGCNAThreads()
+
+
+
+##Step 1: Clean Data
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+annot =read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/AnnotationData.csv",row.names=1)
+
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+##EdgeR comparisons
+countdata=countdata[,row.names(groups)]
+x <- countdata
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+design<-model.matrix(~0+groups$Group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+##comparisons
+##3 hour CN vs 0 hour CN
+compare = makeContrasts((CN2-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN2=G_X_E$table
+
+##6 hour CN vs 0 hour CN
+compare = makeContrasts((CN3-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN3=G_X_E$table
+
+##3 hour CV vs 0 hour CV
+compare = makeContrasts((CV2-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV2=G_X_E$table
+
+##6 hour CV vs 0 hour CV
+compare = makeContrasts((CV3-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV3=G_X_E$table
+
+##3 hour EM vs 0 hour EM
+compare = makeContrasts((EM2-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM2=G_X_E$table
+
+##6 hour EM vs 0 hour EM
+compare = makeContrasts((EM3-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM3=G_X_E$table
+
+##0 hour CV vs 0 hour CN
+compare = makeContrasts((CV1-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN1=G_X_E$table
+
+##0 hour EM vs 0 hour CN
+compare = makeContrasts((EM1-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN1=G_X_E$table
+
+##0 hour EM vs 0 hour CV
+compare = makeContrasts((EM1-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV1=G_X_E$table
+
+##3 hour CV vs 3 hour CN
+compare = makeContrasts((CV2-CN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN2=G_X_E$table
+
+##3 hour EM vs 3 hour CN
+compare = makeContrasts((EM2-CN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN2=G_X_E$table
+
+##3 hour EM vs 3 hour CV
+compare = makeContrasts((EM2-CV2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV2=G_X_E$table
+
+##6 hour CV vs 6 hour CN
+compare = makeContrasts((CV3-CN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN3=G_X_E$table
+
+##6 hour EM vs 6 hour CN
+compare = makeContrasts((EM3-CN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN3=G_X_E$table
+
+##6 hour EM vs 6 hour CV
+compare = makeContrasts((EM3-CV3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV3=G_X_E$table
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+
+sCVCN1=CVCN1[CVCN1$FDR<.05,]
+sEMCN1=EMCN1[EMCN1$FDR<.05,]
+sEMCV1=EMCV1[EMCV1$FDR<.05,]
+
+sCVCN2=CVCN2[CVCN2$FDR<.05,]
+sEMCN2=EMCN2[EMCN2$FDR<.05,]
+sEMCV2=EMCV2[EMCV2$FDR<.05,]
+
+sCVCN3=CVCN3[CVCN3$FDR<.05,]
+sEMCN3=EMCN3[EMCN3$FDR<.05,]
+sEMCV3=EMCV3[EMCV3$FDR<.05,]
+
+sCVgenes=unique(c(row.names(sCV2),row.names(sCV3)))
+sCNgenes=unique(c(row.names(sCN2),row.names(sCN3)))
+sCVCNgenes=unique(c(row.names(sCVCN1),row.names(sCVCN2),row.names(sCVCN3)))
+
+```
+
+```{r}
+
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+annot =read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/AnnotationData.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+groups=groups[substring(groups$Library.ID,1,2)!="EM",]
+cpmdata=cpmdata[,row.names(groups)]
+traitData=traitData[substring(traitData$liver,1,2)!="EM",]
+traitData=traitData[,substring(colnames(traitData),1,2)!="Em"]
+
+traitData$NegCon1=sample(1:100,size=nrow(traitData))
+traitData$NegCon2=sample(1:100,size=nrow(traitData))
+traitData$NegCon3=sample(1:100,size=nrow(traitData))
+traitData$NegCon4=sample(1:100,size=nrow(traitData))
+traitData$NegCon5=sample(1:100,size=nrow(traitData))
+
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+datExpr0 = as.data.frame(t(cpmdata))
+names(datExpr0) = row.names(cpmdata)
+rownames(datExpr0) = names(cpmdata)
+gsg = goodSamplesGenes(datExpr0, verbose = 3)
+sampleTree = hclust(dist(datExpr0), method = "average")
+clust = cutreeStatic(sampleTree, cutHeight = 80000, minSize = 10)
+
+keepSamples = (clust==1)
+datExpr = datExpr0[keepSamples, ]
+datExpr = datExpr0[,gsg$goodGenes]
+nGenes = ncol(datExpr)
+nSamples = nrow(datExpr)
+allTraits = traitData
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+rownames(datTraits) = allTraits[traitRows, 1]
+collectGarbage()
+
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+traitColors = numbers2colors(datTraits, signed = FALSE)
+con.datExpr=datExpr
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+groups=groups[substring(groups$Library.ID,1,2)=="EM",]
+cpmdata=cpmdata[,row.names(groups)]
+traitData=traitData[substring(traitData$liver,1,2)=="EM",]
+traitData=traitData[,substring(colnames(traitData),1,2)!="Em"]
+
+traitData$NegCon1=sample(1:100,size=nrow(traitData))
+traitData$NegCon2=sample(1:100,size=nrow(traitData))
+traitData$NegCon3=sample(1:100,size=nrow(traitData))
+traitData$NegCon4=sample(1:100,size=nrow(traitData))
+traitData$NegCon5=sample(1:100,size=nrow(traitData))
+
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+datExpr0 = as.data.frame(t(cpmdata))
+names(datExpr0) = row.names(cpmdata)
+rownames(datExpr0) = names(cpmdata)
+gsg = goodSamplesGenes(datExpr0, verbose = 3)
+sampleTree = hclust(dist(datExpr0), method = "average")
+clust = cutreeStatic(sampleTree, cutHeight = 80000, minSize = 10)
+datExpr = datExpr0[,gsg$goodGenes]
+##only for emricasan only samples
+datExpr=datExpr[,-18102]
+
+nGenes = ncol(datExpr)
+nSamples = nrow(datExpr)
+allTraits = traitData
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+rownames(datTraits) = allTraits[traitRows, 1]
+collectGarbage()
+
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+traitColors = numbers2colors(datTraits, signed = FALSE)
+
+
+ap.datExpr=datExpr
+
+```
+```{r}
+
+multiExpr=vector(mode="list", length=2)
+moduleLabels=intersect(colnames(ap.datExpr),colnames(con.datExpr))
+con.datExpr=con.datExpr[,moduleLabels]
+multiExpr[[1]]=list(data=as.data.frame(con.datExpr))
+
+multiExpr[[2]]=list(data=as.data.frame(ap.datExpr))
+
+```
+
+
+```{r}
+bnet=blockwiseConsensusModules(
+  multiExpr, maxBlockSize = 20000,power=5,minModuleSize = 30,
+  deepSplit = 2,
+  pamRespectsDendro = F,
+  mergeCutHeight = .25, numericLabels = T,
+  minKMEtoStay = 0,
+  saveTOMs=F,verbose=5
+)
+
+```
+
+
+```{r}
+
+bwLabels = matchLabels(bnet$colors, moduleLabels, pThreshold = 1e-7);
+bwColors = labels2colors(bwLabels)
+
+```
+
+```{r}
+
+layout(matrix(c(1:4), 2, 2), heights = c(0.8, 0.2), widths = c(1,1))
+#layout.show(4);
+nBlocks = length(bnet$dendrograms)
+# Plot the dendrogram and the module colors underneath for each block
+for (block in 1:nBlocks)
+  plotDendroAndColors(bnet$dendrograms[[block]], moduleColors[bnet$blockGenes[[block]]],
+                    "Module colors",
+                    main = paste("Gene dendrogram and module colors in block", block),
+                    dendroLabels = FALSE, hang = 0.03,
+                    addGuide = TRUE, guideHang = 0.05,
+                    setLayout = FALSE)
+
+```
+
+```{r}
+
+
+sizeGrWindow(12,9);
+#pdf(file="Plots/SingleDendro-BWColors.pdf", wi = 12, he = 9);
+plotDendroAndColors(consTree,
+                  cbind(moduleColors, bwColors),
+                  c("Single block", "Blockwise"),
+                  dendroLabels = FALSE, hang = 0.03,
+                  addGuide = TRUE, guideHang = 0.05,
+                  main = "Single block consensus gene dendrogram and module colors")
+```
+
+
+
+
+```{r}
+
+temp.ydata=con.cpmdata[con.lactgenes,]
+temp.xdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+row.names(temp.xdata)=temp.xdata$liver
+xdata=temp.xdata[colnames(temp.ydata),"alactate"]
+
+##scaleing = subtract the mean and divide by the standard deviation
+
+
+mean.ydata=mean(as.numeric(temp.ydata[1,]))
+sd.ydata=sd(as.numeric(temp.ydata[1,]))
+ydata=(temp.ydata[1,]-mean.ydata)/sd.ydata
+plot(xdata,ydata,ylim=c(-5,5),type="l")
+
+
+for(i in con.lactgenes){
+  mean.ydata=mean(as.numeric(temp.ydata[i,]))
+  sd.ydata=sd(as.numeric(temp.ydata[i,]))
+  ydata=(temp.ydata[i,]-mean.ydata)/sd.ydata
+  lines(xdata,ydata )
+}
+
+```
+
+

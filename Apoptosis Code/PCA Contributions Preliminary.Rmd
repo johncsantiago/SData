@@ -1,0 +1,251 @@
+---
+title: "Top 10 PCA Genes"
+author: "John Santiago"
+date: "5/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+
+library(gplots)
+library(heatmaply)
+library("biomaRt")
+library("goseq")
+library(plot3D)
+
+##ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+##go_slim=getBM(attributes="goslim_goa_accession",mart=ensembl)
+##reactome=getBM(attributes = "reactome",mart=ensembl)
+##kegg_enzyme=getBM(attributes="kegg_enzyme", mart=ensembl)
+
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+
+cpmdata=cpmdata[,c(1,3,6,9,12,2,4,7,10,13,5,8,11,14,15,18,21,24,27,16,19,22,25,28,17,20,23,26,29,30,33 ,36,39,42,31,34,37,40,43,32,35,38,41,44)]
+groups=groups[colnames(cpmdata),]
+
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+row.names(groups)=groups$Library.ID
+
+pca <- prcomp(t(cpmdata), scale.=TRUE) 
+gr <- factor(row.names(groups))
+contribution=pca$rotation
+
+i=1
+meancpm=cpmdata[,1:9]
+names(meancpm)=c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3")
+while(i <= nrow(meancpm)){
+        meancpm[i,1]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="CN1"]))
+        meancpm[i,2]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="CN2"]))
+        meancpm[i,3]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="CN3"])) 
+        
+        meancpm[i,4]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="CV1"]))
+        meancpm[i,5]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="CV2"]))
+        meancpm[i,6]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="CV3"]))  
+        
+        meancpm[i,7]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="EM1"]))
+        meancpm[i,8]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="EM2"]))
+        meancpm[i,9]=mean(as.numeric(cpmdata[i,substring(colnames(cpmdata),1,3)=="EM3"]))  
+i=i+1}
+
+meancpm= meancpm[rowSums(meancpm)!=0,]
+
+
+```
+
+```{r}
+
+PC1contribute=contribution[,1]
+PC1contribute=PC1contribute[order(PC1contribute,decreasing=T)]
+
+PC2contribute=contribution[,2]
+PC2contribute=PC2contribute[order(PC2contribute,decreasing=T)]
+
+PC3contribute=contribution[,3]
+PC3contribute=PC3contribute[order(PC3contribute,decreasing=T)]
+
+PCcontribute=PC1contribute
+loading=(PCcontribute)
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+percent.variation=signif(ve,4)
+
+##The column sum of squares of the loadings (pca$rotation) are the variances of PCs.
+percents=(PCcontribute*PCcontribute)
+percents=percents[order(percents,decreasing=T)]
+loading=loading[names(percents)]
+percent2=percents
+temppercent=0
+i=1
+while(i<=length(percents)){
+  percents[i]=percents[i]+temppercent
+  temppercent=percents[i]
+  i=i+1
+}
+
+percents=percents[loading[names(percents)]>0]
+hmd=names(percents)[percents<=.1]
+toppc1=hmd
+hmd=cpmdata[(hmd),]
+hmd=cpmdata[row.names(hmd),]
+
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+```
+
+```{r fig.width=5,fig.height=5, fig.align="center"}
+allhm=heatmaply(hmd,scale="row",trace="none",Colv = F,Rowv=T,cexRow = .1,main="Top 10% PC1 Contribution",col=hmcolors, dendrogram = "row")
+allhm
+```
+
+
+```{r}
+
+order=allhm$x$data[[1]][4]
+ordernames=substring(order[[1]][,1],6,20)
+order=order[[1]]
+order[,1]=as.numeric(substring(order[,1],48,58))
+order[,2]=as.numeric(substring(order[,2],48,58))
+order[,3]=as.numeric(substring(order[,3],48,58))
+order[,4]=as.numeric(substring(order[,4],48,58))
+order[,5]=as.numeric(substring(order[,5],48,58))
+order[,6]=as.numeric(substring(order[,6],48,58))
+order[,7]=as.numeric(substring(order[,7],48,58))
+order[,8]=as.numeric(substring(order[,8],48,58))
+order[,9]=as.numeric(substring(order[,9],48,58))
+order[,10]=as.numeric(substring(order[,10],48,58))
+order[,11]=as.numeric(substring(order[,11],48,58))
+order[,12]=as.numeric(substring(order[,12],48,58))
+order[,13]=as.numeric(substring(order[,13],48,58))
+order[,14]=as.numeric(substring(order[,14],48,58))
+
+order[,15]=as.numeric(substring(order[,15],48,58))
+order[,16]=as.numeric(substring(order[,16],48,58))
+order[,17]=as.numeric(substring(order[,17],48,58))
+order[,18]=as.numeric(substring(order[,18],48,58))
+order[,19]=as.numeric(substring(order[,19],48,58))
+order[,20]=as.numeric(substring(order[,20],48,58))
+order[,21]=as.numeric(substring(order[,21],48,58))
+order[,22]=as.numeric(substring(order[,22],48,58))
+order[,23]=as.numeric(substring(order[,23],48,58))
+order[,24]=as.numeric(substring(order[,24],48,58))
+order[,25]=as.numeric(substring(order[,25],48,58))
+order[,26]=as.numeric(substring(order[,26],48,58))
+order[,27]=as.numeric(substring(order[,27],48,58))
+order[,28]=as.numeric(substring(order[,28],48,58))
+order[,29]=as.numeric(substring(order[,29],48,58))
+
+order[,30]=as.numeric(substring(order[,30],48,58))
+order[,31]=as.numeric(substring(order[,31],48,58))
+order[,32]=as.numeric(substring(order[,32],48,58))
+order[,33]=as.numeric(substring(order[,33],48,58))
+order[,34]=as.numeric(substring(order[,34],48,58))
+order[,35]=as.numeric(substring(order[,35],48,58))
+order[,36]=as.numeric(substring(order[,36],48,58))
+order[,37]=as.numeric(substring(order[,37],48,58))
+order[,38]=as.numeric(substring(order[,38],48,58))
+order[,39]=as.numeric(substring(order[,39],48,58))
+order[,40]=as.numeric(substring(order[,40],48,58))
+order[,41]=as.numeric(substring(order[,41],48,58))
+order[,42]=as.numeric(substring(order[,42],48,58))
+order[,43]=as.numeric(substring(order[,43],48,58))
+order[,44]=as.numeric(substring(order[,44],48,58))
+
+colnames(order)=colnames(hmd)
+row.names(order)=ordernames
+mode(order)="numeric"
+order=order[nrow(order):1,]
+
+allorder=order
+
+```
+
+
+```{r fig.width=5,fig.height=5, fig.align="center"}
+heatmaply(order[,1:14],scale="none",trace="none",Colv = F,Rowv=F,cexRow = .1,main="Top 10% PC1 Contribution",col=hmcolors, dendrogram = "none")
+
+```
+
+```{r fig.width=5,fig.height=5, fig.align="center"}
+heatmaply(order[,15:29],scale="none",trace="none",Colv = F,Rowv=F,cexRow = .1,main="Top 10% PC1 Contribution",col=hmcolors, dendrogram = "none")
+
+```
+
+
+
+```{r fig.width=5,fig.height=5, fig.align="center"}
+heatmaply(order[,30:44],scale="none",trace="none",Colv = F,Rowv=F,cexRow = .1,main="Top 10% PC1 Contribution",col=hmcolors, dendrogram = "none")
+
+```
+
+
+```{r fig.width=5,fig.height=5, fig.align="center"}
+heatmaply(meancpm[row.names(order),],scale="row",trace="none",Colv = F,Rowv=F,cexRow = .1,main="Top 10% PC1 Contribution",col=hmcolors, dendrogram = "none")
+
+```
+
+
+```{r}
+
+pca <- prcomp(t(meancpm[1:11517,]), scale.=TRUE) 
+gr <- factor(c("CN1","CN2","CN3","CV1","CV2","CV3","EM1","EM2","EM3"))
+contribution=pca$rotation
+
+PC1contribute=contribution[,1]
+PC1contribute=PC1contribute[order(PC1contribute,decreasing=T)]
+
+PC2contribute=contribution[,2]
+PC2contribute=PC2contribute[order(PC2contribute,decreasing=T)]
+
+PC3contribute=contribution[,3]
+PC3contribute=PC3contribute[order(PC3contribute,decreasing=T)]
+
+PCcontribute=PC1contribute
+loading=(PCcontribute)
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+percent.variation=signif(ve,4)
+
+##The column sum of squares of the loadings (pca$rotation) are the variances of PCs.
+percents=(PCcontribute*PCcontribute)
+percents=percents[order(percents,decreasing=T)]
+loading=loading[names(percents)]
+percent2=percents
+temppercent=0
+i=1
+while(i<=length(percents)){
+  percents[i]=percents[i]+temppercent
+  temppercent=percents[i]
+  i=i+1
+}
+
+percents=percents[loading[names(percents)]>0]
+hmd=names(percents)[percents<=.1]
+toppc1=hmd
+hmd=meancpm[(hmd),]
+
+hmcolors=colorpanel(100,"royalblue4","white","firebrick4")
+```
+
+```{r fig.width=5,fig.height=5, fig.align="center"}
+allmeanhm=heatmaply(hmd,scale="row",trace="none",Colv = F,Rowv=T,cexRow = .1,main="Top 10% PC1 Contribution",col=hmcolors, dendrogram = "none")
+allmeanhm
+```
+
+
+
+```{r}
+
+order[setdiff(row.names(order),row.names(sC2m)),2]=NA
+order[setdiff(row.names(order),row.names(sC3m)),3]=NA
+order[setdiff(row.names(order),row.names(sC4m)),4]=NA
+order[setdiff(row.names(order),row.names(sC5m)),5]=NA
+order[setdiff(row.names(order),row.names(sR2m)),6]=NA
+order[setdiff(row.names(order),row.names(sR3m)),7]=NA
+order[setdiff(row.names(order),row.names(sR4m)),8]=NA
+order[setdiff(row.names(order),row.names(sR5m)),9]=NA
+
+```

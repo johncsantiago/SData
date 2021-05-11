@@ -178,9 +178,9 @@ sEMgenes=unique(c(row.names(sEM2),row.names(sEM3)))
 cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
 groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
 traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
-groups=groups[substring(groups$Library.ID,1,2)=="EM",]
+groups=groups[substring(groups$Library.ID,1,2)=="EM"&substring(groups$Library.ID,4,4)!="5",]
 cpmdata=cpmdata[,row.names(groups)]
-traitData=traitData[substring(traitData$liver,1,2)=="EM",]
+traitData=traitData[substring(traitData$liver,1,2)=="EM"&substring(traitData$liver,4,4)!="5",]
 traitData=traitData[,substring(colnames(traitData),1,2)!="Em"]
 
 traitData$NegCon1=sample(1:100,size=nrow(traitData))
@@ -238,7 +238,7 @@ plotDendroAndColors(sampleTree, traitColors,
                     groupLabels = names(datTraits),
                     main = "Sample dendrogram and trait heatmap")
 
-ap.datExpr=datExpr
+ap1234.datExpr=datExpr
 
 ```
 
@@ -254,7 +254,7 @@ net = blockwiseModules(datExpr, power = 5,
                        saveTOMs = TRUE,
                        saveTOMFileBase = "LiverTOM",
                        verbose = 3)
-ap.datExpr=datExpr
+ap1234.datExpr=datExpr
 ```
 
 ```{r include=F}
@@ -312,7 +312,7 @@ row.names(textMatrix)=row.names(moduleTraitCor)
 
 ```{r}
 par(mar = c(10, 13.5, 5, 5));
-ap.modtraitheatmap=labeledHeatmap(Matrix = moduleTraitCor[row.order,col.order],
+ap1234.modtraitheatmap=labeledHeatmap(Matrix = moduleTraitCor[row.order,col.order],
                xLabels = col.order,
                yLabels = row.order,
                ySymbols = row.order,
@@ -323,7 +323,7 @@ ap.modtraitheatmap=labeledHeatmap(Matrix = moduleTraitCor[row.order,col.order],
                cex.text = 0.5,
                zlim = c(-1,1),
                main = paste("Module-trait relationships"))
-ap.modtraitheatmap
+ap1234.modtraitheatmap
 
 ```
 
@@ -367,8 +367,8 @@ sig.data=c(names(MMPvalue),names(GSPvalue))
 for(i in sig.data){
 sig.trait.genes[,paste("adj",i,sep="")]=p.adjust(sig.trait.genes[,i],method="BH")
 }
-ap.sigtraitgenes=sig.trait.genes
-ap.cpmdata=cpmdata
+ap1234.sigtraitgenes=sig.trait.genes
+ap1234.cpmdata=cpmdata
 cor<-stats::cor
 ```
 
@@ -390,8 +390,9 @@ barplot(height=totalsig,las=3)
 
 ```{r}
 
+trait="AST.100g"
 ##trait="male"
-trait="alactate"
+##trait="alactate"
 ##trait="height"
 ##trait="Emricasan"
 ##trait = "violet"
@@ -410,7 +411,7 @@ heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol
     midpoint = 0,
     na.value = "grey50"))
 
-ap.lactgenes=hmgene.names
+ap1234.lactgenes=hmgene.names
 ```
 
 
@@ -446,6 +447,27 @@ heatmaply(hmplotdata[,substring(colnames(hmplotdata),3,3)!=1],scale="row",trace=
 
 
 ```
+
+```{r}
+
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+lactatelevels=traitData$alactate
+names(lactatelevels)=traitData$liver
+lactatesamples=colnames(hmplotdata)[substring(colnames(hmplotdata),3,3)!=1]
+lactatelevels=lactatelevels[lactatesamples]
+
+##same data with 0H data excluded
+heatmaply(hmplotdata[,names(lactatelevels)[order(lactatelevels)]],scale="row",trace="none",Colv = F,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+
+```
+
 
 
 ```{r}
