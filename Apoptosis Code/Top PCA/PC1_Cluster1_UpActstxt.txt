@@ -1,0 +1,8 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Upstream Regulator	Molecule Type	p-value of overlap	B-H corrected p-value	Target Molecules in Dataset	Mechanistic Network
+APOB	transporter	2.92E-03	4.09E-02	BIVM	 
+EGLN	group	8.49E-03	5.94E-02	PPP1R3E,THAP8	 
+GFI1B	transcription regulator	1.45E-02	6.78E-02	GABPB2	 
+IFITM1	transmembrane receptor	2.60E-02	9.11E-02	ACBD4	 
+CCNK	kinase	4.30E-02	1.20E-01	GABPB2	 

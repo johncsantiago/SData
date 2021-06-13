@@ -1,0 +1,193 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Ingenuity Canonical Pathways	 -log(p-value)	Ratio	z-score	Molecules	
+Hepatic Fibrosis Signaling Pathway	2.9E00	1.48E-02	0.000	Calm1 (includes others),FGF2,FOS,IRS2,KDR,SERPINE1	
+RANK Signaling in Osteoclasts	2.63E00	3.37E-02	NaN	Calm1 (includes others),FOS,MAP3K6	
+Autophagy	2.48E00	1.94E-02	0.000	Calm1 (includes others),FGF2,FOS,IRS2	
+Inhibition of Angiogenesis by TSP1	2.36E00	6.06E-02	NaN	KDR,THBS1	
+Sulfate Activation for Sulfonation	2.23E00	5E-01	NaN	PAPSS2	
+iNOS Signaling	2.08E00	4.35E-02	NaN	Calm1 (includes others),FOS	
+PI3K Signaling in B Lymphocytes	2.07E00	2.13E-02	NaN	Calm1 (includes others),FOS,IRS2	
+Corticotropin Releasing Hormone Signaling	2.04E00	2.07E-02	NaN	Calm1 (includes others),CRHR2,FOS	
+CD27 Signaling in Lymphocytes	1.92E00	3.57E-02	NaN	FOS,MAP3K6	
+SPINK1 General Cancer Pathway	1.92E00	3.57E-02	NaN	Mt1,Mt2	
+Thrombopoietin Signaling	1.82E00	3.17E-02	NaN	FOS,IRS2	
+GNRH Signaling	1.77E00	1.65E-02	NaN	Calm1 (includes others),FOS,MAP3K6	
+UDP-N-acetyl-D-glucosamine Biosynthesis II	1.75E00	1.67E-01	NaN	GFPT2	
+Ceramide Degradation	1.75E00	1.67E-01	NaN	ACER2	
+Hepatic Fibrosis / Hepatic Stellate Cell Activation	1.74E00	1.6E-02	NaN	FGF2,KDR,SERPINE1	
+GDNF Family Ligand-Receptor Interactions	1.68E00	2.67E-02	NaN	FOS,IRS2	
+Chemokine Signaling	1.68E00	2.67E-02	NaN	Calm1 (includes others),FOS	
+HIF1α Signaling	1.66E00	1.49E-02	NaN	FGF2,KDR,SERPINE1	
+Thyroid Cancer Signaling	1.66E00	2.6E-02	NaN	FOS,IRS2	
+Sphingosine and Sphingosine-1-phosphate Metabolism	1.63E00	1.25E-01	NaN	ACER2	
+VEGF Family Ligand-Receptor Interactions	1.61E00	2.44E-02	NaN	FOS,KDR	
+NRF2-mediated Oxidative Stress Response	1.56E00	1.37E-02	NaN	FOS,JUNB,MAFF	
+TGF-β Signaling	1.5E00	2.13E-02	NaN	FOS,SERPINE1	
+IGF-1 Signaling	1.43E00	1.96E-02	NaN	FOS,IRS2	
+Systemic Lupus Erythematosus In B Cell Signaling Pathway	1.42E00	1.21E-02	NaN	Calm1 (includes others),FOS,LILRB4	
+Acyl-CoA Hydrolysis	1.42E00	7.69E-02	NaN	THEM4	
+Bladder Cancer Signaling	1.35E00	1.77E-02	NaN	FGF2,THBS1	
+Opioid Signaling Pathway	1.35E00	1.13E-02	NaN	Calm1 (includes others),FOS,FOSB	
+Nitric Oxide Signaling in the Cardiovascular System	1.34E00	1.74E-02	NaN	Calm1 (includes others),KDR	
+HGF Signaling	1.25E00	1.55E-02	NaN	FOS,MAP3K6	
+STAT3 Pathway	1.21E00	1.48E-02	NaN	FGF2,KDR	
+Apelin Endothelial Signaling Pathway	1.2E00	1.46E-02	NaN	Calm1 (includes others),FOS	
+Role of Macrophages, Fibroblasts and Endothelial Cells in Rheumatoid Arthritis	1.2E00	9.74E-03	NaN	Calm1 (includes others),FGF2,FOS	
+IL-17A Signaling in Gastric Cells	1.18E00	4.35E-02	NaN	FOS	
+Apelin Cardiac Fibroblast Signaling Pathway	1.18E00	4.35E-02	NaN	SERPINE1	
+eNOS Signaling	1.12E00	1.31E-02	NaN	Calm1 (includes others),KDR	
+HMGB1 Signaling	1.11E00	1.29E-02	NaN	FOS,SERPINE1	
+Erythropoietin Signaling Pathway	1.06E00	1.2E-02	NaN	FOS,IRS2	
+TNFR2 Signaling	1.04E00	3.12E-02	NaN	FOS	
+Role of JAK2 in Hormone-like Cytokine Signaling	1.04E00	3.12E-02	NaN	IRS2	
+CREB Signaling in Neurons	1.03E00	6.92E-03	-2.000	Calm1 (includes others),CRHR2,FGF2,KDR	
+Acute Phase Response Signaling	1.03E00	1.16E-02	NaN	FOS,SERPINE1	
+Tumor Microenvironment Pathway	1.02E00	1.15E-02	NaN	FGF2,FOS	
+Production of Nitric Oxide and Reactive Oxygen Species in Macrophages	1.01E00	1.12E-02	NaN	FOS,MAP3K6	
+B Cell Receptor Signaling	1.01E00	1.12E-02	NaN	Calm1 (includes others),MAP3K6	
+Coagulation System	1E00	2.86E-02	NaN	SERPINE1	
+IL-9 Signaling	1E00	2.86E-02	NaN	IRS2	
+Cell Cycle Regulation by BTG Family Proteins	1E00	2.86E-02	NaN	BTG2	
+IL-17A Signaling in Fibroblasts	1E00	2.86E-02	NaN	FOS	
+Coronavirus Pathogenesis Pathway	9.79E-01	1.08E-02	NaN	FOS,SERPINE1	
+ILK Signaling	9.67E-01	1.06E-02	NaN	FOS,IRS2	
+Regulation Of The Epithelial Mesenchymal Transition By Growth Factors Pathway	9.67E-01	1.06E-02	NaN	FGF2,FOS	
+Adrenomedullin signaling pathway	9.39E-01	1.03E-02	NaN	Calm1 (includes others),FOS	
+MIF Regulation of Innate Immunity	9.28E-01	2.38E-02	NaN	FOS	
+April Mediated Signaling	9.28E-01	2.38E-02	NaN	FOS	
+B Cell Activating Factor Signaling	9.21E-01	2.33E-02	NaN	FOS	
+IL-8 Signaling	9.17E-01	9.9E-03	NaN	FOS,KDR	
+nNOS Signaling in Neurons	9E-01	2.22E-02	NaN	Calm1 (includes others)	
+PFKFB4 Signaling Pathway	9E-01	2.22E-02	NaN	FGF2	
+nNOS Signaling in Skeletal Muscle Cells	8.83E-01	2.13E-02	NaN	Calm1 (includes others)	
+Role of Osteoblasts, Osteoclasts and Chondrocytes in Rheumatoid Arthritis	8.66E-01	9.22E-03	NaN	Calm1 (includes others),FOS	
+TNFR1 Signaling	8.57E-01	2E-02	NaN	FOS	
+UVB-Induced MAPK Signaling	8.51E-01	1.96E-02	NaN	FOS	
+UVC-Induced MAPK Signaling	8.51E-01	1.96E-02	NaN	FOS	
+Stearate Biosynthesis I (Animals)	8.36E-01	1.89E-02	NaN	THEM4	
+EGF Signaling	8.21E-01	1.82E-02	NaN	FOS	
+Sperm Motility	7.9E-01	8.26E-03	NaN	Calm1 (includes others),KDR	
+PXR/RXR Activation	7.85E-01	1.67E-02	NaN	PAPSS2	
+PCP pathway	7.85E-01	1.67E-02	NaN	JUNB	
+IL-2 Signaling	7.8E-01	1.64E-02	NaN	FOS	
+Cardiac Hypertrophy Signaling	7.72E-01	8.03E-03	NaN	Calm1 (includes others),MAP3K6	
+Mitotic Roles of Polo-Like Kinase	7.59E-01	1.56E-02	NaN	PLK3	
+Pyridoxal 5'-phosphate Salvage Pathway	7.54E-01	1.54E-02	NaN	MAP3K6	
+Glutamate Receptor Signaling	7.54E-01	1.54E-02	NaN	Calm1 (includes others)	
+CD40 Signaling	7.47E-01	1.52E-02	NaN	FOS	
+Signaling by Rho Family GTPases	7.42E-01	7.69E-03	NaN	CDC42EP2,FOS	
+Growth Hormone Signaling	7.35E-01	1.47E-02	NaN	FOS	
+Role of JAK1 and JAK3 in γc Cytokine Signaling	7.35E-01	1.47E-02	NaN	IRS2	
+IL-10 Signaling	7.3E-01	1.45E-02	NaN	FOS	
+Melatonin Signaling	7.3E-01	1.45E-02	NaN	Calm1 (includes others)	
+ERK5 Signaling	7.19E-01	1.41E-02	NaN	FOS	
+Toll-like Receptor Signaling	7.03E-01	1.35E-02	NaN	FOS	
+Neurotrophin/TRK Signaling	6.97E-01	1.33E-02	NaN	FOS	
+Cardiac Hypertrophy Signaling (Enhanced)	6.97E-01	5.77E-03	NaN	Calm1 (includes others),FGF2,MAP3K6	
+Renal Cell Carcinoma Signaling	6.93E-01	1.32E-02	NaN	FOS	
+Estrogen-Dependent Breast Cancer Signaling	6.88E-01	1.3E-02	NaN	FOS	
+Senescence Pathway	6.86E-01	7.07E-03	NaN	Calm1 (includes others),SERPINE1	
+IL-3 Signaling	6.82E-01	1.28E-02	NaN	FOS	
+JAK/Stat Signaling	6.64E-01	1.22E-02	NaN	FOS	
+Regulation of IL-2 Expression in Activated and Anergic T Lymphocytes	6.6E-01	6.78E-03	NaN	Calm1 (includes others),FOS	
+LPS-stimulated MAPK Signaling	6.58E-01	1.2E-02	NaN	FOS	
+FGF Signaling	6.54E-01	1.19E-02	NaN	FGF2	
+Prolactin Signaling	6.5E-01	1.18E-02	NaN	FOS	
+Synaptogenesis Signaling Pathway	6.5E-01	6.67E-03	NaN	Calm1 (includes others),THBS1	
+PDGF Signaling	6.44E-01	1.16E-02	NaN	FOS	
+Ceramide Signaling	6.36E-01	1.14E-02	NaN	FOS	
+CCR5 Signaling in Macrophages	6.31E-01	6.47E-03	NaN	Calm1 (includes others),FOS	
+ErbB Signaling	6.23E-01	1.1E-02	NaN	FOS	
+IL-1 Signaling	6.2E-01	1.09E-02	NaN	FOS	
+Salvage Pathways of Pyrimidine Ribonucleotides	6.2E-01	1.09E-02	NaN	MAP3K6	
+CD28 Signaling in T Helper Cells	6.16E-01	6.33E-03	NaN	Calm1 (includes others),FOS	
+p53 Signaling	6.11E-01	1.06E-02	NaN	THBS1	
+VEGF Signaling	6.04E-01	1.04E-02	NaN	KDR	
+UVA-Induced MAPK Signaling	5.99E-01	1.03E-02	NaN	FOS	
+Sumoylation Pathway	5.99E-01	1.03E-02	NaN	FOS	
+Neuropathic Pain Signaling In Dorsal Horn Neurons	5.92E-01	1.01E-02	NaN	FOS	
+α-Adrenergic Signaling	5.77E-01	9.71E-03	NaN	Calm1 (includes others)	
+MSP-RON Signaling In Macrophages Pathway	5.73E-01	9.62E-03	NaN	FOS	
+Airway Pathology in Chronic Obstructive Pulmonary Disease	5.7E-01	9.52E-03	NaN	FGF2	
+PPAR Signaling	5.7E-01	9.52E-03	NaN	FOS	
+T Cell Exhaustion Signaling Pathway	5.58E-01	5.75E-03	NaN	FOS,KDR	
+CDK5 Signaling	5.56E-01	9.17E-03	NaN	FOSB	
+Sphingosine-1-phosphate Signaling	5.47E-01	8.93E-03	NaN	ACER2	
+Cholecystokinin/Gastrin-mediated Signaling	5.42E-01	8.85E-03	NaN	FOS	
+Cdc42 Signaling	5.42E-01	5.6E-03	NaN	CDC42EP2,FOS	
+PKCθ Signaling in T Lymphocytes	5.41E-01	5.59E-03	NaN	FOS,MAP3K6	
+Neuregulin Signaling	5.33E-01	8.62E-03	NaN	ERRFI1	
+NGF Signaling	5.33E-01	8.62E-03	NaN	MAP3K6	
+IL-15 Production	5.3E-01	8.55E-03	NaN	KDR	
+IL-12 Signaling and Production in Macrophages	5.27E-01	8.47E-03	NaN	FOS	
+Renin-Angiotensin Signaling	5.27E-01	8.47E-03	NaN	FOS	
+RhoA Signaling	5.24E-01	8.4E-03	NaN	CDC42EP2	
+Glioma Signaling	5.14E-01	8.2E-03	NaN	Calm1 (includes others)	
+Role of PKR in Interferon Induction and Antiviral Response	5.11E-01	8.13E-03	NaN	FOS	
+GP6 Signaling Pathway	5.09E-01	8.06E-03	NaN	Calm1 (includes others)	
+14-3-3-mediated Signaling	5.06E-01	8E-03	NaN	FOS	
+IL-6 Signaling	5.06E-01	8E-03	NaN	FOS	
+Synaptic Long Term Potentiation	5E-01	7.87E-03	NaN	Calm1 (includes others)	
+P2Y Purigenic Receptor Signaling Pathway	5E-01	7.87E-03	NaN	FOS	
+Role of NFAT in Regulation of the Immune Response	4.98E-01	5.19E-03	NaN	Calm1 (includes others),FOS	
+fMLP Signaling in Neutrophils	4.98E-01	7.81E-03	NaN	Calm1 (includes others)	
+CCR3 Signaling in Eosinophils	4.98E-01	7.81E-03	NaN	Calm1 (includes others)	
+Adipogenesis pathway	4.89E-01	7.63E-03	NaN	FGF2	
+Xenobiotic Metabolism General Signaling Pathway	4.87E-01	7.58E-03	NaN	MAP3K6	
+White Adipose Tissue Browning Pathway	4.81E-01	7.46E-03	NaN	KDR	
+MSP-RON Signaling In Cancer Cells Pathway	4.81E-01	7.46E-03	NaN	FOS	
+T Cell Receptor Signaling	4.74E-01	4.99E-03	NaN	Calm1 (includes others),FOS	
+Insulin Receptor Signaling	4.71E-01	7.25E-03	NaN	IRS2	
+NAD Signaling Pathway	4.61E-01	7.04E-03	NaN	FGF2	
+Cellular Effects of Sildenafil (Viagra)	4.61E-01	7.04E-03	NaN	Calm1 (includes others)	
+Necroptosis Signaling Pathway	4.61E-01	7.04E-03	NaN	TIMM8A	
+Aryl Hydrocarbon Receptor Signaling	4.46E-01	6.76E-03	NaN	FOS	
+Relaxin Signaling	4.44E-01	6.71E-03	NaN	FOS	
+PTEN Signaling	4.44E-01	6.71E-03	NaN	KDR	
+Type II Diabetes Mellitus Signaling	4.41E-01	6.67E-03	NaN	IRS2	
+Inhibition of ARE-Mediated mRNA Degradation Pathway	4.35E-01	6.54E-03	NaN	ZFP36	
+IL-17 Signaling	4.26E-01	6.37E-03	NaN	FOS	
+Aldosterone Signaling in Epithelial Cells	4.21E-01	6.29E-03	NaN	Sacs	
+CXCR4 Signaling	4.16E-01	6.17E-03	NaN	FOS	
+Germ Cell-Sertoli Cell Junction Signaling	4.16E-01	6.17E-03	NaN	MAP3K6	
+Human Embryonic Stem Cell Pluripotency	4.13E-01	6.13E-03	NaN	FGF2	
+Androgen Signaling	4.13E-01	6.13E-03	NaN	Calm1 (includes others)	
+Gαq Signaling	4.09E-01	6.06E-03	NaN	Calm1 (includes others)	
+Wnt/β-catenin Signaling	4.03E-01	5.95E-03	NaN	SOX4	
+Natural Killer Cell Signaling	3.99E-01	5.88E-03	NaN	MAP3K6	
+Tight Junction Signaling	3.96E-01	5.81E-03	NaN	FOS	
+Dopamine-DARPP32 Feedback in cAMP Signaling	3.86E-01	5.65E-03	NaN	Calm1 (includes others)	
+Clathrin-mediated Endocytosis Signaling	3.79E-01	5.52E-03	NaN	FGF2	
+Endothelin-1 Signaling	3.73E-01	5.43E-03	NaN	FOS	
+HER-2 Signaling in Breast Cancer	3.66E-01	5.32E-03	NaN	FOS	
+RAR Activation	3.61E-01	5.24E-03	NaN	FOS	
+Regulation of the Epithelial-Mesenchymal Transition Pathway	3.58E-01	5.18E-03	NaN	FGF2	
+PI3K/AKT Signaling	3.51E-01	5.08E-03	NaN	THEM4	
+Sertoli Cell-Sertoli Cell Junction Signaling	3.46E-01	5E-03	NaN	MAP3K6	
+Calcium Signaling	3.38E-01	4.88E-03	NaN	Calm1 (includes others)	
+Glucocorticoid Receptor Signaling	3.36E-01	3.85E-03	NaN	FOS,SERPINE1	
+ERK/MAPK Signaling	3.36E-01	4.85E-03	NaN	FOS	
+Role of NFAT in Cardiac Hypertrophy	3.23E-01	4.65E-03	NaN	Calm1 (includes others)	
+cAMP-mediated signaling	3.18E-01	4.57E-03	NaN	Calm1 (includes others)	
+Osteoarthritis Pathway	3.09E-01	4.44E-03	NaN	FGF2	
+LPS/IL-1 Mediated Inhibition of RXR Function	3.05E-01	4.39E-03	NaN	PAPSS2	
+Breast Cancer Regulation by Stathmin1	2.97E-01	3.53E-03	NaN	CRHR2,FGF2	
+Actin Cytoskeleton Signaling	2.95E-01	4.24E-03	NaN	FGF2	
+AMPK Signaling	2.92E-01	4.2E-03	NaN	IRS2	
+Calcium-induced T Lymphocyte Apoptosis	2.68E-01	3.86E-03	NaN	Calm1 (includes others)	
+Colorectal Cancer Metastasis Signaling	2.64E-01	3.82E-03	NaN	FOS	
+Protein Ubiquitination Pathway	2.62E-01	3.79E-03	NaN	Sacs	
+Xenobiotic Metabolism Signaling	2.6E-01	3.77E-03	NaN	MAP3K6	
+Sirtuin Signaling Pathway	2.56E-01	3.72E-03	NaN	TIMM8A	
+Neuroinflammation Signaling Pathway	2.41E-01	3.52E-03	NaN	FOS	
+Nur77 Signaling in T Lymphocytes	2.29E-01	3.37E-03	NaN	Calm1 (includes others)	
+iCOS-iCOSL Signaling in T Helper Cells	2.2E-01	3.26E-03	NaN	Calm1 (includes others)	
+Molecular Mechanisms of Cancer	-0E00	2.31E-03	NaN	FOS	
+Systemic Lupus Erythematosus Signaling	-0E00	2.62E-03	NaN	FOS	
+Phospholipase C Signaling	-0E00	2.16E-03	NaN	Calm1 (includes others)	
+Protein Kinase A Signaling	-0E00	2.65E-03	NaN	Calm1 (includes others)	
+Tec Kinase Signaling	-0E00	2.6E-03	NaN	FOS	
+Estrogen Receptor Signaling	-0E00	2.53E-03	NaN	FOS	
+NF-κB Signaling	-0E00	2.66E-03	NaN	KDR	
+Systemic Lupus Erythematosus In T Cell Signaling Pathway	-0E00	2.38E-03	NaN	FOS	

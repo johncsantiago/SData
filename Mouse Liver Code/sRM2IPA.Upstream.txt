@@ -1,0 +1,358 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Upstream Regulator	Expr Log Ratio	Molecule Type	Predicted Activation State	Activation z-score	Flags	p-value of overlap	B-H corrected p-value	Target Molecules in Dataset	Mechanistic Network
+CREM	 	transcription regulator	Activated	2.961	 	2.38E-13	1.50E-10	APOLD1,BTG2,CIART,CSRNP1,ERRFI1,FOS,IRS2,JUNB,Sik1,THBS1	 
+CREB1	 	transcription regulator	Activated	2.985	 	6.39E-12	2.02E-09	APOLD1,BTG2,CIART,CSRNP1,ERRFI1,FOS,IRS2,JUNB,Sik1	10 (2)
+IL1B	 	cytokine	Activated	2.920	 	5.91E-11	1.24E-08	BTG2,CSRNP1,ERRFI1,FGF2,FOS,FOSB,Mt1,Mt2,MYOD1,ZFP36	 
+GNAS	 	enzyme	Activated	2.433	 	6.54E-09	1.03E-06	ARL4D,FOS,FOSL2,MAFF,NR4A3,THBS1	 
+IRAK4	 	kinase	 	 	 	6.04E-08	7.62E-06	BTG2,CSRNP1,ERRFI1,FOS,FOSB,ZFP36	 
+CAMK4	 	kinase	 	1.982	 	1.20E-07	1.26E-05	FOS,FOSB,FOSL2,JUNB	 
+NCOA1	 	transcription regulator	 	-0.765	 	1.79E-07	1.61E-05	BTG2,Calm1 (includes others),FGF2,FOS,JUNB,KDR	 
+MEF2C	 	transcription regulator	 	1.109	 	2.95E-07	2.32E-05	FOS,FOSB,JUNB,MYOD1,ZFP36	 
+KCNE3	 	ion channel	 	 	 	2.38E-06	1.67E-04	APOLD1,CSRNP1,FOSB,PLK3,Sik1	 
+G protein alphai	 	group	Activated	2.219	bias	2.75E-06	1.73E-04	FOS,FOSL2,MAFF,NR4A3,THBS1	 
+GNAQ	 	enzyme	Activated	2.000	bias	4.92E-06	2.82E-04	FOS,MAFF,Rnf125,SERPINE1	 
+MEF2D	 	transcription regulator	 	1.732	bias	6.13E-06	3.23E-04	FOS,FOSB,JUNB,ZFP36	 
+STEAP3	 	transporter	 	-1.000	bias	1.86E-05	8.47E-04	ACER2,ERRFI1,FGF2,NR4A3	 
+APEX1	 	enzyme	 	 	 	1.98E-05	8.47E-04	FOS,FOSB,JUNB	 
+SERPINE1	1.807	other	 	1.000	 	2.01E-05	8.47E-04	FGF2,FOS,JUNB,ZFP36	 
+OSMR	 	transmembrane receptor	 	 	 	2.93E-05	1.15E-03	FOS,JUNB,Mt2,ZFP36	7 (2)
+IKBKG	 	kinase	Activated	2.213	 	3.26E-05	1.15E-03	FOS,IFI16,JUNB,Mt1,Mt2	 
+ENG	 	transmembrane receptor	 	 	 	3.29E-05	1.15E-03	KDR,SERPINE1,THBS1	 
+CHUK	 	kinase	Activated	2.213	 	3.83E-05	1.27E-03	FOS,IFI16,JUNB,Mt1,Mt2	 
+Mt1	1.376	other	 	 	 	4.43E-05	1.35E-03	FOS,Mt1,SERPINE1	 
+AHR	 	ligand-dependent nuclear receptor	 	1.000	 	4.51E-05	1.35E-03	BTG2,FOS,JUNB,Mt1,Mt2,SERPINE1,THBS1	11 (4)
+OSM	 	cytokine	Activated	2.000	 	4.97E-05	1.39E-03	FOS,JUNB,Mt2,ZFP36	7 (2)
+IPMK	 	kinase	 	 	 	5.08E-05	1.39E-03	FOS,FOSB,JUNB	 
+OPRK1	 	G-protein coupled receptor	 	 	 	5.87E-05	1.44E-03	FOS,KDR	 
+ELK3	 	transcription regulator	 	 	 	5.87E-05	1.44E-03	FOS,SERPINE1	 
+ERK1/2	 	group	Activated	2.000	 	5.95E-05	1.44E-03	FOS,IRS2,JUNB,SERPINE1	 
+E2F1	 	transcription regulator	 	 	 	6.73E-05	1.57E-03	Calm1 (includes others),FOS,IRS2,SERPINE1,ZFP36	 
+MAPK3	 	kinase	 	 	 	9.29E-05	2.09E-03	FOS,FOSL2,JUNB	3 (2)
+TLR3	 	transmembrane receptor	 	1.308	 	1.41E-04	3.07E-03	Apol11b (includes others),IFI16,JUNB,LILRB4,SERPINE1	 
+SERCA	 	group	 	 	 	1.46E-04	3.07E-03	BTG2,ZFP36	 
+BMP10	 	growth factor	 	1.000	 	1.51E-04	3.07E-03	FGF2,FOS,NR4A3,THBS1	 
+MYF6	 	transcription regulator	 	 	 	1.80E-04	3.49E-03	FGF2,MYOD1,SERPINE1,THBS1	 
+DRD2	 	G-protein coupled receptor	 	 	 	1.83E-04	3.49E-03	FOS,SERPINE1,THBS1	 
+CREBBP	 	transcription regulator	 	 	 	2.02E-04	3.74E-03	CD160,FOS,FOSB,FOSL2,MYOD1,Rnf125	 
+PDX1	 	transcription regulator	 	 	 	2.13E-04	3.84E-03	ARL4D,FGF2,IRS2,PAPSS2	 
+STAT3	 	transcription regulator	 	0.436	 	2.27E-04	3.98E-03	FOS,IFI16,JUNB,MYOD1,SERPINE1,ZFP36	 
+TIMP3	 	other	 	 	 	2.34E-04	3.99E-03	FOS,SERPINE1,THBS1	 
+BDNF	 	growth factor	 	 	 	3.15E-04	5.10E-03	FOS,MYOD1,THBS1,TRIB2	 
+MRTFB	 	transcription regulator	 	 	 	3.27E-04	5.10E-03	LILRB4,SERPINE1,SLC20A1,THBS1	 
+IKBKB	 	kinase	Activated	2.216	 	3.33E-04	5.10E-03	FOS,IFI16,JUNB,Mt1,Mt2	 
+PTK2	 	kinase	 	 	 	3.38E-04	5.10E-03	FOS,PRRX1,THBS1	 
+RBPJ	 	transcription regulator	 	 	 	3.39E-04	5.10E-03	FGF2,FOS,KDR,SOX4	 
+MAPK9	 	kinase	 	 	 	3.78E-04	5.54E-03	FOS,FOSL2,JUNB,ZFP36	7 (2)
+SRD5A2	 	enzyme	 	 	 	4.35E-04	6.10E-03	IRS2,Mt1	 
+Igkv1-117	 	other	 	 	 	4.35E-04	6.10E-03	FOSL2,JUNB	 
+NKX3-1	 	transcription regulator	 	 	 	4.69E-04	6.43E-03	BTG2,FOS,SOX4	 
+MRTFA	 	transcription regulator	 	 	 	5.12E-04	6.83E-03	LILRB4,SERPINE1,SLC20A1,THBS1	 
+ELK1	 	transcription regulator	 	 	 	5.30E-04	6.83E-03	FOS,JUNB	 
+Ncoa6	 	transcription regulator	 	 	 	5.30E-04	6.83E-03	FOS,SERPINE1	 
+RPS6KA4	 	kinase	 	 	 	6.35E-04	7.86E-03	FOS,JUNB	 
+PLAT	 	peptidase	 	 	 	6.35E-04	7.86E-03	FOS,SERPINE1	 
+TICAM1	 	other	 	0.882	bias	6.76E-04	8.21E-03	Apol11b (includes others),IFI16,MAFF,SERPINE1	 
+IFN Beta	 	group	 	 	 	7.00E-04	8.33E-03	IFI16,SERPINE1,THBS1	 
+VEGFA	 	growth factor	 	 	 	7.38E-04	8.62E-03	CD160,FOS,KDR	 
+IFNAR1	 	transmembrane receptor	 	 	 	8.51E-04	9.77E-03	Apol11b (includes others),IFI16,SERPINE1,THBS1	 
+RPS6KA5	 	kinase	 	 	 	8.72E-04	9.82E-03	FOS,JUNB	 
+MAP3K1	 	kinase	 	 	 	1.15E-03	1.27E-02	SERPINE1,THBS1	 
+STAT5A	 	transcription regulator	 	 	 	1.17E-03	1.27E-02	FOS,FOSB,FOSL2,ZFP36	 
+IFNG	 	cytokine	 	0.633	 	1.29E-03	1.36E-02	FAM107A,FGF2,FOSB,IFI16,IRS2,MYOD1,THBS1	 
+DIO2	 	enzyme	 	 	 	1.29E-03	1.36E-02	FOS,FOSB,IER5,LILRB4	 
+ARRB1	 	transcription regulator	 	 	 	1.45E-03	1.50E-02	JUNB,SERPINE1	 
+P38 MAPK	 	group	 	 	 	1.66E-03	1.65E-02	FOS,JUNB,SERPINE1	3 (2)
+ADAM12	 	peptidase	 	 	 	1.66E-03	1.65E-02	JUNB,MYOD1,SERPINE1	 
+SRF	 	transcription regulator	 	 	 	1.68E-03	1.65E-02	FOS,JUNB,KDR,MYOD1	 
+CYB5R4	 	enzyme	 	 	 	1.80E-03	1.75E-02	Mt1,Mt2	 
+IFNB1	 	cytokine	 	 	 	1.84E-03	1.76E-02	FGF2,FOS,IFI16,THBS1	 
+let-7	 	microRNA	 	 	 	1.98E-03	1.87E-02	IRS2,THBS1	 
+TRPV4	 	ion channel	 	 	 	2.18E-03	1.99E-02	FOS,THBS1	 
+Mt2	1.697	other	 	 	 	2.18E-03	1.99E-02	FOS,SERPINE1	 
+NR5A2	 	ligand-dependent nuclear receptor	 	 	 	2.22E-03	2.01E-02	FOS,JUNB,Mt1	 
+SRD5A1	 	enzyme	 	 	 	2.38E-03	2.12E-02	IRS2,Mt1	 
+ITGB3	 	transmembrane receptor	 	 	 	2.59E-03	2.13E-02	FOS,KDR	 
+PTCH1	 	transmembrane receptor	 	 	 	2.59E-03	2.13E-02	BTG2,MYOD1	 
+LPL	 	enzyme	 	 	 	2.81E-03	2.13E-02	IRS2,THBS1	 
+MAPK8	 	kinase	 	 	 	2.90E-03	2.13E-02	FOS,FOSL2,ZFP36	7 (3)
+DYSF	 	other	 	 	 	2.90E-03	2.13E-02	ERRFI1,IFI16,LILRB4	 
+TAF4	 	transcription regulator	 	 	 	2.99E-03	2.13E-02	MAFF,MAP3K6,THBS1	 
+SLC9A3	 	ion channel	 	 	 	3.04E-03	2.13E-02	Mt1,Mt2	 
+PRKCB	 	kinase	 	 	 	3.04E-03	2.13E-02	FOS,IRS2	 
+INSC	 	other	 	 	 	3.16E-03	2.13E-02	KDR	 
+ZMIZ1	 	transcription regulator	 	 	 	3.16E-03	2.13E-02	SERPINE1	 
+Gata	 	group	 	 	 	3.16E-03	2.13E-02	KDR	 
+FGF14	 	growth factor	 	 	 	3.16E-03	2.13E-02	FOS	 
+SLC39A4	 	transporter	 	 	 	3.16E-03	2.13E-02	Mt1	 
+Cebp	 	complex	 	 	 	3.16E-03	2.13E-02	MYOD1	 
+NTF4	 	growth factor	 	 	 	3.16E-03	2.13E-02	FOS	 
+NTS	 	other	 	 	 	3.16E-03	2.13E-02	FOS	 
+NPVF	 	other	 	 	 	3.16E-03	2.13E-02	FOS	 
+SCN1B	 	ion channel	 	 	 	3.16E-03	2.13E-02	FOS	 
+SCN7A	 	ion channel	 	 	 	3.16E-03	2.13E-02	FOS	 
+SEMA6A	 	transmembrane receptor	 	 	 	3.16E-03	2.13E-02	KDR	 
+POU4F3	 	transcription regulator	 	 	 	3.16E-03	2.13E-02	FOS	 
+ILF2	 	transcription regulator	 	 	 	3.16E-03	2.13E-02	FOS	 
+NR1I3	 	ligand-dependent nuclear receptor	 	 	 	3.18E-03	2.13E-02	MAFF,Mt1,PAPSS2	 
+NCOA3	 	transcription regulator	 	 	 	3.28E-03	2.15E-02	FGF2,KDR	 
+ARRB2	 	other	 	 	 	3.28E-03	2.15E-02	JUNB,SERPINE1	3 (3)
+MKNK1	 	kinase	 	 	 	3.38E-03	2.20E-02	FOS,FOSB,NR4A3	 
+Irgm1	 	other	 	 	 	3.58E-03	2.31E-02	Apol11b (includes others),IFI16,LILRB4	 
+MEF2A	 	transcription regulator	 	 	 	3.77E-03	2.40E-02	ARHGAP20,FOS	 
+CAV1	 	transmembrane receptor	 	 	 	3.90E-03	2.46E-02	SERPINE1,SLC20A1,THBS1	 
+JAK1	 	kinase	 	 	 	4.03E-03	2.50E-02	FOS,MYOD1	 
+MYOD1	-2.151	transcription regulator	 	 	 	4.03E-03	2.50E-02	IFI16,MYOD1	 
+AGTR1	 	G-protein coupled receptor	 	 	 	4.30E-03	2.64E-02	FOS,SERPINE1	 
+NOSTRIN	 	transcription regulator	 	 	 	4.58E-03	2.78E-02	KDR,THBS1	 
+YY1	 	transcription regulator	 	 	 	4.83E-03	2.90E-02	BTG2,FOS,KDR,MYOD1	 
+FOXO3	 	transcription regulator	 	 	 	5.22E-03	2.91E-02	FOS,FOSB,JUNB	 
+FOXO1	 	transcription regulator	 	1.982	 	5.32E-03	2.91E-02	FOS,FOSB,IRS2,JUNB	 
+SOCS3	 	phosphatase	 	 	 	5.46E-03	2.91E-02	FOS,IRS2	 
+TNFRSF1A	 	transmembrane receptor	 	 	 	5.76E-03	2.91E-02	KDR,MYOD1,SERPINE1	 
+SREBF1	 	transcription regulator	 	 	 	5.77E-03	2.91E-02	IRS2,SERPINE1	 
+GNB2	 	enzyme	 	 	 	5.77E-03	2.91E-02	FOSB,FOSL2	 
+GNB1	 	enzyme	 	 	 	5.77E-03	2.91E-02	FOSB,FOSL2	 
+E2F3	 	transcription regulator	 	 	 	6.09E-03	2.91E-02	FGF2,SERPINE1	 
+EPHB1	 	kinase	 	 	 	6.31E-03	2.91E-02	FOS	 
+MSK1/2	 	group	 	 	 	6.31E-03	2.91E-02	FOS	 
+L-type Calcium Channel	 	complex	 	 	 	6.31E-03	2.91E-02	FOS	 
+Gpcr	 	group	 	 	 	6.31E-03	2.91E-02	FOS	 
+ATP1A2	 	transporter	 	 	 	6.31E-03	2.91E-02	FOS	 
+E2F5	 	transcription regulator	 	 	 	6.31E-03	2.91E-02	SERPINE1	 
+MAPK8IP2	 	other	 	 	 	6.31E-03	2.91E-02	FOS	 
+POLR2A	 	enzyme	 	 	 	6.31E-03	2.91E-02	FOS	 
+CST3	 	other	 	 	 	6.31E-03	2.91E-02	FGF2	 
+CCL1	 	cytokine	 	 	 	6.31E-03	2.91E-02	SERPINE1	 
+NUMB	 	other	 	 	 	6.31E-03	2.91E-02	Mt2	 
+mir-132	 	microRNA	 	 	 	6.31E-03	2.91E-02	SOX4	 
+DRD1	 	G-protein coupled receptor	 	 	 	6.31E-03	2.91E-02	FOS	 
+ME1	 	enzyme	 	 	 	6.31E-03	2.91E-02	IRS2	 
+GABRG2	 	ion channel	 	 	 	6.31E-03	2.91E-02	FOS	 
+ILF3	 	transcription regulator	 	 	 	6.31E-03	2.91E-02	FOS	 
+TH	 	enzyme	 	 	 	6.31E-03	2.91E-02	FOS	 
+PTGER1	 	G-protein coupled receptor	 	 	 	6.31E-03	2.91E-02	FOS	 
+GRAP	 	other	 	 	 	6.31E-03	2.91E-02	FOS	 
+CRTAP	 	other	 	 	 	6.31E-03	2.91E-02	SERPINE1	 
+Hspa1b	 	other	 	 	 	6.31E-03	2.91E-02	FOS	 
+HSPA1A/HSPA1B	 	enzyme	 	 	 	6.31E-03	2.91E-02	FOS	 
+Nedd4	 	enzyme	 	 	 	6.31E-03	2.91E-02	THBS1	 
+RNF11	 	enzyme	 	 	 	6.31E-03	2.91E-02	SERPINE1	 
+NR3C1	 	ligand-dependent nuclear receptor	 	 	 	6.68E-03	3.05E-02	ANGPTL7,ERRFI1,FOS,THBS1	 
+ATP7B	 	transporter	 	 	 	7.09E-03	3.22E-02	Mt1,Mt2	 
+SMAD3	 	transcription regulator	 	 	 	7.25E-03	3.27E-02	FOS,JUNB,SERPINE1	6 (2)
+TP53	 	transcription regulator	 	1.879	 	7.30E-03	3.27E-02	BTG2,FGF2,FOS,IER5,IFI16,KDR,Mt2,SERPINE1,THBS1	 
+Interferon alpha	 	group	 	 	 	7.44E-03	3.31E-02	FOS,IFI16	 
+FOXP3	 	transcription regulator	 	 	 	7.57E-03	3.34E-02	FOS,FOSL2,NR4A3	 
+MSTN	 	growth factor	 	 	 	7.79E-03	3.42E-02	FOS,MYOD1	 
+RORC	 	ligand-dependent nuclear receptor	 	 	 	8.25E-03	3.59E-02	LRTM1,Mt1,Mt2	 
+YAP1	 	transcription regulator	 	 	 	8.53E-03	3.66E-02	SERPINE1,THBS1	4 (2)
+CYP1A2	 	enzyme	 	 	 	8.91E-03	3.66E-02	Mt1,Mt2	 
+CYP1B1	 	enzyme	 	 	 	8.91E-03	3.66E-02	Mt1,Mt2	 
+PPP1R1B	 	phosphatase	 	 	 	9.45E-03	3.66E-02	FOS	 
+EAF2	 	transcription regulator	 	 	 	9.45E-03	3.66E-02	THBS1	 
+SLC1A1	 	transporter	 	 	 	9.45E-03	3.66E-02	FOS	 
+GNAO1	 	enzyme	 	 	 	9.45E-03	3.66E-02	FOS	 
+DLG4	 	kinase	 	 	 	9.45E-03	3.66E-02	FOS	 
+HHEX	 	transcription regulator	 	 	 	9.45E-03	3.66E-02	KDR	 
+GFRA2	 	transmembrane receptor	 	 	 	9.45E-03	3.66E-02	FOSB	 
+CDK5R2	 	other	 	 	 	9.45E-03	3.66E-02	FOS	 
+TBXT	 	transcription regulator	 	 	 	9.45E-03	3.66E-02	KDR	 
+CUL4B	 	other	 	 	 	9.45E-03	3.66E-02	ZFP36	 
+COL1A2	 	other	 	 	 	9.45E-03	3.66E-02	SERPINE1	 
+ADAM15	 	peptidase	 	 	 	9.45E-03	3.66E-02	KDR	 
+Nrg1	 	other	 	 	 	9.45E-03	3.66E-02	FOS	 
+Irs4	 	other	 	 	 	9.45E-03	3.66E-02	IRS2	 
+NDP	 	growth factor	 	 	 	9.45E-03	3.66E-02	Mt1	 
+ZBTB10	 	other	 	 	 	1.05E-02	4.01E-02	IFI16,NR4A3,SERPINE1	 
+IL11RA	 	transmembrane receptor	 	 	 	1.05E-02	4.01E-02	FOS,JUNB	 
+CCN2	 	growth factor	 	 	 	1.09E-02	4.15E-02	SERPINE1,SOX4	 
+CEBPA	 	transcription regulator	 	 	 	1.19E-02	4.24E-02	IRS2,SERPINE1,THBS1	 
+TSHZ3	 	transcription regulator	 	 	 	1.22E-02	4.24E-02	FOSB,FOSL2	 
+RORA	 	ligand-dependent nuclear receptor	 	 	 	1.26E-02	4.24E-02	LRTM1,Mt1,Mt2	 
+dopamine D1 receptor	 	group	 	 	 	1.26E-02	4.24E-02	FOS	 
+Pkg	 	group	 	 	 	1.26E-02	4.24E-02	FOS	 
+DRD3	 	G-protein coupled receptor	 	 	 	1.26E-02	4.24E-02	FOS	 
+MYLK2	 	kinase	 	 	 	1.26E-02	4.24E-02	MYOD1	 
+GPR17	 	G-protein coupled receptor	 	 	 	1.26E-02	4.24E-02	FOS	 
+ATOH7	 	transcription regulator	 	 	 	1.26E-02	4.24E-02	SOX4	 
+TEX11	 	other	 	 	 	1.26E-02	4.24E-02	FOS	 
+GADD45G	 	other	 	 	 	1.26E-02	4.24E-02	FOS	 
+ARID1B	 	transcription regulator	 	 	 	1.26E-02	4.24E-02	FOS	 
+mir-365	 	microRNA	 	 	 	1.26E-02	4.24E-02	MYOD1	 
+RNF111	 	enzyme	 	 	 	1.26E-02	4.24E-02	SERPINE1	 
+SKIL	 	transcription regulator	 	 	 	1.26E-02	4.24E-02	SERPINE1	 
+USP2	 	peptidase	 	 	 	1.26E-02	4.24E-02	SERPINE1	 
+Ifi202b	 	other	 	 	 	1.26E-02	4.24E-02	MYOD1	 
+F2RL3	 	G-protein coupled receptor	 	 	 	1.26E-02	4.24E-02	FOS	 
+XPA	 	other	 	 	 	1.26E-02	4.24E-02	FOS	 
+EPC1	 	transcription regulator	 	 	 	1.26E-02	4.24E-02	MYOD1	 
+CAMK2A	 	kinase	 	 	 	1.26E-02	4.24E-02	FOS	 
+DUSP1	 	phosphatase	 	 	 	1.36E-02	4.55E-02	SERPINE1,ZFP36	 
+NOS2	 	enzyme	 	 	 	1.37E-02	4.57E-02	IRS2,KDR,LILRB4	 
+GLI3	 	transcription regulator	 	 	 	1.40E-02	4.66E-02	FOSB,JUNB	 
+SOX11	 	transcription regulator	 	 	 	1.57E-02	4.86E-02	MYOD1	 
+sGC	 	complex	 	 	 	1.57E-02	4.86E-02	FOS	 
+RPE65	 	enzyme	 	 	 	1.57E-02	4.86E-02	FOS	 
+ITGB5	 	other	 	 	 	1.57E-02	4.86E-02	KDR	 
+KCNN4	 	ion channel	 	 	 	1.57E-02	4.86E-02	FOS	 
+ARAF	 	kinase	 	 	 	1.57E-02	4.86E-02	FOS	 
+KIDINS220	 	transcription regulator	 	 	 	1.57E-02	4.86E-02	FOS	 
+OXTR	 	G-protein coupled receptor	 	 	 	1.57E-02	4.86E-02	FOS	 
+SOX15	 	transcription regulator	 	 	 	1.57E-02	4.86E-02	MYOD1	 
+STAU1	 	transporter	 	 	 	1.57E-02	4.86E-02	MYOD1	 
+SMURF2	 	enzyme	 	 	 	1.57E-02	4.86E-02	SERPINE1	 
+HIVEP2	 	transcription regulator	 	 	 	1.57E-02	4.86E-02	FOS	 
+TGFB2	 	growth factor	 	 	 	1.57E-02	4.86E-02	KDR	 
+PTPRN2	 	phosphatase	 	 	 	1.57E-02	4.86E-02	IRS2	 
+CX3CR1	 	G-protein coupled receptor	 	 	 	1.69E-02	5.19E-02	ACER2,FGF2,FOS	 
+ID3	 	transcription regulator	 	 	 	1.74E-02	5.33E-02	BTG2,NR4A3,SOX4	 
+TLR9	 	transmembrane receptor	 	 	 	1.77E-02	5.39E-02	IFI16,LILRB4,SERPINE1	 
+Rhox4b (includes others)	 	transcription regulator	 	 	 	1.88E-02	5.50E-02	KDR	 
+Tnf receptor	 	group	 	 	 	1.88E-02	5.50E-02	SERPINE1	 
+FAT1	 	other	 	 	 	1.88E-02	5.50E-02	PRRX1	 
+PNPLA8	 	enzyme	 	 	 	1.88E-02	5.50E-02	Mt1	 
+ANGPTL6	 	other	 	 	 	1.88E-02	5.50E-02	FGF2	 
+NSD2	 	enzyme	 	 	 	1.88E-02	5.50E-02	FOS	 
+F2R	 	G-protein coupled receptor	 	 	 	1.88E-02	5.50E-02	FOS	 
+GJA8	 	transporter	 	 	 	1.88E-02	5.50E-02	IRS2	 
+H4C3	 	other	 	 	 	1.88E-02	5.50E-02	FOSB	 
+POR	 	enzyme	 	 	 	1.93E-02	5.62E-02	KDR,MAP3K6,Mt1	 
+THRA	 	ligand-dependent nuclear receptor	 	 	 	1.96E-02	5.66E-02	FOS,MYOD1	 
+MYRF	 	transcription regulator	 	 	 	2.01E-02	5.71E-02	JUNB,UAP1L1	 
+FADD	 	other	 	 	 	2.07E-02	5.71E-02	FOS,JUNB	 
+STAT6	 	transcription regulator	 	 	 	2.10E-02	5.71E-02	FAM118B,IFI16,IRS2,LILRB4	 
+TNFRSF1B	 	transmembrane receptor	 	 	 	2.18E-02	5.71E-02	MYOD1,SERPINE1	 
+Nos	 	group	 	 	 	2.19E-02	5.71E-02	FOS	 
+MAPK8IP1	 	other	 	 	 	2.19E-02	5.71E-02	FOS	 
+HNRNPR	 	other	 	 	 	2.19E-02	5.71E-02	THBS1	 
+APOA4	 	transporter	 	 	 	2.19E-02	5.71E-02	FOS	 
+PDE6B	 	enzyme	 	 	 	2.19E-02	5.71E-02	FOS	 
+DEF6	 	other	 	 	 	2.19E-02	5.71E-02	FOS	 
+NDST1	 	enzyme	 	 	 	2.19E-02	5.71E-02	FGF2	 
+GCK	 	kinase	 	 	 	2.19E-02	5.71E-02	IRS2	 
+PROC	 	peptidase	 	 	 	2.19E-02	5.71E-02	SERPINE1	 
+GHRHR	 	G-protein coupled receptor	 	 	 	2.19E-02	5.71E-02	CRHR2	 
+TRPC1	 	ion channel	 	 	 	2.19E-02	5.71E-02	MYOD1	 
+ELK4	 	transcription regulator	 	 	 	2.19E-02	5.71E-02	JUNB	 
+MFGE8	 	other	 	 	 	2.19E-02	5.71E-02	FGF2	 
+TNFRSF12A	 	transmembrane receptor	 	 	 	2.19E-02	5.71E-02	MYOD1	 
+FBXL5	 	enzyme	 	 	 	2.19E-02	5.71E-02	Mt2	 
+AFP	 	transporter	 	 	 	2.19E-02	5.71E-02	FOS	 
+FOSL1	 	transcription regulator	 	 	 	2.19E-02	5.71E-02	FOS	 
+EPOR	 	transmembrane receptor	 	 	 	2.19E-02	5.71E-02	JUNB	 
+DBH	 	enzyme	 	 	 	2.19E-02	5.71E-02	FOS	 
+Gm26313	 	other	 	 	 	2.19E-02	5.71E-02	THBS1	 
+EGLN	 	group	 	 	 	2.23E-02	5.80E-02	Apol11b (includes others),SERPINE1	 
+Vegf	 	group	 	 	 	2.29E-02	5.90E-02	ANGPTL7,Mt2	 
+PTGS2	 	enzyme	 	 	 	2.29E-02	5.90E-02	FOS,KDR	 
+EGR1	 	transcription regulator	 	 	 	2.41E-02	6.07E-02	JUNB,SERPINE1	 
+MTF1	 	transcription regulator	 	 	 	2.50E-02	6.07E-02	Mt1	 
+PECAM1	 	other	 	 	 	2.50E-02	6.07E-02	THBS1	 
+MST1	 	growth factor	 	 	 	2.50E-02	6.07E-02	SOX4	 
+GLRX	 	enzyme	 	 	 	2.50E-02	6.07E-02	FGF2	 
+TRPV1	 	ion channel	 	 	 	2.50E-02	6.07E-02	FOS	 
+TTN	 	kinase	 	 	 	2.50E-02	6.07E-02	Calm1 (includes others)	 
+mir-221	 	microRNA	 	 	 	2.50E-02	6.07E-02	KDR	 
+PTGDR	 	G-protein coupled receptor	 	 	 	2.50E-02	6.07E-02	IFI16	 
+PLAUR	 	transmembrane receptor	 	 	 	2.50E-02	6.07E-02	JUNB	 
+RAF1	 	kinase	 	 	 	2.50E-02	6.07E-02	FOS	 
+MAP2K7	 	kinase	 	 	 	2.50E-02	6.07E-02	JUNB	 
+GHSR	 	G-protein coupled receptor	 	 	 	2.50E-02	6.07E-02	IRS2	 
+PRKAR2B	 	kinase	 	 	 	2.50E-02	6.07E-02	FOS	 
+PDYN	 	transporter	 	 	 	2.50E-02	6.07E-02	KDR	 
+SOCS1	 	other	 	 	 	2.53E-02	6.11E-02	IFI16,IRS2	 
+NR4A1	 	ligand-dependent nuclear receptor	 	 	 	2.54E-02	6.12E-02	Mt1,NR4A3,SERPINE1	 
+ID2	 	transcription regulator	 	 	 	2.61E-02	6.25E-02	BTG2,NR4A3,SOX4	 
+DNMT3B	 	enzyme	 	 	 	2.65E-02	6.33E-02	FGF2,KDR	 
+PTEN	 	phosphatase	 	 	 	2.79E-02	6.52E-02	BTG2,FOS,KDR,SOX4	 
+PLCG1	 	enzyme	 	 	 	2.81E-02	6.52E-02	KDR	 
+ROCK2	 	kinase	 	 	 	2.81E-02	6.52E-02	MYOD1	 
+GPNMB	 	enzyme	 	 	 	2.81E-02	6.52E-02	FOS	 
+GPER1	 	G-protein coupled receptor	 	 	 	2.81E-02	6.52E-02	FOS	 
+miR-27a-3p (and other miRNAs w/seed UCACAGU)	 	mature microRNA	 	 	 	2.81E-02	6.52E-02	IFI16	 
+CSHL1	 	growth factor	 	 	 	2.81E-02	6.52E-02	FOS	 
+Hmga2	 	enzyme	 	 	 	2.81E-02	6.52E-02	MYOD1	 
+TCR	 	complex	 	 	 	3.03E-02	6.80E-02	FOS,JUNB	 
+MED1	 	transcription regulator	 	 	 	3.03E-02	6.80E-02	MYOD1,THBS1	 
+DMD	 	other	 	 	 	3.06E-02	6.80E-02	ARHGAP20,BTG2,MYOD1	 
+CYP19A1	 	enzyme	 	 	 	3.09E-02	6.80E-02	FAM107A,FGF2	 
+BMP	 	group	 	 	 	3.12E-02	6.80E-02	KDR	 
+PLD1	 	enzyme	 	 	 	3.12E-02	6.80E-02	NR4A3	 
+mir-15	 	microRNA	 	 	 	3.12E-02	6.80E-02	Rnf125	 
+FBN1	 	other	 	 	 	3.12E-02	6.80E-02	SERPINE1	 
+CXCR4	 	G-protein coupled receptor	 	 	 	3.12E-02	6.80E-02	JUNB	 
+ACVRL1	 	kinase	 	 	 	3.12E-02	6.80E-02	SERPINE1	 
+VLDLR	 	transporter	 	 	 	3.12E-02	6.80E-02	FOS	 
+EREG	 	growth factor	 	 	 	3.12E-02	6.80E-02	FGF2	 
+KAT2B	 	transcription regulator	 	 	 	3.12E-02	6.80E-02	FOSB	 
+KRIT1	 	other	 	 	 	3.12E-02	6.80E-02	THBS1	 
+CRY1	 	enzyme	 	 	 	3.12E-02	6.80E-02	FOS	 
+GSK3A	 	kinase	 	 	 	3.12E-02	6.80E-02	KDR	 
+PRKACA	 	kinase	 	 	 	3.12E-02	6.80E-02	Sik1	 
+TSC2	 	other	 	 	 	3.23E-02	6.95E-02	IRS2,Mt1	 
+RGS4	 	enzyme	 	 	 	3.23E-02	6.95E-02	CRHR2,LRRC38	 
+PRDM1	 	transcription regulator	 	 	 	3.23E-02	6.95E-02	CD160,FOS	 
+KLF11	 	transcription regulator	 	 	 	3.23E-02	6.95E-02	SERPINE1,THBS1	 
+EGF	 	growth factor	 	 	 	3.29E-02	7.07E-02	FOS,MYOD1	 
+PDE3B	 	enzyme	 	 	 	3.42E-02	7.15E-02	SERPINE1	 
+CRY2	 	enzyme	 	 	 	3.42E-02	7.15E-02	FOS	 
+ODC1	 	enzyme	 	 	 	3.42E-02	7.15E-02	SERPINE1	 
+SELPLG	 	other	 	 	 	3.42E-02	7.15E-02	CD160	 
+E2F6	 	transcription regulator	 	 	 	3.42E-02	7.15E-02	SERPINE1	 
+OSTM1	 	other	 	 	 	3.42E-02	7.15E-02	FOS	 
+IFRD1	 	other	 	 	 	3.42E-02	7.15E-02	MYOD1	 
+MYZAP	 	other	 	 	 	3.42E-02	7.15E-02	FOS	 
+CYP1A1	 	enzyme	 	 	 	3.50E-02	7.28E-02	Mt1,Mt2	 
+EP300	 	transcription regulator	 	 	 	3.54E-02	7.36E-02	CD160,FOSL2,Rnf125	 
+TET2	 	enzyme	 	 	 	3.56E-02	7.37E-02	IFI16,TRIB2	 
+DICER1	 	enzyme	 	 	 	3.62E-02	7.47E-02	CD160,FOS,SERPINE1	 
+ESR1	 	ligand-dependent nuclear receptor	 	 	 	3.66E-02	7.49E-02	FOS,FOSB,SOX4	 
+SOX4	2.289	transcription regulator	 	 	 	3.70E-02	7.49E-02	Mt1,MYOD1	 
+SLC30A7	 	transporter	 	 	 	3.73E-02	7.49E-02	IRS2	 
+MYOG	 	transcription regulator	 	 	 	3.73E-02	7.49E-02	IFI16	 
+PFKFB3	 	kinase	 	 	 	3.73E-02	7.49E-02	FGF2	 
+ELAVL1	 	other	 	 	 	3.73E-02	7.49E-02	MYOD1	 
+ITGB6	 	other	 	 	 	3.73E-02	7.49E-02	SERPINE1	 
+SSTR2	 	G-protein coupled receptor	 	 	 	3.73E-02	7.49E-02	FOS	 
+RGS2	 	enzyme	 	 	 	3.84E-02	7.65E-02	BTG2,ERRFI1	 
+GATA4	 	transcription regulator	 	 	 	3.84E-02	7.65E-02	FGF2,TRIB2	 
+RARA	 	ligand-dependent nuclear receptor	 	 	 	3.84E-02	7.65E-02	ELL2,FOSL2	 
+METTL14	 	enzyme	 	 	 	4.03E-02	7.83E-02	THBS1	 
+STK3	 	kinase	 	 	 	4.03E-02	7.83E-02	SOX4	 
+CXCL12	 	cytokine	 	 	 	4.03E-02	7.83E-02	JUNB	 
+MAPKAP1	 	other	 	 	 	4.03E-02	7.83E-02	IFI16	 
+B4GALNT1	 	enzyme	 	 	 	4.03E-02	7.83E-02	FOS	 
+TREX1	 	enzyme	 	 	 	4.03E-02	7.83E-02	IFI16	 
+PLA2G2E	 	enzyme	 	 	 	4.03E-02	7.83E-02	SERPINE1	 
+ITPR1	 	ion channel	 	 	 	4.03E-02	7.83E-02	FOS	 
+FZD9	 	G-protein coupled receptor	 	 	 	4.34E-02	8.19E-02	IFI16	 
+PRKG1	 	kinase	 	 	 	4.34E-02	8.19E-02	SERPINE1	 
+MC4R	 	G-protein coupled receptor	 	 	 	4.34E-02	8.19E-02	FOS	 
+NOTCH3	 	transcription regulator	 	 	 	4.34E-02	8.19E-02	KDR	 
+PRLR	 	transmembrane receptor	 	 	 	4.34E-02	8.19E-02	FGF2	 
+NF1	 	other	 	 	 	4.34E-02	8.19E-02	FGF2	 
+SH3BP2	1.734	other	 	 	 	4.34E-02	8.19E-02	FOS	 
+HDC	 	enzyme	 	 	 	4.34E-02	8.19E-02	FOS	 
+Klra7 (includes others)	 	transmembrane receptor	 	 	 	4.34E-02	8.19E-02	Mt1	 
+FOS	2.467	transcription regulator	 	 	 	4.59E-02	8.58E-02	FOS,IRS2,Mt2	 
+PGF	 	growth factor	 	 	 	4.64E-02	8.58E-02	FOSB	 
+SPTLC2	 	enzyme	 	 	 	4.64E-02	8.58E-02	THBS1	 
+ZFPM2	 	transcription regulator	 	 	 	4.64E-02	8.58E-02	KDR	 
+UBE3A	 	enzyme	 	 	 	4.64E-02	8.58E-02	SERPINE1	 
+TNK1	 	kinase	 	 	 	4.64E-02	8.58E-02	IFI16	 
+NOX4	 	enzyme	 	 	 	4.64E-02	8.58E-02	SERPINE1	 
+MIR17HG	 	other	 	 	 	4.66E-02	8.59E-02	Sik1,SOX4	 
+MAPK1	 	kinase	 	 	 	4.74E-02	8.71E-02	FOS,FOSL2	 
+LEP	 	growth factor	 	 	 	4.77E-02	8.75E-02	CRHR2,FOS,SERPINE1	 
+GAS2L3	 	other	 	 	 	4.94E-02	8.78E-02	BTG2	 
+GLIS2	 	transcription regulator	 	 	 	4.94E-02	8.78E-02	SERPINE1	 
+CASP3	 	peptidase	 	 	 	4.94E-02	8.78E-02	MYOD1	 
+NREP	 	other	 	 	 	4.94E-02	8.78E-02	FGF2	 
+NPY1R	 	G-protein coupled receptor	 	 	 	4.94E-02	8.78E-02	FOS	 
+NT5E	 	phosphatase	 	 	 	4.94E-02	8.78E-02	SERPINE1	 
+CD47	 	transmembrane receptor	 	 	 	4.94E-02	8.78E-02	KDR	 
+RHOA	 	enzyme	 	 	 	4.94E-02	8.78E-02	FOS	 
+Gm12602	 	other	 	 	 	4.94E-02	8.78E-02	BTG2	 
+POU2F2	 	transcription regulator	 	 	 	4.94E-02	8.78E-02	ELL2	 
+PRKN	 	enzyme	 	 	 	4.94E-02	8.78E-02	KDR	 

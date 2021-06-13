@@ -1,0 +1,216 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Ingenuity Canonical Pathways	 -log(p-value)	Ratio	z-score	Molecules	
+JAK/Stat Signaling	4.14E00	6.1E-02	-2.236	BCL2L1,CISH,SOCS1,SOCS2,SOCS3	
+Role of JAK2 in Hormone-like Cytokine Signaling	3.2E00	9.38E-02	NaN	SOCS1,SOCS2,SOCS3	
+IL-9 Signaling	3.08E00	8.57E-02	NaN	CISH,SOCS2,SOCS3	
+Prolactin Signaling	2.97E00	4.71E-02	-1.000	IRF1,SOCS1,SOCS2,SOCS3	
+Retinoic acid Mediated Apoptosis Signaling	2.79E00	6.82E-02	NaN	IRF1,PARP16,TIPARP	
+IGF-1 Signaling	2.68E00	3.92E-02	NaN	CCN2,SOCS1,SOCS2,SOCS3	
+Role of Tissue Factor in Cancer	2.53E00	3.57E-02	NaN	BCL2L1,CCN2,CSF1,F3	
+Growth Hormone Signaling	2.25E00	4.41E-02	NaN	SOCS1,SOCS2,SOCS3	
+STAT3 Pathway	2.24E00	2.96E-02	-2.000	CISH,SOCS1,SOCS2,SOCS3	
+Apelin Cardiac Fibroblast Signaling Pathway	2.19E00	8.7E-02	NaN	APLNR,CCN2	
+Role of JAK family kinases in IL-6-type Cytokine Signaling	2.12E00	8E-02	NaN	SOCS1,SOCS3	
+Type II Diabetes Mellitus Signaling	2.09E00	2.67E-02	NaN	NFKBIA,SOCS1,SOCS2,SOCS3	
+Th1 and Th2 Activation Pathway	2.04E00	2.58E-02	NaN	IRF1,S1PR1,SOCS1,SOCS3	
+Interferon Signaling	1.94E00	6.45E-02	NaN	IRF1,SOCS1	
+Acute Phase Response Signaling	1.88E00	2.31E-02	-2.000	NFKBIA,SOCS1,SOCS2,SOCS3	
+p53 Signaling	1.87E00	3.19E-02	NaN	BCL2L1,GADD45G,TP53INP1	
+Death Receptor Signaling	1.87E00	3.19E-02	NaN	NFKBIA,PARP16,TIPARP	
+G-Protein Coupled Receptor Signaling	1.84E00	1.85E-02	NaN	APLNR,NFKBIA,PTGIR,RASGRP1,S1PR1	
+Production of Nitric Oxide and Reactive Oxygen Species in Macrophages	1.84E00	2.25E-02	0.000	IRF1,NFKBIA,RHOB,RND3	
+IL-17A Signaling in Fibroblasts	1.84E00	5.71E-02	NaN	CEBPD,NFKBIA	
+UVA-Induced MAPK Signaling	1.83E00	3.09E-02	NaN	BCL2L1,PARP16,TIPARP	
+Sumoylation Pathway	1.83E00	3.09E-02	NaN	NFKBIA,RHOB,RND3	
+Th1 Pathway	1.7E00	2.75E-02	NaN	IRF1,SOCS1,SOCS3	
+Sphingosine-1-phosphate Signaling	1.67E00	2.68E-02	NaN	RHOB,RND3,S1PR1	
+IL-8 Signaling	1.65E00	1.98E-02	NaN	BCL2L1,NFKBIA,RHOB,RND3	
+Type I Diabetes Mellitus Signaling	1.63E00	1.63E-02	-1.342	IRF1,NFKBIA,SOCS1,SOCS2,SOCS3	
+Apelin Pancreas Signaling Pathway	1.63E00	4.44E-02	NaN	APLNR,DDIT3	
+Role of Macrophages, Fibroblasts and Endothelial Cells in Rheumatoid Arthritis	1.63E00	1.62E-02	NaN	CEBPD,CSF1,NFKBIA,SOCS1,SOCS3	
+iNOS Signaling	1.61E00	4.35E-02	NaN	IRF1,NFKBIA	
+IL-23 Signaling Pathway	1.61E00	4.35E-02	NaN	NFKBIA,SOCS3	
+Molecular Mechanisms of Cancer	1.57E00	1.39E-02	NaN	BCL2L1,NFKBIA,RALGDS,RASGRP1,RHOB,RND3	
+IL-6 Signaling	1.55E00	2.4E-02	NaN	NFKBIA,SOCS1,SOCS3	
+Adipogenesis pathway	1.49E00	2.29E-02	NaN	CEBPD,DDIT3,PER2	
+Lymphotoxin β Receptor Signaling	1.48E00	3.7E-02	NaN	BCL2L1,NFKBIA	
+CD27 Signaling in Lymphocytes	1.45E00	3.57E-02	NaN	BCL2L1,NFKBIA	
+Gαi Signaling	1.45E00	2.21E-02	NaN	APLNR,RALGDS,S1PR1	
+Semaphorin Signaling in Neurons	1.42E00	3.45E-02	NaN	RHOB,RND3	
+Induction of Apoptosis by HIV1	1.35E00	3.12E-02	NaN	BCL2L1,NFKBIA	
+Mitotic Roles of Polo-Like Kinase	1.35E00	3.12E-02	NaN	ANAPC10,PLK2	
+Colorectal Cancer Metastasis Signaling	1.3E00	1.53E-02	0.000	BCL2L1,RALGDS,RHOB,RND3	
+Role of JAK1 and JAK3 in γc Cytokine Signaling	1.3E00	2.94E-02	NaN	SOCS1,SOCS3	
+IL-10 Signaling	1.29E00	2.9E-02	NaN	NFKBIA,SOCS3	
+Glioma Invasiveness Signaling	1.28E00	2.86E-02	NaN	RHOB,RND3	
+GM-CSF Signaling	1.28E00	2.86E-02	NaN	BCL2L1,CISH	
+Hematopoiesis from Multipotent Stem Cells	1.25E00	9.09E-02	NaN	CSF1	
+Gαq Signaling	1.25E00	1.82E-02	NaN	NFKBIA,RHOB,RND3	
+PEDF Signaling	1.15E00	2.41E-02	NaN	BCL2L1,NFKBIA	
+Actin Nucleation by ARP-WASP Complex	1.1E00	2.27E-02	NaN	RHOB,RND3	
+Unfolded protein response	1.1E00	2.25E-02	NaN	CEBPD,DDIT3	
+Extrinsic Prothrombin Activation Pathway	1.09E00	6.25E-02	NaN	F3	
+PD-1, PD-L1 cancer immunotherapy pathway	1.06E00	2.15E-02	NaN	BCL2L1,RASGRP1	
+mTOR Signaling	1.05E00	1.5E-02	NaN	DDIT4,RHOB,RND3	
+ATM Signaling	1.05E00	2.11E-02	NaN	GADD45G,NFKBIA	
+Small Cell Lung Cancer Signaling	1.05E00	2.11E-02	NaN	BCL2L1,NFKBIA	
+Integrin Signaling	1.03E00	1.47E-02	NaN	RHOB,RND3,TSPAN4	
+GADD45 Signaling	1E00	5E-02	NaN	GADD45G	
+Endoplasmic Reticulum Stress Pathway	1E00	5E-02	NaN	DDIT3	
+Apoptosis Signaling	9.87E-01	1.94E-02	NaN	BCL2L1,NFKBIA	
+MSP-RON Signaling In Macrophages Pathway	9.83E-01	1.92E-02	NaN	SOCS1,SOCS3	
+PPAR Signaling	9.75E-01	1.9E-02	NaN	NFKBIA,NRIP1	
+cAMP-mediated signaling	9.63E-01	1.37E-02	NaN	APLNR,PTGIR,S1PR1	
+Regulation of Actin-based Motility by Rho	9.55E-01	1.85E-02	NaN	RHOB,RND3	
+Role of JAK1, JAK2 and TYK2 in Interferon Signaling	9.39E-01	4.35E-02	NaN	SOCS1	
+IL-22 Signaling	9.24E-01	4.17E-02	NaN	SOCS3	
+Cholecystokinin/Gastrin-mediated Signaling	9.21E-01	1.77E-02	NaN	RHOB,RND3	
+Atherosclerosis Signaling	9.03E-01	1.72E-02	NaN	CSF1,F3	
+Apelin Liver Signaling Pathway	8.93E-01	3.85E-02	NaN	APLNR	
+IL-12 Signaling and Production in Macrophages	8.89E-01	1.69E-02	NaN	IRF1,NFKBIA	
+Th2 Pathway	8.66E-01	1.64E-02	NaN	S1PR1,SOCS3	
+Role of PKR in Interferon Induction and Antiviral Response	8.63E-01	1.63E-02	NaN	IRF1,NFKBIA	
+Pancreatic Adenocarcinoma Signaling	8.63E-01	1.63E-02	NaN	BCL2L1,RALGDS	
+Phagosome Formation	8.18E-01	1.53E-02	NaN	RHOB,RND3	
+Circadian Rhythm Signaling	8.07E-01	3.12E-02	NaN	PER2	
+TNFR2 Signaling	8.07E-01	3.12E-02	NaN	NFKBIA	
+4-1BB Signaling in T Lymphocytes	7.96E-01	3.03E-02	NaN	NFKBIA	
+MIF-mediated Glucocorticoid Regulation	7.83E-01	2.94E-02	NaN	NFKBIA	
+Hepatic Fibrosis Signaling Pathway	7.8E-01	9.88E-03	0.000	CCN2,NFKBIA,RHOB,RND3	
+Coagulation System	7.72E-01	2.86E-02	NaN	F3	
+Role of RIG1-like Receptors in Antiviral Innate Immunity	7.72E-01	2.86E-02	NaN	NFKBIA	
+NAD Signaling Pathway	7.64E-01	1.41E-02	NaN	PARP16,TIPARP	
+TWEAK Signaling	7.5E-01	2.7E-02	NaN	NFKBIA	
+Docosahexaenoic Acid (DHA) Signaling	7.4E-01	2.63E-02	NaN	BCL2L1	
+HMGB1 Signaling	7.06E-01	1.29E-02	NaN	RHOB,RND3	
+MIF Regulation of Innate Immunity	7.01E-01	2.38E-02	NaN	NFKBIA	
+April Mediated Signaling	7.01E-01	2.38E-02	NaN	NFKBIA	
+HOTAIR Regulatory Pathway	6.97E-01	1.27E-02	NaN	IRF1,NFKBIA	
+B Cell Activating Factor Signaling	6.9E-01	2.33E-02	NaN	NFKBIA	
+CXCR4 Signaling	6.78E-01	1.23E-02	NaN	RHOB,RND3	
+Germ Cell-Sertoli Cell Junction Signaling	6.78E-01	1.23E-02	NaN	RHOB,RND3	
+Erythropoietin Signaling Pathway	6.62E-01	1.2E-02	NaN	BCL2L1,NFKBIA	
+Glioblastoma Multiforme Signaling	6.54E-01	1.19E-02	NaN	RHOB,RND3	
+Myc Mediated Apoptosis Signaling	6.5E-01	2.08E-02	NaN	BCL2L1	
+Apelin Muscle Signaling Pathway	6.5E-01	2.08E-02	NaN	APLNR	
+TNFR1 Signaling	6.33E-01	2E-02	NaN	NFKBIA	
+FAT10 Cancer Signaling Pathway	6.33E-01	2E-02	NaN	NFKBIA	
+B Cell Receptor Signaling	6.18E-01	1.12E-02	NaN	BCL2L1,NFKBIA	
+Role of IL-17A in Arthritis	6.11E-01	1.89E-02	NaN	NFKBIA	
+Activation of IRF by Cytosolic Pattern Recognition Receptors	6.04E-01	1.85E-02	NaN	NFKBIA	
+Role of PI3K/AKT Signaling in the Pathogenesis of Influenza	6.04E-01	1.85E-02	NaN	NFKBIA	
+MSP-RON Signaling Pathway	5.97E-01	1.82E-02	NaN	CSF1	
+Coronavirus Pathogenesis Pathway	5.93E-01	1.08E-02	NaN	DDIT3,NFKBIA	
+Hepatic Fibrosis / Hepatic Stellate Cell Activation	5.87E-01	1.07E-02	NaN	CCN2,CSF1	
+ILK Signaling	5.83E-01	1.06E-02	NaN	RHOB,RND3	
+IL-2 Signaling	5.59E-01	1.64E-02	NaN	SOCS1	
+PI3K/AKT Signaling	5.54E-01	1.02E-02	NaN	BCL2L1,NFKBIA	
+IL-17A Signaling in Airway Cells	5.47E-01	1.59E-02	NaN	NFKBIA	
+Eicosanoid Signaling	5.47E-01	1.59E-02	NaN	PTGIR	
+Thrombin Signaling	5.35E-01	9.8E-03	NaN	RHOB,RND3	
+Glucocorticoid Receptor Signaling	5.32E-01	7.69E-03	NaN	BCL2L1,NFKBIA,NRIP1,TSC22D3	
+CD40 Signaling	5.3E-01	1.52E-02	NaN	NFKBIA	
+Role of Hypercytokinemia/hyperchemokinemia in the Pathogenesis of Influenza	5.24E-01	1.49E-02	NaN	S1PR1	
+RhoGDI Signaling	5.23E-01	9.62E-03	NaN	RHOB,RND3	
+Role of MAPK Signaling in Inhibiting the Pathogenesis of Influenza	5.04E-01	1.41E-02	NaN	NFKBIA	
+Maturity Onset Diabetes of Young (MODY) Signaling	4.99E-01	1.39E-02	NaN	KLF11	
+Role of Osteoblasts, Osteoclasts and Chondrocytes in Rheumatoid Arthritis	4.98E-01	9.22E-03	NaN	CSF1,NFKBIA	
+Leptin Signaling in Obesity	4.93E-01	1.37E-02	NaN	SOCS3	
+Toll-like Receptor Signaling	4.89E-01	1.35E-02	NaN	NFKBIA	
+Hypoxia Signaling in the Cardiovascular System	4.89E-01	1.35E-02	NaN	NFKBIA	
+IL-15 Signaling	4.84E-01	1.33E-02	NaN	BCL2L1	
+GDNF Family Ligand-Receptor Interactions	4.84E-01	1.33E-02	NaN	DOK7	
+Macropinocytosis Signaling	4.84E-01	1.33E-02	NaN	CSF1	
+Angiopoietin Signaling	4.8E-01	1.32E-02	NaN	NFKBIA	
+BEX2 Signaling Pathway	4.8E-01	1.32E-02	NaN	NFKBIA	
+IL-7 Signaling Pathway	4.75E-01	1.3E-02	NaN	SOCS1	
+VDR/RXR Activation	4.71E-01	1.28E-02	NaN	KLF4	
+NF-κB Activation by Viruses	4.71E-01	1.28E-02	NaN	NFKBIA	
+Xenobiotic Metabolism AHR Signaling Pathway	4.66E-01	1.27E-02	NaN	NRIP1	
+TR/RXR Activation	4.62E-01	1.25E-02	NaN	UCP3	
+IL-4 Signaling	4.62E-01	1.25E-02	NaN	SOCS1	
+Apelin Adipocyte Signaling Pathway	4.57E-01	1.23E-02	NaN	APLNR	
+LPS-stimulated MAPK Signaling	4.49E-01	1.2E-02	NaN	NFKBIA	
+Ceramide Signaling	4.28E-01	1.14E-02	NaN	S1PR1	
+RANK Signaling in Osteoclasts	4.25E-01	1.12E-02	NaN	NFKBIA	
+Systemic Lupus Erythematosus In B Cell Signaling Pathway	4.24E-01	8.06E-03	NaN	BCL2L1,RASGRP1	
+Cardiac Hypertrophy Signaling	4.21E-01	8.03E-03	NaN	RHOB,RND3	
+IL-1 Signaling	4.13E-01	1.09E-02	NaN	NFKBIA	
+Signaling by Rho Family GTPases	3.99E-01	7.69E-03	NaN	RHOB,RND3	
+VEGF Signaling	3.99E-01	1.04E-02	NaN	BCL2L1	
+Apelin Cardiomyocyte Signaling Pathway	3.96E-01	1.03E-02	NaN	APLNR	
+Protein Ubiquitination Pathway	3.9E-01	7.58E-03	NaN	ANAPC10,USP54	
+OX40 Signaling Pathway	3.83E-01	7.46E-03	NaN	BCL2L1,NFKBIA	
+Sirtuin Signaling Pathway	3.81E-01	7.43E-03	NaN	GADD45G,PFKFB3	
+Kinetochore Metaphase Signaling Pathway	3.73E-01	9.62E-03	NaN	ANAPC10	
+Antioxidant Action of Vitamin C	3.7E-01	9.52E-03	NaN	NFKBIA	
+Chronic Myeloid Leukemia Signaling	3.67E-01	9.43E-03	NaN	BCL2L1	
+Role of MAPK Signaling in Promoting the Pathogenesis of Influenza	3.64E-01	9.35E-03	NaN	NFKBIA	
+Senescence Pathway	3.56E-01	7.07E-03	NaN	ANAPC10,GADD45G	
+Phospholipase C Signaling	3.54E-01	6.48E-03	NaN	RALGDS,RHOB,RND3	
+Prostate Cancer Signaling	3.52E-01	9.01E-03	NaN	NFKBIA	
+p38 MAPK Signaling	3.49E-01	8.93E-03	NaN	DDIT3	
+Amyotrophic Lateral Sclerosis Signaling	3.46E-01	8.85E-03	NaN	BCL2L1	
+Neuregulin Signaling	3.38E-01	8.62E-03	NaN	ERRFI1	
+IL-15 Production	3.35E-01	8.55E-03	NaN	IRF1	
+Gαs Signaling	3.33E-01	8.47E-03	NaN	PTGIR	
+RhoA Signaling	3.3E-01	8.4E-03	NaN	RND3	
+Ferroptosis Signaling Pathway	3.2E-01	8.13E-03	NaN	ANGPTL4	
+fMLP Signaling in Neutrophils	3.07E-01	7.81E-03	NaN	NFKBIA	
+Gα12/13 Signaling	3.03E-01	7.69E-03	NaN	NFKBIA	
+MSP-RON Signaling In Cancer Cells Pathway	2.93E-01	7.46E-03	NaN	NFKBIA	
+Rac Signaling	2.89E-01	7.35E-03	NaN	MCF2L	
+Apelin Endothelial Signaling Pathway	2.87E-01	7.3E-03	NaN	APLNR	
+Insulin Receptor Signaling	2.85E-01	7.25E-03	NaN	SOCS3	
+Hereditary Breast Cancer Signaling	2.82E-01	7.19E-03	NaN	GADD45G	
+Endocannabinoid Cancer Inhibition Pathway	2.82E-01	7.19E-03	NaN	DDIT3	
+PI3K Signaling in B Lymphocytes	2.78E-01	7.09E-03	NaN	NFKBIA	
+Aryl Hydrocarbon Receptor Signaling	2.64E-01	6.76E-03	NaN	NRIP1	
+Relaxin Signaling	2.63E-01	6.71E-03	NaN	NFKBIA	
+PTEN Signaling	2.63E-01	6.71E-03	NaN	BCL2L1	
+Inhibition of ARE-Mediated mRNA Degradation Pathway	2.55E-01	6.54E-03	NaN	ZFP36	
+Breast Cancer Regulation by Stathmin1	2.39E-01	5.3E-03	NaN	APLNR,PTGIR,S1PR1	
+Human Embryonic Stem Cell Pluripotency	2.37E-01	6.13E-03	NaN	S1PR1	
+Xenobiotic Metabolism CAR Signaling Pathway	2.32E-01	6.02E-03	NaN	NRIP1	
+D-myo-inositol (1,4,5,6)-Tetrakisphosphate Biosynthesis	2.31E-01	5.99E-03	NaN	SOCS3	
+D-myo-inositol (3,4,5,6)-tetrakisphosphate Biosynthesis	2.31E-01	5.99E-03	NaN	SOCS3	
+Xenobiotic Metabolism PXR Signaling Pathway	2.28E-01	5.92E-03	NaN	NRIP1	
+Protein Kinase A Signaling	2.25E-01	5.29E-03	NaN	ANAPC10,NFKBIA	
+Tumor Microenvironment Pathway	2.2E-01	5.75E-03	NaN	CSF1	
+Hepatic Cholestasis	2.14E-01	5.62E-03	NaN	NFKBIA	
+3-phosphoinositide Degradation	2.12E-01	5.59E-03	NaN	SOCS3	
+Clathrin-mediated Endocytosis Signaling	2.09E-01	5.52E-03	NaN	LDLRAP1	
+D-myo-inositol-5-phosphate Metabolism	2.06E-01	5.46E-03	NaN	SOCS3	
+PPARα/RXRα Activation	2.05E-01	5.43E-03	NaN	NFKBIA	
+Leukocyte Extravasation Signaling	2.01E-01	5.35E-03	NaN	RASGRP1	
+HER-2 Signaling in Breast Cancer	1.99E-01	5.32E-03	NaN	NFKBIA	
+Axonal Guidance Signaling	-0E00	4.1E-03	NaN	ADAMTS1,ADAMTS20	
+Huntington's Disease Signaling	-0E00	3.72E-03	NaN	BCL2L1	
+NRF2-mediated Oxidative Stress Response	-0E00	4.57E-03	NaN	ENC1	
+RAR Activation	-0E00	5.24E-03	NaN	NRIP1	
+Role of NFAT in Regulation of the Immune Response	-0E00	2.6E-03	NaN	NFKBIA	
+CD28 Signaling in T Helper Cells	-0E00	3.16E-03	NaN	NFKBIA	
+Dendritic Cell Maturation	-0E00	2.72E-03	NaN	NFKBIA	
+iCOS-iCOSL Signaling in T Helper Cells	-0E00	3.26E-03	NaN	NFKBIA	
+CREB Signaling in Neurons	-0E00	5.19E-03	NaN	APLNR,PTGIR,S1PR1	
+EIF2 Signaling	-0E00	4.88E-03	NaN	DDIT3	
+AMPK Signaling	-0E00	4.2E-03	NaN	PFKFB3	
+Altered T Cell and B Cell Signaling in Rheumatoid Arthritis	-0E00	3.44E-03	NaN	CSF1	
+Regulation of IL-2 Expression in Activated and Anergic T Lymphocytes	-0E00	3.39E-03	NaN	NFKBIA	
+PKCθ Signaling in T Lymphocytes	-0E00	2.79E-03	NaN	NFKBIA	
+Hematopoiesis from Pluripotent Stem Cells	-0E00	4.2E-03	NaN	CSF1	
+Superpathway of Inositol Phosphate Compounds	-0E00	4.5E-03	NaN	SOCS3	
+3-phosphoinositide Biosynthesis	-0E00	5.18E-03	NaN	SOCS3	
+Tec Kinase Signaling	-0E00	5.21E-03	NaN	RHOB,RND3	
+Estrogen Receptor Signaling	-0E00	2.53E-03	NaN	NRIP1	
+Xenobiotic Metabolism Signaling	-0E00	3.77E-03	NaN	NRIP1	
+NF-κB Signaling	-0E00	2.66E-03	NaN	NFKBIA	
+T Cell Receptor Signaling	-0E00	4.99E-03	NaN	NFKBIA,RASGRP1	
+Autophagy	-0E00	4.85E-03	NaN	DDIT3	
+Osteoarthritis Pathway	-0E00	4.44E-03	NaN	DDIT4	
+Opioid Signaling Pathway	-0E00	3.76E-03	NaN	NFKBIA	
+Th17 Activation Pathway	-0E00	3.64E-03	NaN	SOCS3	
+Synaptogenesis Signaling Pathway	-0E00	3.33E-03	NaN	RASGRP1	
+Systemic Lupus Erythematosus In T Cell Signaling Pathway	-0E00	4.75E-03	NaN	RHOB,RND3	
+Insulin Secretion Signaling Pathway	-0E00	3.86E-03	NaN	KLF11	

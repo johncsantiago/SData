@@ -1,0 +1,115 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Upstream Regulator	Expr Log Ratio	Molecule Type	Predicted Activation State	Activation z-score	Flags	p-value of overlap	B-H corrected p-value	Target Molecules in Dataset	Mechanistic Network
+IL1B	 	cytokine	Activated	2.000	bias	6.09E-06	1.60E-03	CSRNP1,FGF2,FOSB,FOXO1,PPARGC1B	 
+GNAS	 	enzyme	 	 	 	6.28E-05	8.26E-03	MAFF,NR4A3,THBS1	 
+G protein alphai	 	group	 	 	 	2.20E-04	1.93E-02	MAFF,NR4A3,THBS1	 
+BMP10	 	growth factor	 	 	 	3.91E-04	2.51E-02	FGF2,NR4A3,THBS1	 
+CREM	 	transcription regulator	 	 	 	4.78E-04	2.51E-02	CSRNP1,SERTAD1,THBS1	 
+GFI1	 	transcription regulator	 	 	 	9.21E-04	4.04E-02	FOXO1,GADD45G,MAFF	 
+miR-182-5p (and other miRNAs w/seed UUGGCAA)	 	mature microRNA	 	 	 	1.69E-03	6.03E-02	FOXO1	 
+DIO2	 	enzyme	 	 	 	2.03E-03	6.03E-02	FOSB,GADD45G,IER5	 
+ID3	 	transcription regulator	 	 	 	3.04E-03	6.03E-02	FOXO1,GADD45G,NR4A3	 
+STEAP3	 	transporter	 	 	 	3.20E-03	6.03E-02	FGF2,NR4A3	 
+ZFAT	 	transcription regulator	 	 	 	3.37E-03	6.03E-02	FOXO1	 
+AGPAT1	 	enzyme	 	 	 	3.37E-03	6.03E-02	FOXO1	 
+CST3	 	other	 	 	 	3.37E-03	6.03E-02	FGF2	 
+Nedd4	 	enzyme	 	 	 	3.37E-03	6.03E-02	THBS1	 
+GLI3	 	transcription regulator	 	 	 	4.14E-03	6.03E-02	FOSB,FOXO1	 
+ID2	 	transcription regulator	 	 	 	4.69E-03	6.03E-02	FOXO1,GADD45G,NR4A3	 
+HRAS	 	enzyme	 	 	 	4.73E-03	6.03E-02	ARHGAP26,THBS1	 
+PKD1	 	ion channel	 	 	 	4.82E-03	6.03E-02	FOSB,FOXO1,SEMA4C	 
+TOX	 	transcription regulator	 	 	 	5.05E-03	6.03E-02	FOXO1	 
+Proinsulin	 	group	 	 	 	5.05E-03	6.03E-02	FOXO1	 
+EAF2	 	transcription regulator	 	 	 	5.05E-03	6.03E-02	THBS1	 
+GFRA2	 	transmembrane receptor	 	 	 	5.05E-03	6.03E-02	FOSB	 
+IRAK4	 	kinase	 	 	 	5.52E-03	6.31E-02	CSRNP1,FOSB	 
+KCNE3	 	ion channel	 	 	 	5.85E-03	6.41E-02	CSRNP1,FOSB	 
+FOXO1	1.151	transcription regulator	 	 	 	6.09E-03	6.41E-02	COMP,FOSB,FOXO1	 
+miR-378a-3p (and other miRNAs w/seed CUGGACU)	 	mature microRNA	 	 	 	6.72E-03	6.55E-02	FOXO1	 
+TPT1	 	other	 	 	 	6.72E-03	6.55E-02	FOXO1	 
+CREB1	 	transcription regulator	 	 	 	9.21E-03	7.02E-02	CSRNP1,SERTAD1	 
+MED1	 	transcription regulator	 	 	 	9.21E-03	7.02E-02	FOXO1,THBS1	 
+TP53	 	transcription regulator	 	-0.254	 	9.23E-03	7.02E-02	FGF2,FOXO1,GADD45G,IER5,PPARGC1B,THBS1	 
+CYP19A1	 	enzyme	 	 	 	9.41E-03	7.02E-02	FAM107A,FGF2	 
+MYF6	 	transcription regulator	 	 	 	9.83E-03	7.02E-02	FGF2,THBS1	 
+ANGPTL6	 	other	 	 	 	1.01E-02	7.02E-02	FGF2	 
+mir-378	 	microRNA	 	 	 	1.01E-02	7.02E-02	FOXO1	 
+H4C3	 	other	 	 	 	1.01E-02	7.02E-02	FOSB	 
+TAF4	 	transcription regulator	 	 	 	1.03E-02	7.02E-02	MAFF,THBS1	 
+MKNK1	 	kinase	 	 	 	1.11E-02	7.02E-02	FOSB,NR4A3	 
+IFNG	 	cytokine	 	0.000	 	1.12E-02	7.02E-02	FAM107A,FGF2,FOSB,THBS1	 
+HNRNPR	 	other	 	 	 	1.17E-02	7.02E-02	THBS1	 
+NDST1	 	enzyme	 	 	 	1.17E-02	7.02E-02	FGF2	 
+PTPRB	 	phosphatase	 	 	 	1.17E-02	7.02E-02	FOXO1	 
+GHRHR	 	G-protein coupled receptor	 	 	 	1.17E-02	7.02E-02	CRHR2	 
+MFGE8	 	other	 	 	 	1.17E-02	7.02E-02	FGF2	 
+Gm26313	 	other	 	 	 	1.17E-02	7.02E-02	THBS1	 
+PECAM1	 	other	 	 	 	1.34E-02	7.34E-02	THBS1	 
+GLRX	 	enzyme	 	 	 	1.34E-02	7.34E-02	FGF2	 
+BDKRB2	 	G-protein coupled receptor	 	 	 	1.34E-02	7.34E-02	FOXO1	 
+KCNA3	 	ion channel	 	 	 	1.34E-02	7.34E-02	FOXO1	 
+FOXO3	 	transcription regulator	 	 	 	1.50E-02	7.48E-02	COMP,FOSB	 
+INS	 	other	 	 	 	1.51E-02	7.48E-02	FOXO1	 
+HSPA9	 	other	 	 	 	1.51E-02	7.48E-02	FOXO1	 
+MECOM	 	transcription regulator	 	 	 	1.51E-02	7.48E-02	GADD45G	 
+KCNJ11	 	ion channel	 	 	 	1.51E-02	7.48E-02	FOXO1	 
+GPRC6A	 	G-protein coupled receptor	 	 	 	1.67E-02	7.59E-02	FOXO1	 
+PLD1	 	enzyme	 	 	 	1.67E-02	7.59E-02	NR4A3	 
+EREG	 	growth factor	 	 	 	1.67E-02	7.59E-02	FGF2	 
+KAT2B	 	transcription regulator	 	 	 	1.67E-02	7.59E-02	FOSB	 
+KRIT1	 	other	 	 	 	1.67E-02	7.59E-02	THBS1	 
+EBF1	 	transcription regulator	 	 	 	1.79E-02	7.80E-02	CD160,FOXO1	 
+BLNK	 	other	 	 	 	1.84E-02	7.80E-02	FOXO1	 
+PIK3R2	 	kinase	 	 	 	1.84E-02	7.80E-02	FOXO1	 
+SELPLG	 	other	 	 	 	1.84E-02	7.80E-02	CD160	 
+SGPP1	 	phosphatase	 	 	 	2.00E-02	7.96E-02	Hrnr	 
+PFKFB3	 	kinase	 	 	 	2.00E-02	7.96E-02	FGF2	 
+mir-34	 	microRNA	 	 	 	2.00E-02	7.96E-02	PPP1R10	 
+IL5	 	cytokine	 	 	 	2.16E-02	7.96E-02	ELL2,GADD45G	 
+METTL14	 	enzyme	 	 	 	2.17E-02	7.96E-02	THBS1	 
+RYR2	 	ion channel	 	 	 	2.17E-02	7.96E-02	FOXO1	 
+PLCG2	 	enzyme	 	 	 	2.17E-02	7.96E-02	FOXO1	 
+DNMT3A	 	enzyme	 	 	 	2.26E-02	7.96E-02	FGF2,FOXO1	 
+MAP3K8	 	kinase	 	 	 	2.26E-02	7.96E-02	IER5,PPARGC1B	 
+Ptprd	 	phosphatase	 	 	 	2.33E-02	7.96E-02	GADD45G	 
+OMA1	 	peptidase	 	 	 	2.33E-02	7.96E-02	PPARGC1B	 
+COL9A1	 	other	 	 	 	2.33E-02	7.96E-02	COMP	 
+PHLPP1	 	enzyme	 	 	 	2.33E-02	7.96E-02	FOXO1	 
+PRLR	 	transmembrane receptor	 	 	 	2.33E-02	7.96E-02	FGF2	 
+NF1	 	other	 	 	 	2.33E-02	7.96E-02	FGF2	 
+PGF	 	growth factor	 	 	 	2.50E-02	7.96E-02	FOSB	 
+SPTLC2	 	enzyme	 	 	 	2.50E-02	7.96E-02	THBS1	 
+CAMK4	 	kinase	 	 	 	2.50E-02	7.96E-02	FOSB	 
+SCX	 	transcription regulator	 	 	 	2.50E-02	7.96E-02	COMP	 
+STAT5A	 	transcription regulator	 	 	 	2.50E-02	7.96E-02	FOSB,GADD45G	 
+CD38	 	enzyme	 	 	 	2.60E-02	7.96E-02	ELL2,GADD45G	 
+LRBA	 	other	 	 	 	2.66E-02	7.96E-02	FOXO1	 
+NREP	 	other	 	 	 	2.66E-02	7.96E-02	FGF2	 
+H2AX	 	transcription regulator	 	 	 	2.66E-02	7.96E-02	PPARGC1B	 
+MAP3K1	 	kinase	 	 	 	2.66E-02	7.96E-02	THBS1	 
+POU2F2	 	transcription regulator	 	 	 	2.66E-02	7.96E-02	ELL2	 
+NBEAL2	 	other	 	 	 	2.83E-02	8.26E-02	THBS1	 
+APEX1	 	enzyme	 	 	 	2.83E-02	8.26E-02	FOSB	 
+GJA1	 	transporter	 	 	 	2.99E-02	8.37E-02	FOXO1	 
+FMO3	 	enzyme	 	 	 	2.99E-02	8.37E-02	FOXO1	 
+SLC6A3	 	transporter	 	 	 	2.99E-02	8.37E-02	FOSB	 
+IRF6	 	transcription regulator	 	 	 	2.99E-02	8.37E-02	PPARGC1B	 
+IFNB1	 	cytokine	 	 	 	3.14E-02	8.64E-02	FGF2,THBS1	 
+ZNF503	 	other	 	 	 	3.16E-02	8.64E-02	FOXO1	 
+GADD45A	 	other	 	 	 	3.32E-02	8.91E-02	FOSB	 
+ENG	 	transmembrane receptor	 	 	 	3.32E-02	8.91E-02	THBS1	 
+let-7	 	microRNA	 	 	 	3.48E-02	9.25E-02	THBS1	 
+TRPV4	 	ion channel	 	 	 	3.64E-02	9.49E-02	THBS1	 
+PDPK1	 	kinase	 	 	 	3.64E-02	9.49E-02	FOXO1	 
+IPMK	 	kinase	 	 	 	3.81E-02	9.72E-02	FOSB	 
+SEMA7A	 	transmembrane receptor	 	 	 	3.81E-02	9.72E-02	FGF2	 
+NR4A3	2.500	ligand-dependent nuclear receptor	 	 	 	3.97E-02	1.00E-01	FOXO1	 
+HMGN1	 	transcription regulator	 	 	 	4.13E-02	1.03E-01	FOSB	 
+LPL	 	enzyme	 	 	 	4.13E-02	1.03E-01	THBS1	 
+NCOA3	 	transcription regulator	 	 	 	4.45E-02	1.08E-01	FGF2	 
+TFE3	 	transcription regulator	 	 	 	4.45E-02	1.08E-01	PPARGC1B	 
+ASXL1	 	transcription regulator	 	 	 	4.62E-02	1.11E-01	PPARGC1B	 
+SCARB1	 	transporter	 	 	 	4.78E-02	1.13E-01	FOXO1	 
+CHADL	 	other	 	 	 	4.78E-02	1.13E-01	FAM107A	 
+MALT1	 	peptidase	 	 	 	4.94E-02	1.16E-01	FOXO1	 

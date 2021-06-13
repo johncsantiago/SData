@@ -1,0 +1,281 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Ingenuity Canonical Pathways	 -log(p-value)	Ratio	z-score	Molecules	
+Ephrin Receptor Signaling	5.6E00	4.52E-02	NaN	CXCL12,EPHA3,GNA14,GNG11,GNG2,ITGA11,ITGA4,SH2D3C,WIPF1	
+Phospholipase C Signaling	4.98E00	2.72E-02	NaN	ADCY4,ARHGEF3,CD3E,CD3G,GNG11,GNG2,IGHM,ITGA11,ITGA4,LCK,MEF2C,ZAP70	
+Sperm Motility	4.88E00	3.69E-02	NaN	EPHA3,FLT4,GNA14,GNG11,GNG2,LCK,LTK,MATK,ZAP70	
+Thrombin Signaling	4.57E00	3.9E-02	NaN	ADCY4,ARHGEF3,F2R,F2RL2,GNA14,GNG11,GNG2,MAPK12	
+IL-15 Production	4.14E00	5E-02	NaN	EPHA3,FLT4,LCK,LTK,MATK,ZAP70	
+G Protein Signaling Mediated by Tubby	3.95E00	9.3E-02	NaN	GNA14,GNG11,GNG2,LCK	
+Leukocyte Extravasation Signaling	3.92E00	3.7E-02	NaN	CXCL12,ITGA4,JAM2,MAPK12,SPN,TIMP2,WIPF1	
+Apelin Endothelial Signaling Pathway	3.8E00	4.35E-02	NaN	ADCY4,GNA14,GNG11,GNG2,MAPK12,MEF2C	
+Signaling by Rho Family GTPases	3.79E00	3.02E-02	NaN	ARHGEF3,GNA14,GNG11,GNG2,ITGA11,ITGA4,MAPK12,WIPF1	
+Primary Immunodeficiency Signaling	3.76E00	8.33E-02	NaN	CD3E,IGHM,LCK,ZAP70	
+Tec Kinase Signaling	3.66E00	2.56E-02	NaN	CD3E,CD3G,GNA14,GNG11,GNG2,ITGA11,ITGA4,LCK,MAPK12	
+IL-1 Signaling	3.65E00	5.32E-02	NaN	ADCY4,GNA14,GNG11,GNG2,MAPK12	
+Role of NFAT in Regulation of the Immune Response	3.58E00	2.5E-02	NaN	CD3E,CD3G,GNA14,GNG11,GNG2,IGHM,LCK,MEF2C,ZAP70	
+CXCR4 Signaling	3.4E00	3.66E-02	NaN	ADCY4,CXCL12,GNA14,GNG11,GNG2,MAPK12	
+Ephrin B Signaling	3.08E00	5.56E-02	NaN	CXCL12,GNA14,GNG11,GNG2	
+Natural Killer Cell Signaling	3.03E00	3.11E-02	NaN	COL1A2,LCK,MAPK12,NCR3,WIPF1,ZAP70	
+Gα12/13 Signaling	2.96E00	3.76E-02	NaN	F2R,F2RL2,LPAR6,MAPK12,MEF2C	
+SAPK/JNK Signaling	2.9E00	2.51E-02	NaN	CD3E,CD3G,GNG11,GNG2,LCK,MAP4K1,MAPK12	
+RhoGDI Signaling	2.82E00	2.83E-02	NaN	ARHGEF3,GNA14,GNG11,GNG2,ITGA11,ITGA4	
+Endocannabinoid Neuronal Synapse Pathway	2.78E00	3.42E-02	NaN	ADCY4,GNA14,GNG11,GNG2,MAPK12	
+Axonal Guidance Signaling	2.65E00	1.84E-02	NaN	CXCL12,EPHA3,GNA14,GNG11,GNG2,ITGA11,ITGA4,ROBO1,WIPF1	
+CREB Signaling in Neurons	2.62E00	1.69E-02	NaN	ADCY4,CYSLTR2,F2R,F2RL2,FLT4,GNA14,GNG11,GNG2,LPAR6,S1PR4	
+Apelin Muscle Signaling Pathway	2.56E00	6.25E-02	NaN	GNA14,GNG11,GNG2	
+α-Adrenergic Signaling	2.49E00	3.85E-02	NaN	ADCY4,GNA14,GNG11,GNG2	
+Cardiac β-adrenergic Signaling	2.46E00	2.89E-02	NaN	ADCY4,ATP2A3,GNA14,GNG11,GNG2	
+Cardiac Hypertrophy Signaling	2.44E00	2.37E-02	NaN	ADCY4,GNA14,GNG11,GNG2,MAPK12,MEF2C	
+Cardiac Hypertrophy Signaling (Enhanced)	2.43E00	1.71E-02	NaN	ADCY4,ATP2A3,GNA14,GNG11,GNG2,ITGA11,ITGA4,MAPK12,MEF2C	
+Molecular Mechanisms of Cancer	2.39E00	1.83E-02	NaN	ADCY4,ARHGEF3,GNA14,GNG11,GNG2,ITGA11,ITGA4,MAPK12	
+GNRH Signaling	2.34E00	2.7E-02	NaN	ADCY4,GNA14,GNG11,GNG2,MAPK12	
+GPCR-Mediated Nutrient Sensing in Enteroendocrine Cells	2.34E00	3.48E-02	NaN	ADCY4,GNA14,GNG11,GNG2	
+PAK Signaling	2.31E00	3.42E-02	NaN	EPHA3,ITGA11,ITGA4,MAPK12	
+Opioid Signaling Pathway	2.27E00	2.2E-02	NaN	ADCY4,GNA14,GNG11,GNG2,LCK,MAPK12	
+Gαs Signaling	2.27E00	3.33E-02	NaN	ADCY4,GNA14,GNG11,GNG2	
+CCR5 Signaling in Macrophages	2.26E00	2.18E-02	NaN	CD3E,CD3G,GNA14,GNG11,GNG2,MAPK12	
+Adrenomedullin signaling pathway	2.25E00	2.58E-02	NaN	ADCY4,GNA14,MAPK12,MATK,RAMP2	
+Endocannabinoid Developing Neuron Pathway	2.24E00	3.25E-02	NaN	ADCY4,GNG11,GNG2,MAPK12	
+Reelin Signaling in Neurons	2.21E00	3.2E-02	NaN	ARHGEF3,LCK,MAP4K1,MAPK12	
+GABA Receptor Signaling	2.15E00	3.08E-02	NaN	ADCY4,GNA14,GNG11,GNG2	
+CCR3 Signaling in Eosinophils	2.14E00	3.05E-02	NaN	GNA14,GNG11,GNG2,MAPK12	
+IL-8 Signaling	2.14E00	2.42E-02	NaN	FLT4,GNA14,GNG11,GNG2,MAPK12	
+Gαi Signaling	2.06E00	2.9E-02	NaN	ADCY4,GNA14,GNG11,GNG2	
+Role of NFAT in Cardiac Hypertrophy	2.05E00	2.3E-02	NaN	ADCY4,GNG11,GNG2,MAPK12,MEF2C	
+Apelin Liver Signaling Pathway	2E00	7.69E-02	NaN	COL1A2,MAPK12	
+Cdc42 Signaling	1.98E00	1.9E-02	NaN	CD3E,CD3G,ITGA11,ITGA4,MAPK12,WIPF1	
+Relaxin Signaling	1.94E00	2.67E-02	NaN	ADCY4,GNA14,GNG11,GNG2	
+Calcium-induced T Lymphocyte Apoptosis	1.94E00	2.16E-02	NaN	ATP2A3,CD3E,CD3G,LCK,ZAP70	
+Apelin Adipocyte Signaling Pathway	1.9E00	3.61E-02	NaN	ADCY4,GSTP1,MAPK12	
+AMPK Signaling	1.87E00	2.07E-02	NaN	CPT1C,GNA14,GNG11,GNG2,MAPK12	
+Human Embryonic Stem Cell Pluripotency	1.82E00	2.45E-02	NaN	GNA14,GNG11,GNG2,S1PR4	
+Gustation Pathway	1.81E00	2.44E-02	NaN	ADCY4,GNG11,GNG2,LPAR6	
+Actin Nucleation by ARP-WASP Complex	1.79E00	3.3E-02	NaN	ITGA11,ITGA4,WIPF1	
+B Cell Development	1.73E00	5.56E-02	NaN	IGHM,SPN	
+Colorectal Cancer Metastasis Signaling	1.73E00	1.91E-02	NaN	ADCY4,GNA14,GNG11,GNG2,MAPK12	
+Regulation of IL-2 Expression in Activated and Anergic T Lymphocytes	1.73E00	1.91E-02	NaN	CD3E,CD3G,LCK,MAPK12,ZAP70	
+Breast Cancer Regulation by Stathmin1	1.69E00	1.37E-02	NaN	ARHGEF3,CYSLTR2,F2R,F2RL2,GNG11,GNG2,LPAR6,S1PR4	
+Inhibition of Matrix Metalloproteases	1.69E00	5.26E-02	NaN	RECK,TIMP2	
+Retinoate Biosynthesis II	1.64E00	2.5E-01	NaN	RBP1	
+Paxillin Signaling	1.62E00	2.83E-02	NaN	ITGA11,ITGA4,MAPK12	
+Hepatic Fibrosis / Hepatic Stellate Cell Activation	1.6E00	2.11E-02	NaN	COL1A2,FLT4,IGFBP3,TIMP2	
+RAR Activation	1.58E00	2.07E-02	NaN	ADCY4,IGFBP3,MAPK12,RBP1	
+Regulation of Actin-based Motility by Rho	1.58E00	2.73E-02	NaN	ITGA11,ITGA4,WIPF1	
+CD28 Signaling in T Helper Cells	1.56E00	1.72E-02	NaN	CD3E,CD3G,LCK,MAPK12,ZAP70	
+Neuregulin Signaling	1.53E00	2.61E-02	NaN	ITGA11,ITGA4,MATK	
+Role of Tissue Factor in Cancer	1.53E00	2.61E-02	NaN	GNA14,LCK,MAPK12	
+Sertoli Cell-Sertoli Cell Junction Signaling	1.52E00	1.98E-02	NaN	ITGA11,ITGA4,JAM2,MAPK12	
+p38 MAPK Signaling	1.5E00	2.54E-02	NaN	MAP4K1,MAPK12,MEF2C	
+Atherosclerosis Signaling	1.43E00	2.38E-02	NaN	COL1A2,CXCL12,ITGA4	
+P2Y Purigenic Receptor Signaling Pathway	1.41E00	2.34E-02	NaN	ADCY4,GNG11,GNG2	
+p70S6K Signaling	1.4E00	2.33E-02	NaN	F2R,F2RL2,IGHM	
+G Beta Gamma Signaling	1.4E00	2.33E-02	NaN	GNA14,GNG11,GNG2	
+fMLP Signaling in Neutrophils	1.39E00	2.31E-02	NaN	GNA14,GNG11,GNG2	
+HGF Signaling	1.39E00	2.29E-02	NaN	ITGA11,ITGA4,MAPK12	
+Phagosome Formation	1.33E00	2.17E-02	NaN	ITGA11,ITGA4,MRC2	
+T Cell Exhaustion Signaling Pathway	1.32E00	1.48E-02	NaN	CD3E,CD3G,EOMES,MAPK12,ZAP70	
+NF-κB Signaling	1.29E00	1.45E-02	NaN	CD3E,CD3G,FLT4,LCK,ZAP70	
+Actin Cytoskeleton Signaling	1.29E00	1.67E-02	NaN	F2R,ITGA11,ITGA4,MATK	
+Corticotropin Releasing Hormone Signaling	1.28E00	2.07E-02	NaN	ADCY4,MAPK12,MEF2C	
+Glutamate Receptor Signaling	1.26E00	3.08E-02	NaN	GNG11,GNG2	
+Calcium Transport I	1.25E00	1E-01	NaN	ATP2A3	
+T Cell Receptor Signaling	1.25E00	1.41E-02	NaN	CD3E,CD3G,LCK,MAPK12,ZAP70	
+PTEN Signaling	1.24E00	2E-02	NaN	FLT4,ITGA11,ITGA4	
+eNOS Signaling	1.23E00	1.97E-02	NaN	ADCY4,FLT4,LPAR6	
+Agrin Interactions at Neuromuscular Junction	1.22E00	2.94E-02	NaN	ITGA4,MAPK12	
+CTLA4 Signaling in Cytotoxic T Lymphocytes	1.21E00	1.57E-02	NaN	CD3E,CD3G,LCK,ZAP70	
+Glioma Invasiveness Signaling	1.19E00	2.82E-02	NaN	F2R,TIMP2	
+TREM1 Signaling	1.18E00	2.78E-02	NaN	NLRC3,NOD1	
+GPCR-Mediated Integration of Enteroendocrine Signaling Exemplified by an L Cell	1.18E00	2.78E-02	NaN	ADCY4,GNA14	
+IL-7 Signaling Pathway	1.17E00	2.74E-02	NaN	IGHM,MAPK12	
+Insulin Secretion Signaling Pathway	1.17E00	1.52E-02	NaN	ADCY4,GNA14,LCK,MAPK12	
+Antiproliferative Role of Somatostatin Receptor 2	1.16E00	2.7E-02	NaN	GNG11,GNG2	
+Caveolar-mediated Endocytosis Signaling	1.15E00	2.67E-02	NaN	ITGA11,ITGA4	
+Gαq Signaling	1.14E00	1.82E-02	NaN	GNA14,GNG11,GNG2	
+IL-15 Signaling	1.13E00	2.6E-02	NaN	LCK,MAPK12	
+Chemokine Signaling	1.13E00	2.6E-02	NaN	CXCL12,MAPK12	
+Androgen Signaling	1.12E00	1.79E-02	NaN	GNA14,GNG11,GNG2	
+iCOS-iCOSL Signaling in T Helper Cells	1.09E00	1.43E-02	NaN	CD3E,CD3G,LCK,ZAP70	
+Regulation of eIF4 and p70S6K Signaling	1.08E00	1.71E-02	NaN	ITGA11,ITGA4,MAPK12	
+FcγRIIB Signaling in B Lymphocytes	1.07E00	2.41E-02	NaN	IGHM,MAPK12	
+PPARα/RXRα Activation	1.05E00	1.66E-02	NaN	ADCY4,GNA14,MEF2C	
+Parkinson's Signaling	1.05E00	6.25E-02	NaN	MAPK12	
+Hepatic Fibrosis Signaling Pathway	1.03E00	1.21E-02	NaN	COL1A2,FLT4,ITGA11,ITGA4,MAPK12	
+Regulation of Cellular Mechanics by Calpain Protease	1.03E00	2.27E-02	NaN	ITGA11,ITGA4	
+Endothelin-1 Signaling	1.02E00	1.61E-02	NaN	ADCY4,GNA14,MAPK12	
+B Cell Receptor Signaling	1.01E00	1.59E-02	NaN	IGHM,MAPK12,MEF2C	
+Mitochondrial L-carnitine Shuttle Pathway	1E00	5.56E-02	NaN	CPT1C	
+The Visual Cycle	9.79E-01	5.26E-02	NaN	RBP1	
+Synaptogenesis Signaling Pathway	9.79E-01	1.3E-02	NaN	ADCY4,EPHA3,LCK,SYT11	
+TGF-β Signaling	9.67E-01	2.08E-02	NaN	MAP4K1,MAPK12	
+Apelin Cardiomyocyte Signaling Pathway	9.51E-01	2.04E-02	NaN	ATP2A3,MAPK12	
+Integrin Signaling	9.28E-01	1.46E-02	NaN	ITGA11,ITGA4,WIPF1	
+Cardiomyocyte Differentiation via BMP Receptors	9.17E-01	4.55E-02	NaN	MEF2C	
+PD-1, PD-L1 cancer immunotherapy pathway	9.17E-01	1.94E-02	NaN	LCK,ZAP70	
+Hematopoiesis from Pluripotent Stem Cells	9.03E-01	1.42E-02	NaN	CD3E,CD3G,IGHM	
+Glutathione Redox Reactions I	9E-01	4.35E-02	NaN	GSTP1	
+PKCθ Signaling in T Lymphocytes	8.93E-01	1.21E-02	NaN	CD3E,CD3G,LCK,ZAP70	
+IL-22 Signaling	8.83E-01	4.17E-02	NaN	MAPK12	
+Role of JAK family kinases in IL-6-type Cytokine Signaling	8.66E-01	4E-02	NaN	MAPK12	
+CDK5 Signaling	8.63E-01	1.8E-02	NaN	ADCY4,MAPK12	
+OX40 Signaling Pathway	8.54E-01	1.35E-02	NaN	CD3E,CD3G,MAPK12	
+IL-17A Signaling in Gastric Cells	8.51E-01	3.85E-02	NaN	MAPK12	
+Glutathione-mediated Detoxification	8.51E-01	3.85E-02	NaN	GSTP1	
+Nitric Oxide Signaling in the Cardiovascular System	8.45E-01	1.75E-02	NaN	ATP2A3,FLT4	
+Sphingosine-1-phosphate Signaling	8.39E-01	1.74E-02	NaN	ADCY4,S1PR4	
+FAK Signaling	8.33E-01	1.72E-02	NaN	ITGA11,ITGA4	
+Cholecystokinin/Gastrin-mediated Signaling	8.27E-01	1.71E-02	NaN	MAPK12,MEF2C	
+Th1 Pathway	8.27E-01	1.71E-02	NaN	CD3E,CD3G	
+Osteoarthritis Pathway	8.21E-01	1.3E-02	NaN	ITGA11,ITGA4,MEF2C	
+Renin-Angiotensin Signaling	8.15E-01	1.68E-02	NaN	ADCY4,MAPK12	
+Dendritic Cell Maturation	8.1E-01	1.12E-02	NaN	CD3E,CD3G,COL1A2,MAPK12	
+Inhibition of Angiogenesis by TSP1	7.67E-01	3.12E-02	NaN	MAPK12	
+Retinoate Biosynthesis I	7.57E-01	3.03E-02	NaN	RBP1	
+4-1BB Signaling in T Lymphocytes	7.45E-01	2.94E-02	NaN	MAPK12	
+Th2 Pathway	7.42E-01	1.5E-02	NaN	CD3E,CD3G	
+Coagulation System	7.33E-01	2.86E-02	NaN	F2R	
+STAT3 Pathway	7.3E-01	1.48E-02	NaN	FLT4,MAPK12	
+White Adipose Tissue Browning Pathway	7.3E-01	1.48E-02	NaN	ADCY4,MAPK12	
+Rac Signaling	7.21E-01	1.46E-02	NaN	ITGA11,ITGA4	
+Systemic Lupus Erythematosus Signaling	7.17E-01	1.03E-02	NaN	CD3E,CD3G,IGHM,LCK	
+Xenobiotic Metabolism General Signaling Pathway	7.17E-01	1.45E-02	NaN	GSTP1,MAPK12	
+Altered T Cell and B Cell Signaling in Rheumatoid Arthritis	7.1E-01	1.15E-02	NaN	CD3E,CD3G,IGHM	
+Communication between Innate and Adaptive Immune Cells	7.01E-01	1.14E-02	NaN	CD3E,CD3G,IGHM	
+IL-17A Signaling in Fibroblasts	7.01E-01	2.63E-02	NaN	MAPK12	
+Estrogen Receptor Signaling	6.97E-01	1.01E-02	NaN	ADCY4,GNA14,GNG11,GNG2	
+Semaphorin Neuronal Repulsive Signaling Pathway	6.84E-01	1.38E-02	NaN	ITGA11,ITGA4	
+Retinol Biosynthesis	6.82E-01	2.5E-02	NaN	RBP1	
+Dilated Cardiomyopathy Signaling Pathway	6.8E-01	1.37E-02	NaN	ADCY4,MAPK12	
+Role of Pattern Recognition Receptors in Recognition of Bacteria and Viruses	6.8E-01	1.37E-02	NaN	MAPK12,NOD1	
+Factors Promoting Cardiogenesis in Vertebrates	6.8E-01	1.37E-02	NaN	MAPK12,MEF2C	
+Intrinsic Prothrombin Activation Pathway	6.72E-01	2.44E-02	NaN	COL1A2	
+Huntington's Disease Signaling	6.64E-01	1.09E-02	NaN	GNA14,GNG11,GNG2	
+April Mediated Signaling	6.62E-01	2.38E-02	NaN	MAPK12	
+Serotonin Receptor Signaling	6.62E-01	2.38E-02	NaN	ADCY4	
+B Cell Activating Factor Signaling	6.54E-01	2.33E-02	NaN	MAPK12	
+Type I Diabetes Mellitus Signaling	6.46E-01	1.06E-02	NaN	CD3E,CD3G,MAPK12	
+MIF Regulation of Innate Immunity	6.44E-01	2.27E-02	NaN	MAPK12	
+Apelin Pancreas Signaling Pathway	6.36E-01	2.22E-02	NaN	MAPK12	
+iNOS Signaling	6.27E-01	2.17E-02	NaN	MAPK12	
+HOTAIR Regulatory Pathway	6.25E-01	1.26E-02	NaN	COL1A2,JAM2	
+Ephrin A Signaling	6.2E-01	2.13E-02	NaN	EPHA3	
+Mitochondrial Dysfunction	6.07E-01	1.22E-02	NaN	CPT1C,MAPK12	
+Amyloid Processing	5.97E-01	2E-02	NaN	MAPK12	
+Th1 and Th2 Activation Pathway	5.95E-01	1.2E-02	NaN	CD3E,CD3G	
+UVC-Induced MAPK Signaling	5.88E-01	1.96E-02	NaN	MAPK12	
+UVB-Induced MAPK Signaling	5.82E-01	1.92E-02	NaN	MAPK12	
+Granulocyte Adhesion and Diapedesis	5.7E-01	1.15E-02	NaN	CXCL12,ITGA4	
+Transcriptional Regulatory Network in Embryonic Stem Cells	5.67E-01	1.85E-02	NaN	EOMES	
+Tight Junction Signaling	5.61E-01	1.13E-02	NaN	F2RL2,JAM2	
+CD27 Signaling in Lymphocytes	5.61E-01	1.82E-02	NaN	MAPK12	
+Dopamine-DARPP32 Feedback in cAMP Signaling	5.61E-01	1.13E-02	NaN	ADCY4,ATP2A3	
+EGF Signaling	5.61E-01	1.82E-02	NaN	MAPK12	
+Tumor Microenvironment Pathway	5.56E-01	1.12E-02	NaN	COL1A2,CXCL12	
+Role of IL-17A in Arthritis	5.48E-01	1.75E-02	NaN	MAPK12	
+Hepatic Cholestasis	5.41E-01	1.09E-02	NaN	ADCY4,MAPK12	
+Acute Phase Response Signaling	5.38E-01	1.09E-02	NaN	MAPK12,RBP1	
+PCP pathway	5.29E-01	1.67E-02	NaN	MAPK12	
+IL-2 Signaling	5.23E-01	1.64E-02	NaN	LCK	
+Activation of IRF by Cytosolic Pattern Recognition Receptors	5.11E-01	1.59E-02	NaN	MAPK12	
+Clathrin-mediated Endocytosis Signaling	5.11E-01	1.04E-02	NaN	DAB2,F2R	
+Induction of Apoptosis by HIV1	5.11E-01	1.59E-02	NaN	MAPK12	
+Lipid Antigen Presentation by CD1	5.11E-01	1.04E-02	NaN	CD3E,CD3G	
+Eicosanoid Signaling	5E-01	1.54E-02	NaN	CYSLTR2	
+Agranulocyte Adhesion and Diapedesis	4.98E-01	1.02E-02	NaN	CXCL12,ITGA4	
+PI3K/AKT Signaling	4.98E-01	1.02E-02	NaN	ITGA11,ITGA4	
+CD40 Signaling	4.95E-01	1.52E-02	NaN	MAPK12	
+IL-17A Signaling in Airway Cells	4.89E-01	1.49E-02	NaN	MAPK12	
+Cytotoxic T Lymphocyte-mediated Apoptosis of Target Cells	4.85E-01	9.95E-03	NaN	CD3E,CD3G	
+Antiproliferative Role of TOB in T Cell Signaling	4.8E-01	9.85E-03	NaN	CD3E,CD3G	
+Growth Hormone Signaling	4.69E-01	1.41E-02	NaN	IGFBP3	
+Calcium Signaling	4.66E-01	9.62E-03	NaN	ATP2A3,MEF2C	
+IL-10 Signaling	4.63E-01	1.39E-02	NaN	MAPK12	
+ERK5 Signaling	4.63E-01	1.39E-02	NaN	MEF2C	
+Leptin Signaling in Obesity	4.6E-01	1.37E-02	NaN	ADCY4	
+Role of MAPK Signaling in Inhibiting the Pathogenesis of Influenza	4.55E-01	1.35E-02	NaN	MAPK12	
+ERK/MAPK Signaling	4.53E-01	9.39E-03	NaN	ITGA11,ITGA4	
+GDNF Family Ligand-Receptor Interactions	4.45E-01	1.32E-02	NaN	MAPK12	
+Dopamine Receptor Signaling	4.45E-01	1.32E-02	NaN	ADCY4	
+VDR/RXR Activation	4.4E-01	1.3E-02	NaN	IGFBP3	
+Toll-like Receptor Signaling	4.4E-01	1.3E-02	NaN	MAPK12	
+NF-κB Activation by Viruses	4.37E-01	1.28E-02	NaN	LCK	
+LPS/IL-1 Mediated Inhibition of RXR Function	4.35E-01	9.09E-03	NaN	CPT1C,GSTP1	
+Graft-versus-Host Disease Signaling	4.35E-01	9.09E-03	NaN	CD3E,CD3G	
+FLT3 Signaling in Hematopoietic Progenitor Cells	4.32E-01	1.27E-02	NaN	MAPK12	
+Role of MAPK Signaling in the Pathogenesis of Influenza	4.32E-01	1.27E-02	NaN	MAPK12	
+Xenobiotic Metabolism AHR Signaling Pathway	4.32E-01	1.27E-02	NaN	GSTP1	
+Allograft Rejection Signaling	4.28E-01	8.97E-03	NaN	CD3E,CD3G	
+BEX2 Signaling Pathway	4.27E-01	1.25E-02	NaN	MAPK12	
+Autoimmune Thyroid Disease Signaling	4.26E-01	8.93E-03	NaN	CD3E,CD3G	
+TR/RXR Activation	4.11E-01	1.19E-02	NaN	NRGN	
+VEGF Family Ligand-Receptor Interactions	4.11E-01	1.19E-02	NaN	FLT4	
+PEDF Signaling	4.11E-01	1.19E-02	NaN	MAPK12	
+FGF Signaling	4.11E-01	1.19E-02	NaN	MAPK12	
+LPS-stimulated MAPK Signaling	4.07E-01	1.18E-02	NaN	MAPK12	
+BMP signaling pathway	4.07E-01	1.18E-02	NaN	MAPK12	
+Protein Kinase A Signaling	4.05E-01	7.73E-03	NaN	ADCY4,GNG11,GNG2	
+RANK Signaling in Osteoclasts	3.91E-01	1.12E-02	NaN	MAPK12	
+Ceramide Signaling	3.88E-01	1.11E-02	NaN	S1PR4	
+Crosstalk between Dendritic Cells and Natural Killer Cells	3.84E-01	1.1E-02	NaN	NCR3	
+T Helper Cell Differentiation	3.79E-01	8.16E-03	NaN	CD3E,CD3G	
+ErbB Signaling	3.77E-01	1.08E-02	NaN	MAPK12	
+Melanocyte Development and Pigmentation Signaling	3.74E-01	1.06E-02	NaN	ADCY4	
+ATM Signaling	3.67E-01	1.04E-02	NaN	MAPK12	
+UVA-Induced MAPK Signaling	3.64E-01	1.03E-02	NaN	MAPK12	
+VEGF Signaling	3.64E-01	1.03E-02	NaN	FLT4	
+Nur77 Signaling in T Lymphocytes	3.63E-01	7.91E-03	NaN	CD3E,CD3G	
+Sumoylation Pathway	3.51E-01	9.9E-03	NaN	MAPK12	
+Th17 Activation Pathway	3.51E-01	7.72E-03	NaN	CD3E,CD3G	
+Mouse Embryonic Stem Cell Pluripotency	3.44E-01	9.71E-03	NaN	MAPK12	
+IGF-1 Signaling	3.41E-01	9.62E-03	NaN	IGFBP3	
+Systemic Lupus Erythematosus In B Cell Signaling Pathway	3.35E-01	7.49E-03	NaN	IGHM,LCK	
+Antioxidant Action of Vitamin C	3.33E-01	9.35E-03	NaN	MAPK12	
+Xenobiotic Metabolism Signaling	3.29E-01	7.38E-03	NaN	GSTP1,MAPK12	
+Prostate Cancer Signaling	3.26E-01	9.17E-03	NaN	GSTP1	
+Role of MAPK Signaling in Promoting the Pathogenesis of Influenza	3.26E-01	9.17E-03	NaN	MAPK12	
+G-Protein Coupled Receptor Signaling	3.23E-01	7.3E-03	NaN	ADCY4,GNA14	
+Sirtuin Signaling Pathway	3.06E-01	7.04E-03	NaN	CPT1C,MAPK12	
+Fc Epsilon RI Signaling	3.05E-01	8.55E-03	NaN	MAPK12	
+NGF Signaling	3.05E-01	8.55E-03	NaN	MAPK12	
+RhoA Signaling	2.92E-01	8.2E-03	NaN	LPAR6	
+Pancreatic Adenocarcinoma Signaling	2.87E-01	8.06E-03	NaN	MAPK12	
+GP6 Signaling Pathway	2.87E-01	8.06E-03	NaN	COL1A2	
+FXR/RXR Activation	2.85E-01	8E-03	NaN	MAPK12	
+Synaptic Long Term Potentiation	2.82E-01	7.94E-03	NaN	GNA14	
+14-3-3-mediated Signaling	2.82E-01	7.94E-03	NaN	MAPK12	
+IL-6 Signaling	2.78E-01	7.81E-03	NaN	MAPK12	
+Neuroinflammation Signaling Pathway	2.74E-01	6.56E-03	NaN	CXCL12,MAPK12	
+Role of PKR in Interferon Induction and Antiviral Response	2.69E-01	7.58E-03	NaN	MAPK12	
+Adipogenesis pathway	2.67E-01	7.52E-03	NaN	RBP1	
+IL-12 Signaling and Production in Macrophages	2.64E-01	7.46E-03	NaN	MAPK12	
+PI3K Signaling in B Lymphocytes	2.58E-01	7.3E-03	NaN	IGHM	
+Endocannabinoid Cancer Inhibition Pathway	2.48E-01	7.04E-03	NaN	ADCY4	
+Cellular Effects of Sildenafil (Viagra)	2.44E-01	6.94E-03	NaN	ADCY4	
+Aryl Hydrocarbon Receptor Signaling	2.39E-01	6.8E-03	NaN	GSTP1	
+Phagosome Maturation	2.35E-01	6.71E-03	NaN	CTSW	
+Type II Diabetes Mellitus Signaling	2.33E-01	6.67E-03	NaN	MAPK12	
+HMGB1 Signaling	2.18E-01	6.29E-03	NaN	MAPK12	
+Inhibition of ARE-Mediated mRNA Degradation Pathway	2.18E-01	6.29E-03	NaN	MAPK12	
+Germ Cell-Sertoli Cell Junction Signaling	2.06E-01	6.02E-03	NaN	MAPK12	
+Wnt/β-catenin Signaling	2E-01	5.88E-03	NaN	MAP4K1	
+Xenobiotic Metabolism CAR Signaling Pathway	1.99E-01	5.85E-03	NaN	GSTP1	
+Glucocorticoid Receptor Signaling	-0E00	5.56E-03	NaN	CD3E,CD3G,MAPK12	
+Synaptic Long Term Depression	-0E00	5.32E-03	NaN	GNA14	
+NRF2-mediated Oxidative Stress Response	-0E00	4.74E-03	NaN	GSTP1	
+IL-17 Signaling	-0E00	5.59E-03	NaN	MAPK12	
+HIF1α Signaling	-0E00	4.9E-03	NaN	FLT4	
+Production of Nitric Oxide and Reactive Oxygen Species in Macrophages	-0E00	5.32E-03	NaN	MAPK12	
+mTOR Signaling	-0E00	4.9E-03	NaN	PRR5L	
+ILK Signaling	-0E00	5.18E-03	NaN	MAPK12	
+Role of Osteoblasts, Osteoclasts and Chondrocytes in Rheumatoid Arthritis	-0E00	4.57E-03	NaN	MAPK12	
+HER-2 Signaling in Breast Cancer	-0E00	5.21E-03	NaN	LCK	
+Role of Macrophages, Fibroblasts and Endothelial Cells in Rheumatoid Arthritis	-0E00	3.19E-03	NaN	CXCL12	
+Gap Junction Signaling	-0E00	5.15E-03	NaN	ADCY4	
+cAMP-mediated signaling	-0E00	4.42E-03	NaN	ADCY4	
+Autophagy	-0E00	4.74E-03	NaN	MAPK12	
+Systemic Lupus Erythematosus In T Cell Signaling Pathway	-0E00	5.26E-03	NaN	CD3E,CD3G	
+Senescence Pathway	-0E00	3.4E-03	NaN	MAPK12	
+Xenobiotic Metabolism PXR Signaling Pathway	-0E00	5.68E-03	NaN	GSTP1	
+Regulation Of The Epithelial Mesenchymal Transition By Growth Factors Pathway	-0E00	5.21E-03	NaN	MAPK12	
+Coronavirus Pathogenesis Pathway	-0E00	5.15E-03	NaN	MAPK12	

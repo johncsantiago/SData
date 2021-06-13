@@ -1,0 +1,4252 @@
+---
+title: "Heatmap Cluster Analysis"
+author: "John Santiago"
+date: "5/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+##libraries
+```{r include=F}
+library(edgeR)
+library(plot3D)
+library(heatmaply)
+library(gplots)
+library(org.Mm.eg.db)
+library(gplots)
+library(heatmaply)
+library("biomaRt")
+library("goseq")
+library(dendextend)
+library(KEGG.db)
+
+ensembl = useMart("ensembl",dataset="mmusculus_gene_ensembl")
+ID.conversion=getBM(attributes=c("ensembl_gene_id","external_gene_name"),mart=ensembl)
+row.names(ID.conversion)=ID.conversion[,1]
+go_slim=getBM(attributes="goslim_goa_accession",mart=ensembl)[,1]
+
+```
+
+
+##EdgeR comparisons
+```{r include=F}
+lcounts=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Liver_CountData.csv",row.names=1,header=T)
+
+lgroups=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Mouse_Liver_Metadata.csv",row.names=1,header=T)
+
+lcpmdata=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Liver_CPM_Data.csv",row.names=1)
+
+lmeancpm=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Mean_Liver_CPM_Data.csv",row.names=1)
+
+
+mcpmdata=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Muscle_CPM_Data.csv",row.names=1)
+
+mmeancpm=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Mean_Muscle_CPM_Data.csv",row.names=1)
+
+mcounts=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Muscle_CountData.csv",row.names=1,header=T)
+
+mgroups=read.csv("https://raw.githubusercontent.com/SashaBurgess/Mouse-Muscle-Liver-Data-/master/Mouse_Muscle_Metadata.csv",row.names=1,header=T)
+
+x <- lcounts[,row.names(lgroups)]
+group <- factor(lgroups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+lz=z
+lcpmdata=cpm(z,base=2)
+
+design<-model.matrix(~0+group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+
+##C2 vs C1
+compare = makeContrasts(C2-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C2=G_X_E$table
+sC2=C2[C2$FDR<.05,]
+
+##C3 vs C1
+compare = makeContrasts(C3-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C3=G_X_E$table
+sC3=C3[C3$FDR<.05,]
+
+##C4 vs C1
+compare = makeContrasts(C4-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C4=G_X_E$table
+sC4=C4[C4$FDR<.05,]
+
+##C5 vs C1
+compare = makeContrasts(C5-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C5=G_X_E$table
+sC5=C5[C5$FDR<.05,]
+
+###
+
+##R2 vs C1
+compare = makeContrasts(R2-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R2=G_X_E$table
+sR2=R2[R2$FDR<.05,]
+
+##R3 vs C1
+compare = makeContrasts(R3-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R3=G_X_E$table
+sR3=R3[R3$FDR<.05,]
+
+##R4 vs C1
+compare = makeContrasts(R4-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R4=G_X_E$table
+sR4=R4[R4$FDR<.05,]
+
+
+##R5 vs C1
+compare = makeContrasts(R5-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R5=G_X_E$table
+sR5=R5[R5$FDR<.05,]
+
+##R2 vs C2
+compare = makeContrasts(R2-C2, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC2=G_X_E$table
+sRC2=RC2[RC2$FDR<.05,]
+
+##R3 vs C3
+compare = makeContrasts(R3-C3, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC3=G_X_E$table
+sRC3=RC3[RC3$FDR<.05,]
+
+##R4 vs C4
+compare = makeContrasts(R4-C4, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC4=G_X_E$table
+sRC4=RC4[RC4$FDR<.05,]
+
+##R4 vs C4
+compare = makeContrasts(R5-C5, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC5=G_X_E$table
+sRC5=RC5[RC5$FDR<.05,]
+
+
+
+x <- mcounts[,row.names(mgroups)]
+group <- factor(mgroups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+lz=z
+mcpmdata=cpm(z,base=2)
+
+design<-model.matrix(~0+group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+
+##C2 vs C1
+compare = makeContrasts(C2-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C2m=G_X_E$table
+sC2m=C2m[C2m$FDR<.05,]
+
+##C3 vs C1
+compare = makeContrasts(C3-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C3m=G_X_E$table
+sC3m=C3m[C3m$FDR<.05,]
+
+##C4 vs C1
+compare = makeContrasts(C4-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C4m=G_X_E$table
+sC4m=C4m[C4m$FDR<.05,]
+
+##C5 vs C1
+compare = makeContrasts(C5-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+C5m=G_X_E$table
+sC5m=C5m[C5m$FDR<.05,]
+
+###
+
+##R2 vs C1
+compare = makeContrasts(R2-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R2m=G_X_E$table
+sR2m=R2m[R2m$FDR<.05,]
+
+##R3 vs C1
+compare = makeContrasts(R3-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R3m=G_X_E$table
+sR3m=R3m[R3m$FDR<.05,]
+
+##R4 vs C1
+compare = makeContrasts(R4-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R4m=G_X_E$table
+sR4m=R4m[R4m$FDR<.05,]
+
+
+##R5 vs C1
+compare = makeContrasts(R5-C1, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+R5m=G_X_E$table
+sR5m=R5m[R5m$FDR<.05,]
+
+##R2 vs C2
+compare = makeContrasts(R2-C2, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC2m=G_X_E$table
+sRC2m=RC2m[RC2m$FDR<.05,]
+
+##R3 vs C3
+compare = makeContrasts(R3-C3, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC3m=G_X_E$table
+sRC3m=RC3m[RC3m$FDR<.05,]
+
+##R4 vs C4
+compare = makeContrasts(R4-C4, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC4m=G_X_E$table
+sRC4m=RC4m[RC4m$FDR<.05,]
+
+##R4 vs C4
+compare = makeContrasts(R5-C5, levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+RC5m=G_X_E$table
+sRC5m=RC5m[RC5m$FDR<.05,]
+
+
+```
+
+##Sig. DEG subsets
+```{r include=F}
+
+sL=(unique(c(row.names(sC2),row.names(sC3),row.names(sC4),row.names(sC5),
+                row.names(sR2),row.names(sR3),row.names(sR4),row.names(sR5))))
+
+sCL=unique(c(row.names(sC2),row.names(sC3),row.names(sC4),row.names(sC5)))
+sRL=unique(c(row.names(sR2),row.names(sR3),row.names(sR4),row.names(sR5)))
+sCLonly=setdiff(sCL,sRL)
+sRLonly=setdiff(sRL,sCL)
+sCLandRL=intersect(sCL,sRL)
+
+sM=(unique(c(row.names(sC2m),row.names(sC3m),row.names(sC4m),row.names(sC5m),
+                row.names(sR2m),row.names(sR3m),row.names(sR4m),row.names(sR5m))))
+
+sCM=unique(c(row.names(sC2m),row.names(sC3m),row.names(sC4m),row.names(sC5m)))
+sRM=unique(c(row.names(sR2m),row.names(sR3m),row.names(sR4m),row.names(sR5m)))
+sCMonly=setdiff(sCM,sRM)
+sRMonly=setdiff(sRM,sCM)
+sCMandRL=intersect(sCM,sRM)
+
+sRCL=unique(c(row.names(sRC2),row.names(sRC3),row.names(sRC4),row.names(sRC5)))
+sRCM=unique(c(row.names(sRC2m),row.names(sRC3m),row.names(sRC4m),row.names(sRC5m)))
+
+```
+
+##Liver Control Code
+```{r}
+
+##uses genes from "cluster" up above
+sigs=sCL
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCL.sig.GO=sig.GO
+sCL.sig.GObp=sig.GObp
+sCL.sig.GOmf=sig.GOmf
+sCL.sig.GOcc=sig.GOcc
+sCL.sig.slims=sig.slims
+sCL.sig.slimsbp=sig.slimsbp
+sCL.sig.slimsmf=sig.slimsmf
+sCL.sig.slimscc=sig.slimscc
+sCL.sig.KEGG=sig.KEGG
+sCL.sigs=sigs
+sCL.genes=sigs
+
+```
+
+```{r}
+
+dataset=lmeancpm[(sCL),]
+branches=4
+
+scaled=(t(scale(t(dataset))))
+scaledID=ID.conversion[row.names(scaled),]
+row.names(scaled)=scaledID[,2]
+colors=c("darkkhaki","lightblue4","cornsilk4",
+         "darkgreen","mediumpurple4","chocolate",
+         "firebrick","green3","deepskyblue",
+         "gold3","goldenrod","royalblue",
+         "black","violet","darkorange3",
+         "darkslategray4","orchid4")
+
+##colors=colors[c(10,4,2)]
+##colors=colors[c(15,9,1)]
+PC1colors=c(colors[1:2])
+##PC2colors=c(colors[c(15,9)])
+
+##colors=PC1colors
+##colors=c("black","black")
+hc <- hclust(dist(scaled), "complete")
+heights=sort(hc$height,decreasing = T)
+
+if(branches>1){
+  cutheight=heights[branches]
+}
+
+if(branches==1){
+  cutheight=max(heights)+1
+}
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+
+if(branches>1){
+  branchcolors=colors[1:length(dnd$lower)]
+}
+if(branches==1){
+  branchcolors="black"
+}
+
+colordend=(color_branches(hc, h=cutheight, col=branchcolors))
+
+
+heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
+
+##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
+
+```
+
+```{r}
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+```
+
+```{r}
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+```{r}
+clusternum=3
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+```{r}
+clusternum=4
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+points
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+```{r}
+clusternum=1
+all.dataset=lcpmdata[(sCL),]
+colnames(all.dataset)=paste(lgroups[colnames(all.dataset),"Group"],lgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+```{r}
+clusternum=2
+all.dataset=lcpmdata[(sCL),]
+colnames(all.dataset)=paste(lgroups[colnames(all.dataset),"Group"],lgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+```{r}
+clusternum=3
+all.dataset=lcpmdata[(sCL),]
+colnames(all.dataset)=paste(lgroups[colnames(all.dataset),"Group"],lgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+```{r}
+clusternum=4
+all.dataset=lcpmdata[(sCL),]
+colnames(all.dataset)=paste(lgroups[colnames(all.dataset),"Group"],lgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+```{r}
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=row.names(scaledID)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCLC1.sig.GO=sig.GO
+sCLC1.sig.GObp=sig.GObp
+sCLC1.sig.GOmf=sig.GOmf
+sCLC1.sig.GOcc=sig.GOcc
+sCLC1.sig.slims=sig.slims
+sCLC1.sig.slimsbp=sig.slimsbp
+sCLC1.sig.slimsmf=sig.slimsmf
+sCLC1.sig.slimscc=sig.slimscc
+sCLC1.sig.KEGG=sig.KEGG
+sCLC1.sigs=sigs
+sCLC1.genes=cluster
+
+```
+
+```{r}
+
+clusternum=2
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCLC2.sig.GO=sig.GO
+sCLC2.sig.GObp=sig.GObp
+sCLC2.sig.GOmf=sig.GOmf
+sCLC2.sig.GOcc=sig.GOcc
+sCLC2.sig.slims=sig.slims
+sCLC2.sig.slimsbp=sig.slimsbp
+sCLC2.sig.slimsmf=sig.slimsmf
+sCLC2.sig.slimscc=sig.slimscc
+sCLC2.sig.KEGG=sig.KEGG
+sCLC2.sigs=sigs
+sCLC2.genes=cluster
+
+```
+
+```{r}
+
+clusternum=3
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCLC3.sig.GO=sig.GO
+sCLC3.sig.GObp=sig.GObp
+sCLC3.sig.GOmf=sig.GOmf
+sCLC3.sig.GOcc=sig.GOcc
+sCLC3.sig.slims=sig.slims
+sCLC3.sig.slimsbp=sig.slimsbp
+sCLC3.sig.slimsmf=sig.slimsmf
+sCLC3.sig.slimscc=sig.slimscc
+sCLC3.sig.KEGG=sig.KEGG
+sCLC3.sigs=sigs
+sCLC3.genes=cluster
+
+```
+
+```{r}
+
+clusternum=4
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCLC4.sig.GO=sig.GO
+sCLC4.sig.GObp=sig.GObp
+sCLC4.sig.GOmf=sig.GOmf
+sCLC4.sig.GOcc=sig.GOcc
+sCLC4.sig.slims=sig.slims
+sCLC4.sig.slimsbp=sig.slimsbp
+sCLC4.sig.slimsmf=sig.slimsmf
+sCLC4.sig.slimscc=sig.slimscc
+sCLC4.sig.KEGG=sig.KEGG
+sCLC4.sigs=sigs
+sCLC4.genes=cluster
+
+```
+
+```{r}
+
+cats=sCL.sig.GObp
+sigs= sCL.genes
+cluster=sCL.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCL_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCL_genes.csv")
+
+
+cats=sCLC1.sig.GObp
+sigs= na.omit(scaledID[sCLC1.genes,1])
+cluster=sCLC1.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC1_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC1_genes.csv")
+
+
+
+cats=sCLC2.sig.GObp
+sigs= na.omit(scaledID[sCLC2.genes,1])
+cluster=sCLC2.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC2_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC2_genes.csv")
+
+
+
+
+cats=sCLC3.sig.GObp
+sigs= na.omit(scaledID[sCLC3.genes,1])
+cluster=sCLC3.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC3_genes.csv")
+
+
+
+
+
+##cats=sCLC4.sig.GObp
+##sigs= na.omit(scaledID[sCLC4.genes,1])
+cluster=sCLC4.genes
+##slims=unlist(go)
+##gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+##gmt[,1:2]=cats$term
+##i=1
+##while(i<=nrow(gmt)){
+  ##gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  ##i=i+1
+##}
+
+##write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCLC4_genes.csv")
+```
+
+##GOslims data
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+bpdata=rbind(rbind(sCLC1.sig.slimsbp[order(sCLC1.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sCLC2.sig.slimsbp[order(sCLC2.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]),
+rbind(sCLC3.sig.slimsbp[order(sCLC3.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sCLC4.sig.slimsbp[order(sCLC4.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]))
+
+bpdata=as.data.frame(bpdata)
+bpcolors=c(rep(colors[1],nrow(sCLC1.sig.slimsbp)),
+  rep(colors[2],nrow(sCLC2.sig.slimsbp)),
+  rep(colors[3],nrow(sCLC3.sig.slimsbp)),
+  rep(colors[4],nrow(sCLC4.sig.slimsbp)))
+
+
+
+sCLslims.bpdata=bpdata
+sCLslims.bpcolors=bpcolors
+sCLslims.toptitle="Total Genes in GOslim Cat."
+sCLslims.bottomtitle="-log(p-value)"
+```
+
+##Liver Control GOslims Plots
+```{r}
+
+bpdata=sCLslims.bpdata
+bpcolors=sCLslims.bpcolors
+toptitle=sCLslims.toptitle
+bottomtitle=sCLslims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)
+
+```
+
+
+
+
+
+
+
+
+
+
+
+##Liver Rapa Code
+```{r}
+
+##uses genes from "cluster" up above
+sigs=sRL
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRL.sig.GO=sig.GO
+sRL.sig.GObp=sig.GObp
+sRL.sig.GOmf=sig.GOmf
+sRL.sig.GOcc=sig.GOcc
+sRL.sig.slims=sig.slims
+sRL.sig.slimsbp=sig.slimsbp
+sRL.sig.slimsmf=sig.slimsmf
+sRL.sig.slimscc=sig.slimscc
+sRL.sig.KEGG=sig.KEGG
+sRL.sigs=sigs
+sRL.genes=sigs
+
+```
+
+```{r}
+
+dataset=lmeancpm[(sRL),]
+branches=4
+
+scaled=(t(scale(t(dataset))))
+scaledID=ID.conversion[row.names(scaled),]
+row.names(scaled)=scaledID[,2]
+colors=c("darkkhaki","lightblue4","cornsilk4",
+         "darkgreen","mediumpurple4","chocolate",
+         "firebrick","green3","deepskyblue",
+         "gold3","goldenrod","royalblue",
+         "black","violet","darkorange3",
+         "darkslategray4","orchid4")
+
+##colors=colors[c(10,4,2)]
+##colors=colors[c(15,9,1)]
+PC1colors=c(colors[1:2])
+##PC2colors=c(colors[c(15,9)])
+
+##colors=PC1colors
+##colors=c("black","black")
+hc <- hclust(dist(scaled), "complete")
+heights=sort(hc$height,decreasing = T)
+
+if(branches>1){
+  cutheight=heights[branches]
+}
+
+if(branches==1){
+  cutheight=max(heights)+1
+}
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+
+if(branches>1){
+  branchcolors=colors[1:length(dnd$lower)]
+}
+if(branches==1){
+  branchcolors="black"
+}
+
+colordend=(color_branches(hc, h=cutheight, col=branchcolors))
+
+
+heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
+
+##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
+
+```
+
+```{r}
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+```
+
+```{r}
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+```{r}
+clusternum=3
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+```{r}
+clusternum=4
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+```{r}
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=row.names(scaledID)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRLC1.sig.GO=sig.GO
+sRLC1.sig.GObp=sig.GObp
+sRLC1.sig.GOmf=sig.GOmf
+sRLC1.sig.GOcc=sig.GOcc
+sRLC1.sig.slims=sig.slims
+sRLC1.sig.slimsbp=sig.slimsbp
+sRLC1.sig.slimsmf=sig.slimsmf
+sRLC1.sig.slimscc=sig.slimscc
+sRLC1.sig.KEGG=sig.KEGG
+sRLC1.sigs=sigs
+sRLC1.genes=cluster
+
+```
+
+```{r}
+
+clusternum=2
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRLC2.sig.GO=sig.GO
+sRLC2.sig.GObp=sig.GObp
+sRLC2.sig.GOmf=sig.GOmf
+sRLC2.sig.GOcc=sig.GOcc
+sRLC2.sig.slims=sig.slims
+sRLC2.sig.slimsbp=sig.slimsbp
+sRLC2.sig.slimsmf=sig.slimsmf
+sRLC2.sig.slimscc=sig.slimscc
+sRLC2.sig.KEGG=sig.KEGG
+sRLC2.sigs=sigs
+sRLC2.genes=cluster
+
+```
+
+```{r}
+
+clusternum=3
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRLC3.sig.GO=sig.GO
+sRLC3.sig.GObp=sig.GObp
+sRLC3.sig.GOmf=sig.GOmf
+sRLC3.sig.GOcc=sig.GOcc
+sRLC3.sig.slims=sig.slims
+sRLC3.sig.slimsbp=sig.slimsbp
+sRLC3.sig.slimsmf=sig.slimsmf
+sRLC3.sig.slimscc=sig.slimscc
+sRLC3.sig.KEGG=sig.KEGG
+sRLC3.sigs=sigs
+sRLC3.genes=cluster
+
+```
+
+```{r}
+
+clusternum=4
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRLC4.sig.GO=sig.GO
+sRLC4.sig.GObp=sig.GObp
+sRLC4.sig.GOmf=sig.GOmf
+sRLC4.sig.GOcc=sig.GOcc
+sRLC4.sig.slims=sig.slims
+sRLC4.sig.slimsbp=sig.slimsbp
+sRLC4.sig.slimsmf=sig.slimsmf
+sRLC4.sig.slimscc=sig.slimscc
+sRLC4.sig.KEGG=sig.KEGG
+sRLC4.sigs=sigs
+sRLC4.genes=cluster
+
+```
+
+```{r}
+
+cats=sRL.sig.GObp
+sigs= sRL.genes
+cluster=sRL.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRL_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRL_genes.csv")
+
+
+
+cats=sRLC1.sig.GObp
+sigs= na.omit(scaledID[sRLC1.genes,1])
+cluster=sRLC1.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC1_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC1_genes.csv")
+
+
+
+cats=sRLC2.sig.GObp
+sigs= na.omit(scaledID[sRLC2.genes,1])
+cluster=sRLC2.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC2_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC2_genes.csv")
+
+
+
+
+cats=sRLC3.sig.GObp
+sigs= na.omit(scaledID[sRLC3.genes,1])
+cluster=sRLC3.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC3_genes.csv")
+
+
+
+
+
+cats=sRLC4.sig.GObp
+sigs= na.omit(scaledID[sRLC4.genes,1])
+cluster=sRLC4.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRLC4_genes.csv")
+```
+
+##Liver Rapa GOslims data
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+bpdata=rbind(rbind(sRLC1.sig.slimsbp[order(sRLC1.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sRLC2.sig.slimsbp[order(sRLC2.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]),
+rbind(sRLC3.sig.slimsbp[order(sRLC3.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sRLC4.sig.slimsbp[order(sRLC4.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]))
+
+bpdata=as.data.frame(bpdata)
+bpcolors=c(rep(colors[1],nrow(sRLC1.sig.slimsbp)),
+  rep(colors[2],nrow(sRLC2.sig.slimsbp)),
+  rep(colors[3],nrow(sRLC3.sig.slimsbp)),
+  rep(colors[4],nrow(sRLC4.sig.slimsbp)))
+
+
+
+sRLslims.bpdata=bpdata
+sRLslims.bpcolors=bpcolors
+sRLslims.toptitle="Total Genes in GOslim Cat."
+sRLslims.bottomtitle="-log(p-value)"
+```
+
+##Liver Rapa GOslims Plots
+```{r}
+
+bpdata=sRLslims.bpdata
+bpcolors=sRLslims.bpcolors
+toptitle=sRLslims.toptitle
+bottomtitle=sRLslims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)
+
+```
+
+
+##Liver Control Half Hour DEG enriched functions
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=row.names(sC2)
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCL2.sig.GO=sig.GO
+sCL2.sig.GObp=sig.GObp
+sCL2.sig.GOmf=sig.GOmf
+sCL2.sig.GOcc=sig.GOcc
+sCL2.sig.slims=sig.slims
+sCL2.sig.slimsbp=sig.slimsbp
+sCL2.sig.slimsmf=sig.slimsmf
+sCL2.sig.slimscc=sig.slimscc
+sCL2.sig.KEGG=sig.KEGG
+sCL2.sigs=sigs
+sCL2.genes=sigs
+
+```
+
+##Liver Control 1 Hour DEG enriched functions
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=row.names(sC3)
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCL3.sig.GO=sig.GO
+sCL3.sig.GObp=sig.GObp
+sCL3.sig.GOmf=sig.GOmf
+sCL3.sig.GOcc=sig.GOcc
+sCL3.sig.slims=sig.slims
+sCL3.sig.slimsbp=sig.slimsbp
+sCL3.sig.slimsmf=sig.slimsmf
+sCL3.sig.slimscc=sig.slimscc
+sCL3.sig.KEGG=sig.KEGG
+sCL3.sigs=sigs
+sCL3.genes=sigs
+
+```
+
+##Liver Control 2 Hour DEG enriched functions
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=row.names(sC4)
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCL4.sig.GO=sig.GO
+sCL4.sig.GObp=sig.GObp
+sCL4.sig.GOmf=sig.GOmf
+sCL4.sig.GOcc=sig.GOcc
+sCL4.sig.slims=sig.slims
+sCL4.sig.slimsbp=sig.slimsbp
+sCL4.sig.slimsmf=sig.slimsmf
+sCL4.sig.slimscc=sig.slimscc
+sCL4.sig.KEGG=sig.KEGG
+sCL4.sigs=sigs
+sCL4.genes=sigs
+
+```
+
+##Liver Control 4 Hour DEG enriched functions
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=row.names(sC5)
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCL5.sig.GO=sig.GO
+sCL5.sig.GObp=sig.GObp
+sCL5.sig.GOmf=sig.GOmf
+sCL5.sig.GOcc=sig.GOcc
+sCL5.sig.slims=sig.slims
+sCL5.sig.slimsbp=sig.slimsbp
+sCL5.sig.slimsmf=sig.slimsmf
+sCL5.sig.slimscc=sig.slimscc
+sCL5.sig.KEGG=sig.KEGG
+sCL5.sigs=sigs
+sCL5.genes=sigs
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+###################################################
+###################################################
+###################################################
+##################  Muscle  #######################
+#################  Datasets  ######################
+###################################################
+###################################################
+###################################################
+###################################################
+###################################################
+
+
+
+
+
+
+
+
+
+
+
+
+###Muscle Code
+##Muscle Control all DEG enriched functions
+```{r}
+
+##uses genes from "cluster" up above
+sigs=sCM
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCM.sig.GO=sig.GO
+sCM.sig.GObp=sig.GObp
+sCM.sig.GOmf=sig.GOmf
+sCM.sig.GOcc=sig.GOcc
+sCM.sig.slims=sig.slims
+sCM.sig.slimsbp=sig.slimsbp
+sCM.sig.slimsmf=sig.slimsmf
+sCM.sig.slimscc=sig.slimscc
+sCM.sig.KEGG=sig.KEGG
+sCM.sigs=sigs
+sCM.genes=sigs
+
+```
+
+##Muscle Control all DEG, mean cpm heatmap in 4 clusters 
+```{r}
+
+dataset=mmeancpm[(sCM),]
+branches=4
+
+scaled=(t(scale(t(dataset))))
+scaledID=ID.conversion[row.names(scaled),]
+row.names(scaled)=scaledID[,2]
+colors=c("darkkhaki","lightblue4","cornsilk4",
+         "darkgreen","mediumpurple4","chocolate",
+         "firebrick","green3","deepskyblue",
+         "gold3","goldenrod","royalblue",
+         "black","violet","darkorange3",
+         "darkslategray4","orchid4")
+
+##colors=colors[c(10,4,2)]
+##colors=colors[c(15,9,1)]
+PC1colors=c(colors[1:2])
+##PC2colors=c(colors[c(15,9)])
+
+##colors=PC1colors
+##colors=c("black","black")
+hc <- hclust(dist(scaled), "complete")
+heights=sort(hc$height,decreasing = T)
+
+if(branches>1){
+  cutheight=heights[branches]
+}
+
+if(branches==1){
+  cutheight=max(heights)+1
+}
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+
+if(branches>1){
+  branchcolors=colors[1:length(dnd$lower)]
+}
+if(branches==1){
+  branchcolors="black"
+}
+
+colordend=(color_branches(hc, h=cutheight, col=branchcolors))
+
+
+heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
+
+##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
+
+```
+
+##Muscle Control Cluster 1 spline
+```{r}
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+```
+
+##Muscle Control Cluster 2 spline
+```{r}
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+##Muscle Control Cluster 3 spline
+```{r}
+clusternum=3
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+##Muscle Control Cluster 4 spline
+```{r}
+clusternum=4
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+##Muscle Control Cluster 1 spline (individual libraries)
+```{r}
+clusternum=1
+all.dataset=mcpmdata[(sCM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Muscle Control Cluster 2 spline (individual libraries)
+```{r}
+clusternum=2
+all.dataset=mcpmdata[(sCM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Muscle Control Cluster 3 spline (individual libraries)
+```{r}
+clusternum=3
+all.dataset=mcpmdata[(sCM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Muscle Control Cluster 4 spline (individual libraries)
+```{r}
+clusternum=4
+all.dataset=mcpmdata[(sCM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Analysis of Control Muscle DEGs in Cluster 1
+```{r}
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=row.names(scaledID)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCMC1.sig.GO=sig.GO
+sCMC1.sig.GObp=sig.GObp
+sCMC1.sig.GOmf=sig.GOmf
+sCMC1.sig.GOcc=sig.GOcc
+sCMC1.sig.slims=sig.slims
+sCMC1.sig.slimsbp=sig.slimsbp
+sCMC1.sig.slimsmf=sig.slimsmf
+sCMC1.sig.slimscc=sig.slimscc
+sCMC1.sig.KEGG=sig.KEGG
+sCMC1.sigs=sigs
+sCMC1.genes=cluster
+
+```
+
+##Analysis of Control Muscle DEGs in Cluster 2
+```{r}
+
+clusternum=2
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCMC2.sig.GO=sig.GO
+sCMC2.sig.GObp=sig.GObp
+sCMC2.sig.GOmf=sig.GOmf
+sCMC2.sig.GOcc=sig.GOcc
+sCMC2.sig.slims=sig.slims
+sCMC2.sig.slimsbp=sig.slimsbp
+sCMC2.sig.slimsmf=sig.slimsmf
+sCMC2.sig.slimscc=sig.slimscc
+sCMC2.sig.KEGG=sig.KEGG
+sCMC2.sigs=sigs
+sCMC2.genes=cluster
+
+```
+
+##Analysis of Control Muscle DEGs in Cluster 3
+```{r}
+
+clusternum=3
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCMC3.sig.GO=sig.GO
+sCMC3.sig.GObp=sig.GObp
+sCMC3.sig.GOmf=sig.GOmf
+sCMC3.sig.GOcc=sig.GOcc
+sCMC3.sig.slims=sig.slims
+sCMC3.sig.slimsbp=sig.slimsbp
+sCMC3.sig.slimsmf=sig.slimsmf
+sCMC3.sig.slimscc=sig.slimscc
+sCMC3.sig.KEGG=sig.KEGG
+sCMC3.sigs=sigs
+sCMC3.genes=cluster
+
+```
+
+##Analysis of Control Muscle DEGs in Cluster 4
+```{r}
+
+clusternum=4
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sCMC4.sig.GO=sig.GO
+sCMC4.sig.GObp=sig.GObp
+sCMC4.sig.GOmf=sig.GOmf
+sCMC4.sig.GOcc=sig.GOcc
+sCMC4.sig.slims=sig.slims
+sCMC4.sig.slimsbp=sig.slimsbp
+sCMC4.sig.slimsmf=sig.slimsmf
+sCMC4.sig.slimscc=sig.slimscc
+sCMC4.sig.KEGG=sig.KEGG
+sCMC4.sigs=sigs
+sCMC4.genes=cluster
+
+```
+
+##write gmt files and files with genes in each cluster
+```{r}
+
+cats=sCM.sig.GObp
+sigs= sCM.genes
+cluster=sCM.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCM_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCM_genes.csv")
+
+
+##No sig. GO terms
+cats=sCMC1.sig.GObp
+sigs= na.omit(scaledID[sCMC1.genes,1])
+cluster=sCMC1.genes
+slims=unlist(go)
+##gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+##gmt[,1:2]=cats$term
+##i=1
+##while(i<=nrow(gmt)){
+  ##gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  ##i=i+1
+##}
+
+##write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC1_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC1_genes.csv")
+
+
+
+cats=sCMC2.sig.GObp
+sigs= na.omit(scaledID[sCMC2.genes,1])
+cluster=sCMC2.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC2_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC2_genes.csv")
+
+
+
+
+cats=sCMC3.sig.GObp
+sigs= na.omit(scaledID[sCMC3.genes,1])
+cluster=sCMC3.genes
+slims=unlist(go)
+##gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+##gmt[,1:2]=cats$term
+##i=1
+##while(i<=nrow(gmt)){
+  ##gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  ##i=i+1
+##}
+
+##write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC3_genes.csv")
+
+
+
+
+
+cats=sCMC4.sig.GObp
+sigs= na.omit(scaledID[sCMC4.genes,1])
+cluster=sCMC4.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sCMC4_genes.csv")
+
+```
+
+##GOslims data
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+bpdata=rbind(rbind(sCMC1.sig.slimsbp[order(sCMC1.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sCMC2.sig.slimsbp[order(sCMC2.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]),
+rbind(sCMC3.sig.slimsbp[order(sCMC3.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sCMC4.sig.slimsbp[order(sCMC4.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]))
+
+bpdata=as.data.frame(bpdata)
+bpcolors=c(rep(colors[1],nrow(sCMC1.sig.slimsbp)),
+  rep(colors[2],nrow(sCMC2.sig.slimsbp)),
+  rep(colors[3],nrow(sCMC3.sig.slimsbp)),
+  rep(colors[4],nrow(sCMC4.sig.slimsbp)))
+
+
+
+sCMslims.bpdata=bpdata
+sCMslims.bpcolors=bpcolors
+sCMslims.toptitle="Total Genes in GOslim Cat."
+sCMslims.bottomtitle="-log(p-value)"
+```
+
+##GOslims Plots
+```{r}
+
+bpdata=sCMslims.bpdata
+bpcolors=sCMslims.bpcolors
+toptitle=sCMslims.toptitle
+bottomtitle=sCMslims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)
+
+```
+
+
+##Muscle Rapa all DEG enriched functions
+```{r}
+
+##uses genes from "cluster" up above
+sigs=sRM
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRM.sig.GO=sig.GO
+sRM.sig.GObp=sig.GObp
+sRM.sig.GOmf=sig.GOmf
+sRM.sig.GOcc=sig.GOcc
+sRM.sig.slims=sig.slims
+sRM.sig.slimsbp=sig.slimsbp
+sRM.sig.slimsmf=sig.slimsmf
+sRM.sig.slimscc=sig.slimscc
+sRM.sig.KEGG=sig.KEGG
+sRM.sigs=sigs
+sRM.genes=sigs
+
+```
+
+##Muscle Rapa all DEG, mean cpm heatmap in 4 clusters 
+```{r}
+
+dataset=mmeancpm[(sRM),]
+branches=4
+
+scaled=(t(scale(t(dataset))))
+scaledID=ID.conversion[row.names(scaled),]
+row.names(scaled)=scaledID[,2]
+colors=c("darkkhaki","lightblue4","cornsilk4",
+         "darkgreen","mediumpurple4","chocolate",
+         "firebrick","green3","deepskyblue",
+         "gold3","goldenrod","royalblue",
+         "black","violet","darkorange3",
+         "darkslategray4","orchid4")
+
+##colors=colors[c(10,4,2)]
+##colors=colors[c(15,9,1)]
+PC1colors=c(colors[1:2])
+##PC2colors=c(colors[c(15,9)])
+
+##colors=PC1colors
+##colors=c("black","black")
+hc <- hclust(dist(scaled), "complete")
+heights=sort(hc$height,decreasing = T)
+
+if(branches>1){
+  cutheight=heights[branches]
+}
+
+if(branches==1){
+  cutheight=max(heights)+1
+}
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+
+if(branches>1){
+  branchcolors=colors[1:length(dnd$lower)]
+}
+if(branches==1){
+  branchcolors="black"
+}
+
+colordend=(color_branches(hc, h=cutheight, col=branchcolors))
+
+
+heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
+
+##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
+
+```
+
+##Muscle Rapa Cluster 1 spline
+```{r}
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+```
+
+##Muscle Rapa Cluster 2 spline
+```{r}
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+##Muscle Rapa Cluster 3 spline
+```{r}
+clusternum=3
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+##Muscle Rapa Cluster 4 spline
+```{r}
+clusternum=4
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+n <- 9
+y <- as.numeric(c(scaled[cluster,1],scaled[cluster,2],scaled[cluster,3],scaled[cluster,4],scaled[cluster,5]))
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+plot(x=(x-.01), y, main = paste("spline[fun](.) through", n, "points"),col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+y2 <- c(scaled[cluster,1],scaled[cluster,6],scaled[cluster,7],scaled[cluster,8],scaled[cluster,9])
+x2 <- c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster)))
+
+points(x=(x2+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x2, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+```
+
+##Muscle Rapa Cluster 1 spline (individual libraries)
+```{r}
+clusternum=1
+all.dataset=mcpmdata[(sRM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Muscle Rapa Cluster 2 spline (individual libraries)
+```{r}
+clusternum=2
+all.dataset=mcpmdata[(sRM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Muscle Rapa Cluster 3 spline (individual libraries)
+```{r}
+clusternum=3
+all.dataset=mcpmdata[(sRM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Muscle Rapa Cluster 4 spline (individual libraries)
+```{r}
+clusternum=4
+all.dataset=mcpmdata[(sRM),]
+colnames(all.dataset)=paste(mgroups[colnames(all.dataset),"Group"],mgroups[colnames(all.dataset),"Replicate"],sep="")
+all.scaled=(t(scale(t(all.dataset))))
+all.scaledID=ID.conversion[row.names(all.scaled),]
+row.names(all.scaled)=all.scaledID[,2]
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+
+
+op <- par(mfrow = c(1,1), mgp = c(2,.8,0), mar = 0.1+c(3,3,3,1))
+
+controls=c("C1","C2","C3","C4","C5")
+rapa=c("R1","R2","R3","R4","R5")
+rep=1
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+x <- as.numeric(c(rep(0,length(cluster)),rep(.5,length(cluster)),rep(1,length(cluster)),rep(2,length(cluster)),rep(4,length(cluster))))
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+
+plot(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x, y))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=3
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+rep=2
+y=c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(controls[2],rep,sep="")],all.scaled[cluster,paste(controls[3],rep,sep="")],all.scaled[cluster,paste(controls[4],rep,sep="")],all.scaled[cluster,paste(controls[5],rep,sep="")])
+
+y2 <- c(all.scaled[cluster,paste(controls[1],rep,sep="")],all.scaled[cluster,paste(rapa[2],rep,sep="")],all.scaled[cluster,paste(rapa[3],rep,sep="")],all.scaled[cluster,paste(rapa[4],rep,sep="")],all.scaled[cluster,paste(rapa[5],rep,sep="")])
+
+points(x=(x-.01), y, col="blue",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y, n = 201,ties = "mean",method="natural"), col = "blue")
+
+points(x=(x+.01), y2, col="red",cex=.1)
+##lines(spline(x2, y2))
+lines(spline(x, y2, n = 201,ties = "mean",method="natural"), col = "red")
+
+
+
+
+
+```
+
+##Analysis of Rapa Muscle DEGs in Cluster 1
+```{r}
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl=row.names(scaledID)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRMC1.sig.GO=sig.GO
+sRMC1.sig.GObp=sig.GObp
+sRMC1.sig.GOmf=sig.GOmf
+sRMC1.sig.GOcc=sig.GOcc
+sRMC1.sig.slims=sig.slims
+sRMC1.sig.slimsbp=sig.slimsbp
+sRMC1.sig.slimsmf=sig.slimsmf
+sRMC1.sig.slimscc=sig.slimscc
+sRMC1.sig.KEGG=sig.KEGG
+sRMC1.sigs=sigs
+sRMC1.genes=cluster
+
+```
+
+##Analysis of Rapa Muscle DEGs in Cluster 2
+```{r}
+
+clusternum=2
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRMC2.sig.GO=sig.GO
+sRMC2.sig.GObp=sig.GObp
+sRMC2.sig.GOmf=sig.GOmf
+sRMC2.sig.GOcc=sig.GOcc
+sRMC2.sig.slims=sig.slims
+sRMC2.sig.slimsbp=sig.slimsbp
+sRMC2.sig.slimsmf=sig.slimsmf
+sRMC2.sig.slimscc=sig.slimscc
+sRMC2.sig.KEGG=sig.KEGG
+sRMC2.sigs=sigs
+sRMC2.genes=cluster
+
+```
+
+##Analysis of Control Muscle DEGs in Cluster 3
+```{r}
+
+clusternum=3
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRMC3.sig.GO=sig.GO
+sRMC3.sig.GObp=sig.GObp
+sRMC3.sig.GOmf=sig.GOmf
+sRMC3.sig.GOcc=sig.GOcc
+sRMC3.sig.slims=sig.slims
+sRMC3.sig.slimsbp=sig.slimsbp
+sRMC3.sig.slimsmf=sig.slimsmf
+sRMC3.sig.slimscc=sig.slimscc
+sRMC3.sig.KEGG=sig.KEGG
+sRMC3.sigs=sigs
+sRMC3.genes=cluster
+
+```
+
+##Analysis of Control Muscle DEGs in Cluster 4
+```{r}
+
+clusternum=4
+
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+KEGG.wall=goseq(pwf,"mm9","ensGene",test.cats=c("KEGG"))
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue, method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+sRMC4.sig.GO=sig.GO
+sRMC4.sig.GObp=sig.GObp
+sRMC4.sig.GOmf=sig.GOmf
+sRMC4.sig.GOcc=sig.GOcc
+sRMC4.sig.slims=sig.slims
+sRMC4.sig.slimsbp=sig.slimsbp
+sRMC4.sig.slimsmf=sig.slimsmf
+sRMC4.sig.slimscc=sig.slimscc
+sRMC4.sig.KEGG=sig.KEGG
+sRMC4.sigs=sigs
+sRMC4.genes=cluster
+
+```
+
+##write gmt files and files with genes in each cluster
+```{r}
+
+cats=sRM.sig.GObp
+sigs= sRM.genes
+cluster=sRM.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRM_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRM_genes.csv")
+
+
+
+cats=sRMC1.sig.GObp
+sigs= na.omit(scaledID[sRMC1.genes,1])
+cluster=sRMC1.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC1_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC1_genes.csv")
+
+
+##No sig GO terms
+cats=sRMC2.sig.GObp
+sigs= na.omit(scaledID[sRMC2.genes,1])
+cluster=sRMC2.genes
+slims=unlist(go)
+##gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+##gmt[,1:2]=cats$term
+##i=1
+##while(i<=nrow(gmt)){
+  ##gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  ##i=i+1
+##}
+
+##write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC2_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC2_genes.csv")
+
+
+
+
+cats=sRMC3.sig.GObp
+sigs= na.omit(scaledID[sRMC3.genes,1])
+cluster=sRMC3.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC3_genes.csv")
+
+
+
+
+
+cats=sRMC4.sig.GObp
+sigs= na.omit(scaledID[sRMC4.genes,1])
+cluster=sRMC4.genes
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,18),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC3_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Mouse Liver Code/sRMC4_genes.csv")
+
+```
+
+##GOslims data
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+bpdata=rbind(rbind(sRMC1.sig.slimsbp[order(sRMC1.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sRMC2.sig.slimsbp[order(sRMC2.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]),
+rbind(sRMC3.sig.slimsbp[order(sRMC3.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  sRMC4.sig.slimsbp[order(sRMC4.sig.slimsbp$adjp, decreasing=T),c("term","numDEInCat","adjp")]))
+
+bpdata=as.data.frame(bpdata)
+bpcolors=c(rep(colors[1],nrow(sRMC1.sig.slimsbp)),
+  rep(colors[2],nrow(sRMC2.sig.slimsbp)),
+  rep(colors[3],nrow(sRMC3.sig.slimsbp)),
+  rep(colors[4],nrow(sRMC4.sig.slimsbp)))
+
+
+
+sRMslims.bpdata=bpdata
+sRMslims.bpcolors=bpcolors
+sRMslims.toptitle="Total Genes in GOslim Cat."
+sRMslims.bottomtitle="-log(p-value)"
+```
+
+##GOslims Plots
+```{r}
+
+bpdata=sRMslims.bpdata
+bpcolors=sRMslims.bpcolors
+toptitle=sRMslims.toptitle
+bottomtitle=sRMslims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)
+
+```
+
+
+
+

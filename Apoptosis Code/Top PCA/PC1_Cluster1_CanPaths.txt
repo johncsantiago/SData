@@ -1,0 +1,22 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Ingenuity Canonical Pathways	 -log(p-value)	Ratio	z-score	Molecules	
+Sulfite Oxidation IV	2.84E00	1E00	NaN	SUOX	
+Chondroitin Sulfate Degradation (Metazoa)	1.7E00	7.14E-02	NaN	HEXD	
+Dermatan Sulfate Degradation (Metazoa)	1.67E00	6.67E-02	NaN	HEXD	
+Superpathway of Methionine Degradation	1.31E00	2.86E-02	NaN	SUOX	
+Triacylglycerol Degradation	1.24E00	2.44E-02	NaN	ABHD6	
+Retinoic acid Mediated Apoptosis Signaling	1.11E00	1.75E-02	NaN	PARP10	
+Death Receptor Signaling	9E-01	1.06E-02	NaN	PARP10	
+UVA-Induced MAPK Signaling	8.86E-01	1.03E-02	NaN	PARP10	
+Reelin Signaling in Neurons	7.85E-01	8E-03	NaN	ARHGEF9	
+NAD Signaling Pathway	7.26E-01	6.9E-03	NaN	PARP10	
+Endocannabinoid Neuronal Synapse Pathway	7.24E-01	6.85E-03	NaN	ABHD6	
+Thrombin Signaling	5.92E-01	4.88E-03	NaN	ARHGEF9	
+RhoGDI Signaling	5.8E-01	4.72E-03	NaN	ARHGEF9	
+Signaling by Rho Family GTPases	4.99E-01	3.77E-03	NaN	ARHGEF9	
+Sirtuin Signaling Pathway	4.74E-01	3.52E-03	NaN	GABPB2	
+Molecular Mechanisms of Cancer	3.29E-01	2.29E-03	NaN	ARHGEF9	
+Phospholipase C Signaling	3.26E-01	2.27E-03	NaN	ARHGEF9	
+Glucocorticoid Receptor Signaling	2.65E-01	1.85E-03	NaN	GABPB2	
+Breast Cancer Regulation by Stathmin1	2.43E-01	1.72E-03	NaN	ARHGEF9	

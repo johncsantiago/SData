@@ -1,0 +1,1183 @@
+---
+title: "Heatmap Cluster Analysis"
+author: "John Santiago"
+date: "5/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+
+library(gplots)
+library(heatmaply)
+library("biomaRt")
+library("goseq")
+library(dendextend)
+library(KEGG.db)
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+meancpm=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMeanCPMdata.csv",row.names=1)
+
+##ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+##ID.conversion=getBM(attributes=c("ensembl_gene_id","external_gene_name"),mart=ensembl)
+##ID.conversion=na.omit(ID.conversion)
+##row.names(ID.conversion)=ID.conversion[,1]
+##ID.conversion[ID.conversion[,2]=="",2]=ID.conversion[ID.conversion[,2]=="",1]
+##ID.conversion=ID.conversion[row.names(cpmdata),]
+##go_slim=getBM(attributes="goslim_goa_accession",mart=ensembl)
+
+
+pca <- prcomp(t(cpmdata), scale.=TRUE) 
+gr <- factor(row.names(groups))
+
+contribution=pca$rotation
+
+PC1contribute=contribution[,1]
+PC1contribute=PC1contribute[order(PC1contribute,decreasing=T)]
+
+PC2contribute=contribution[,2]
+PC2contribute=PC2contribute[order(PC2contribute,decreasing=T)]
+
+PC3contribute=contribution[,3]
+PC3contribute=PC3contribute[order(PC3contribute,decreasing=T)]
+
+
+
+```
+
+
+
+```{r}
+
+PCcontribute=PC1contribute
+loading=(PCcontribute)
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+percent.variation=signif(ve,4)
+
+##The column sum of squares of the loadings (pca$rotation) are the variances of PCs.
+percents=(PCcontribute*PCcontribute)
+percents=percents[order(percents,decreasing=T)]
+loading=loading[names(percents)]
+percent2=percents
+temppercent=0
+i=1
+while(i<=length(percents)){
+  percents[i]=percents[i]+temppercent
+  temppercent=percents[i]
+  i=i+1
+}
+
+##percents=percents[loading[names(percents)]>0]
+
+
+hmd=names(percents)[percents<=.1]
+
+
+dataset=meancpm[hmd,]
+branches=2
+
+scaled=(t(scale(t(dataset))))
+scaledID=ID.conversion[row.names(scaled),]
+row.names(scaled)=scaledID[,2]
+colors=c("darkkhaki","lightblue4","cornsilk4",
+         "darkgreen","mediumpurple4","chocolate",
+         "firebrick","green3","deepskyblue",
+         "gold3","goldenrod","royalblue",
+         "black","violet","darkorange3",
+         "darkslategray4","orchid4")
+
+##colors=colors[c(10,4,2)]
+##colors=colors[c(15,9,1)]
+PC1colors=c(colors[1:2])
+##PC2colors=c(colors[c(15,9)])
+
+colors=PC1colors
+
+hc <- hclust(dist(scaled), "complete")
+heights=sort(hc$height,decreasing = T)
+
+if(branches>1){
+  cutheight=heights[branches]
+}
+
+if(branches==1){
+  cutheight=max(heights)+1
+}
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+
+if(branches>1){
+  branchcolors=colors[1:length(dnd$lower)]
+}
+if(branches==1){
+  branchcolors="black"
+}
+
+colordend=(color_branches(hc, h=cutheight, col=branchcolors))
+
+
+heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
+
+##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
+
+```
+
+```{r}
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=cpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+pc1.sig.GO1=sig.GO
+pc1.sig.GObp1=sig.GObp
+pc1.sig.GOmf1=sig.GOmf
+pc1.sig.GOcc1=sig.GOcc
+pc1.sig.slims1=sig.slims
+pc1.sig.slimsbp1=sig.slimsbp
+pc1.sig.slimsmf1=sig.slimsmf
+pc1.sig.slimscc1=sig.slimscc
+pc1.sig.KEGG1=sig.KEGG
+pc1.sigs1=sigs
+pc1.cluster1=cluster
+
+```
+
+
+```{r}
+
+cluster=pc1.cluster1
+
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster1_genes.csv")
+```
+
+
+
+```{r}
+
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=cpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+pc1.sig.GO2=sig.GO
+pc1.sig.GObp2=sig.GObp
+pc1.sig.GOmf2=sig.GOmf
+pc1.sig.GOcc2=sig.GOcc
+pc1.sig.slims2=sig.slims
+pc1.sig.slimsbp2=sig.slimsbp
+pc1.sig.slimsmf2=sig.slimsmf
+pc1.sig.slimscc2=sig.slimscc
+pc1.sig.KEGG2=sig.KEGG
+pc1.sigs2=sigs
+pc1.cluster2=cluster
+
+```
+
+
+```{r}
+
+cats=pc1.sig.GObp2
+sigs=pc1.sigs2
+cluster=pc1.cluster2
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,15),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_genes.csv")
+```
+
+
+```{r}
+PCcontribute=PC2contribute
+loading=(PCcontribute)
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+percent.variation=signif(ve,4)
+
+##The column sum of squares of the loadings (pca$rotation) are the variances of PCs.
+percents=(PCcontribute*PCcontribute)
+percents=percents[order(percents,decreasing=T)]
+loading=loading[names(percents)]
+percent2=percents
+temppercent=0
+i=1
+while(i<=length(percents)){
+  percents[i]=percents[i]+temppercent
+  temppercent=percents[i]
+  i=i+1
+}
+
+##percents=percents[loading[names(percents)]>0]
+
+
+hmd=names(percents)[percents<=.1]
+
+
+dataset=meancpm[hmd,]
+branches=2
+
+scaled=(t(scale(t(dataset))))
+scaledID=ID.conversion[row.names(scaled),]
+row.names(scaled)=scaledID[,2]
+colors=c("darkkhaki","lightblue4","cornsilk4",
+         "darkgreen","mediumpurple4","chocolate",
+         "firebrick","green3","deepskyblue",
+         "gold3","goldenrod","royalblue",
+         "black","violet","darkorange3",
+         "darkslategray4","orchid4")
+
+##colors=colors[c(10,4,2)]
+##colors=colors[c(15,9,1)]
+PC1colors=c(colors[1:2])
+PC2colors=c(colors[c(15,9)])
+
+colors=PC2colors
+
+hc <- hclust(dist(scaled), "complete")
+heights=sort(hc$height,decreasing = T)
+
+if(branches>1){
+  cutheight=heights[branches]
+}
+
+if(branches==1){
+  cutheight=max(heights)+1
+}
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+
+if(branches>1){
+  branchcolors=colors[1:length(dnd$lower)]
+}
+if(branches==1){
+  branchcolors="black"
+}
+
+colordend=(color_branches(hc, h=cutheight, col=branchcolors))
+
+
+heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
+
+##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
+
+```
+
+```{r}
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=cpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+pc2.sig.GO1=sig.GO
+pc2.sig.GObp1=sig.GObp
+pc2.sig.GOmf1=sig.GOmf
+pc2.sig.GOcc1=sig.GOcc
+pc2.sig.slims1=sig.slims
+pc2.sig.slimsbp1=sig.slimsbp
+pc2.sig.slimsmf1=sig.slimsmf
+pc2.sig.slimscc1=sig.slimscc
+pc2.sig.KEGG1=sig.KEGG
+pc2.sigs1=sigs
+pc2.cluster1=cluster
+
+```
+
+
+```{r}
+
+cats=pc2.sig.GOcc1
+sigs=pc2.sigs1
+cluster=pc2.cluster1
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,15),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_GOcc.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_genes.csv")
+```
+
+
+
+```{r}
+
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=cpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+pc2.sig.GO2=sig.GO
+pc2.sig.GObp2=sig.GObp
+pc2.sig.GOmf2=sig.GOmf
+pc2.sig.GOcc2=sig.GOcc
+pc2.sig.slims2=sig.slims
+pc2.sig.slimsbp2=sig.slimsbp
+pc2.sig.slimsmf2=sig.slimsmf
+pc2.sig.slimscc2=sig.slimscc
+pc2.sig.KEGG2=sig.KEGG
+pc2.sigs2=sigs
+pc2.cluster2=cluster
+
+```
+
+
+```{r}
+
+cats=pc2.sig.GObp2
+sigs=pc2.sigs2
+cluster=pc2.cluster2
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,15),sigs)
+  i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_GObp.txt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_genes.csv")
+```
+
+
+
+
+
+
+##GOslims data
+
+
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+bpdata=rbind(pc1.sig.slims1[order(pc1.sig.slims1$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  pc1.sig.slims2[order(pc1.sig.slims2$adjp, decreasing=T),c("term","numDEInCat","adjp")])
+
+bpdata=as.data.frame(bpdata)
+bpcolors=c(rep(PC1colors[1],nrow(pc1.sig.slims1)),
+  rep(PC1colors[2],nrow(pc1.sig.slims2)))
+
+
+
+pc1slims.bpdata=bpdata
+pc1slims.bpcolors=bpcolors
+pc1slims.toptitle="Total Genes in GOslim Cat."
+pc1slims.bottomtitle="-log(p-value)"
+```
+
+
+
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+bpdata=rbind(pc2.sig.slims1[order(pc2.sig.slims1$adjp, decreasing=T),c("term","numDEInCat","adjp")],
+  pc2.sig.slims2[order(pc2.sig.slims2$adjp, decreasing=T),c("term","numDEInCat","adjp")])
+
+bpdata=as.data.frame(bpdata)
+bpcolors=c(rep(PC2colors[1],nrow(pc2.sig.slims1)),
+  rep(PC2colors[2],nrow(pc2.sig.slims2)))
+
+
+
+pc2slims.bpdata=bpdata
+pc2slims.bpcolors=bpcolors
+pc2slims.toptitle="Total Genes in GOslim Cat."
+pc2slims.bottomtitle="-log(p-value)"
+```
+
+
+##GOslims Plots
+```{r}
+
+bpdata=pc1slims.bpdata
+bpcolors=pc1slims.bpcolors
+toptitle=pc1slims.toptitle
+bottomtitle=pc1slims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)  
+```
+
+
+
+```{r}
+
+bpdata=pc2slims.bpdata
+bpcolors=pc2slims.bpcolors
+toptitle=pc2slims.toptitle
+bottomtitle=pc2slims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)  
+```
+
+
+
+
+
+
+
+
+
+
+
+
+##Canonical Pathways Data
+
+```{r}
+CanPaths=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_CanPaths.txt",sep="\t",header = F)
+
+bpcolor=PC1colors[2]
+
+colnames(CanPaths)=CanPaths[2,]
+CanPaths=CanPaths[c(-1,-2),]
+CanPaths$` -log(p-value)`=as.numeric(CanPaths$` -log(p-value)`)
+CanPaths=CanPaths[CanPaths$` -log(p-value)`>-log(.05),c("Ingenuity Canonical Pathways"," -log(p-value)","Ratio","Molecules")]
+CanPaths=na.omit(CanPaths)
+row.names(CanPaths)=CanPaths$`Ingenuity Canonical Pathways`
+  
+  
+if(nrow(CanPaths)>25){
+  CanPaths=CanPaths[1:25,]
+}
+
+targets=strsplit(CanPaths$Molecules, split=",")
+names(targets)=CanPaths$`Ingenuity Canonical Pathways`
+total.targets=sapply(targets,length)
+total.targets=total.targets[length(total.targets):1]
+
+sig.val=CanPaths$` -log(p-value)`
+names(sig.val)=CanPaths$`Ingenuity Canonical Pathways`
+sig.val=sig.val[length(sig.val):1]
+
+ratio=as.numeric(CanPaths$Ratio)
+names(ratio)=CanPaths$`Ingenuity Canonical Pathways`
+ratio=ratio[length(ratio):1]
+
+pc1.c2.cp.sig.val=sig.val
+pc1.c2.cp.bpcolor=bpcolor
+pc1.c2.cp.ratio=ratio
+pc1.c2.cp.toptitle="Ratio"
+pc1.c2.cp.bottomtitle="-log(p-value)"
+
+```
+
+
+
+```{r}
+CanPaths=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_CanPaths.txt",sep="\t",header = F)
+
+bpcolor=PC2colors[2]
+
+colnames(CanPaths)=CanPaths[2,]
+CanPaths=CanPaths[c(-1,-2),]
+CanPaths$` -log(p-value)`=as.numeric(CanPaths$` -log(p-value)`)
+CanPaths=CanPaths[CanPaths$` -log(p-value)`>(-log(.05)),c("Ingenuity Canonical Pathways"," -log(p-value)","Ratio","Molecules")]
+CanPaths=na.omit(CanPaths)
+
+if(nrow(CanPaths)>25){
+  CanPaths=CanPaths[1:25,]
+}
+
+targets=strsplit(CanPaths$Molecules, split=",")
+names(targets)=CanPaths$`Ingenuity Canonical Pathways`
+total.targets=sapply(targets,length)
+total.targets=total.targets[length(total.targets):1]
+
+sig.val=CanPaths$` -log(p-value)`
+names(sig.val)=CanPaths$`Ingenuity Canonical Pathways`
+sig.val=sig.val[length(sig.val):1]
+
+ratio=CanPaths$Ratio
+names(ratio)=CanPaths$`Ingenuity Canonical Pathways`
+ratio=ratio[length(ratio):1]
+
+
+pc2.c2.cp.sig.val=sig.val
+pc2.c2.cp.bpcolor=bpcolor
+pc2.c2.cp.ratio=ratio
+pc2.c2.cp.toptitle="Ratio"
+pc2.c2.cp.bottomtitle="-log(p-value)"
+
+```
+
+
+
+##Canonical Pathways Plots
+
+```{r}
+sig.val=pc1.c2.cp.sig.val
+bpcolor=pc1.c2.cp.bpcolor
+ratio=pc1.c2.cp.ratio
+toptitle=pc1.c2.cp.toptitle
+bottomtitle=pc1.c2.cp.bottomtitle
+
+par(mar=c(5,30,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=ratio, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="white",xlim=c(0,1),lwd=3)
+points(x=ratio, y=.5:(length(sig.val)-.5),pch=21,col="white",bg="black", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)  
+
+```
+
+```{r}
+sig.val=pc2.c2.cp.sig.val
+bpcolor=pc2.c2.cp.bpcolor
+ratio=pc2.c2.cp.ratio
+toptitle=pc2.c2.cp.toptitle
+bottomtitle=pc2.c2.cp.bottomtitle
+
+par(mar=c(5,30,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=ratio, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="white",xlim=c(0,1),lwd=3)
+points(x=ratio, y=.5:(length(sig.val)-.5),pch=21,col="white",bg="black", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)  
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+##Upstream Activators Data
+
+```{r}
+UpActs=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_UpActs.txt",sep="\t",header = F)
+bpcolor=PC1colors[2]
+colnames(UpActs)=UpActs[2,]
+UpActs=UpActs[c(-1,-2),]
+UpActs$`B-H corrected p-value`=as.numeric(UpActs$`B-H corrected p-value`)
+UpActs=UpActs[UpActs$`B-H corrected p-value`<(.05),]
+UpActs=UpActs[substring(UpActs$`Upstream Regulator`,1,3)!="miR"&substring(UpActs$`Upstream Regulator`,1,3)!="mir",]
+
+targets=strsplit(UpActs$`Target Molecules in Dataset`, split=",")
+names(targets)=UpActs$`Upstream Regulator`
+total.targets=sapply(targets,length)
+total.targets=total.targets[length(total.targets):1]
+
+sig.val=-log10(UpActs$`B-H corrected p-value`)
+names(sig.val)=UpActs$`Upstream Regulator`
+sig.val=sig.val[length(sig.val):1]
+
+
+pc1.c2.ua.sig.val=sig.val
+pc1.c2.ua.bpcolor=bpcolor
+pc1.c2.ua.total.targets=total.targets
+pc1.c2.ua.toptitle="Total Genes"
+pc1.c2.ua.bottomtitle="-log(p-value)"
+
+```
+
+
+
+```{r}
+UpActs=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_UpActs.txt",sep="\t",header = F)
+bpcolor=PC2colors[1]
+colnames(UpActs)=UpActs[2,]
+UpActs=UpActs[c(-1,-2),]
+UpActs$`B-H corrected p-value`=as.numeric(UpActs$`B-H corrected p-value`)
+UpActs=UpActs[UpActs$`B-H corrected p-value`<(.05),]
+UpActs=UpActs[substring(UpActs$`Upstream Regulator`,1,3)!="miR"&substring(UpActs$`Upstream Regulator`,1,3)!="mir",]
+
+targets=strsplit(UpActs$`Target Molecules in Dataset`, split=",")
+names(targets)=UpActs$`Upstream Regulator`
+total.targets=sapply(targets,length)
+total.targets=total.targets[length(total.targets):1]
+
+sig.val=-log10(UpActs$`B-H corrected p-value`)
+names(sig.val)=UpActs$`Upstream Regulator`
+sig.val=sig.val[length(sig.val):1]
+
+pc2.c1.ua.sig.val=sig.val
+pc2.c1.ua.bpcolor=bpcolor
+pc2.c1.ua.total.targets=total.targets
+pc2.c1.ua.toptitle="Total Genes"
+pc2.c1.ua.bottomtitle="-log(p-value)"
+
+```
+
+```{r}
+UpActs=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_UpActs.txt",sep="\t",header = F)
+bpcolor=PC2colors[2]
+colnames(UpActs)=UpActs[2,]
+UpActs=UpActs[c(-1,-2),]
+UpActs$`B-H corrected p-value`=as.numeric(UpActs$`B-H corrected p-value`)
+UpActs=UpActs[UpActs$`B-H corrected p-value`<(.05),]
+UpActs=UpActs[substring(UpActs$`Upstream Regulator`,1,3)!="miR"&substring(UpActs$`Upstream Regulator`,1,3)!="mir",]
+
+targets=strsplit(UpActs$`Target Molecules in Dataset`, split=",")
+names(targets)=UpActs$`Upstream Regulator`
+total.targets=sapply(targets,length)
+total.targets=total.targets[length(total.targets):1]
+
+sig.val=-log10(UpActs$`B-H corrected p-value`)
+names(sig.val)=UpActs$`Upstream Regulator`
+sig.val=sig.val[length(sig.val):1]
+
+pc2.c2.ua.sig.val=sig.val
+pc2.c2.ua.bpcolor=bpcolor
+pc2.c2.ua.total.targets=total.targets
+pc2.c2.ua.toptitle="Total Genes"
+pc2.c2.ua.bottomtitle="-log(p-value)"
+
+```
+
+```{r}
+UpActs=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_UpActs.txt",sep="\t",header = F)
+bpcolors=PC2colors
+colnames(UpActs)=UpActs[2,]
+UpActs=UpActs[c(-1,-2),]
+UpActs$`B-H corrected p-value`=as.numeric(UpActs$`B-H corrected p-value`)
+UpActs=UpActs[UpActs$`B-H corrected p-value`<(.05),]
+UpActs=UpActs[substring(UpActs$`Upstream Regulator`,1,3)!="miR"&substring(UpActs$`Upstream Regulator`,1,3)!="mir",]
+
+UpActs1=UpActs
+
+UpActs=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_UpActs.txt",sep="\t",header = F)
+colnames(UpActs)=UpActs[2,]
+UpActs=UpActs[c(-1,-2),]
+UpActs$`B-H corrected p-value`=as.numeric(UpActs$`B-H corrected p-value`)
+UpActs=UpActs[UpActs$`B-H corrected p-value`<(.05),]
+UpActs=UpActs[substring(UpActs$`Upstream Regulator`,1,3)!="miR"&substring(UpActs$`Upstream Regulator`,1,3)!="mir",]
+UpActs2=UpActs
+
+UpActs1$color=bpcolors[1]
+UpActs2$color=bpcolors[2]
+
+UpActs=rbind(UpActs2,UpActs1)
+
+targets=strsplit(UpActs$`Target Molecules in Dataset`, split=",")
+names(targets)=UpActs$`Upstream Regulator`
+total.targets=sapply(targets,length)
+total.targets=total.targets[length(total.targets):1]
+
+sig.val=-log10(UpActs$`B-H corrected p-value`)
+names(sig.val)=UpActs$`Upstream Regulator`
+sig.val=sig.val[length(sig.val):1]
+
+
+pc2.c1c2.ua.sig.val=sig.val
+pc2.c1c2.ua.bpcolor=UpActs$color[nrow(UpActs):1]
+pc2.c1c2.ua.total.targets=total.targets
+pc2.c1c2.ua.toptitle="Total Genes"
+pc2.c1c2.ua.bottomtitle="-log(p-value)"
+
+```
+
+
+##Upstream Activators Plots
+
+```{r}
+
+sig.val=pc1.c2.ua.sig.val
+bpcolor=pc1.c2.ua.bpcolor
+total.targets=pc1.c2.ua.total.targets
+toptitle=pc1.c2.ua.toptitle
+bottomtitle=pc1.c2.ua.bottomtitle
+
+par(mar=c(5,10,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=total.targets, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="black",xlim=c(0,max(total.targets)),lwd=3)
+points(x=total.targets, y=.5:(length(sig.val)-.5),pch=21,col="black",bg="white", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)
+
+
+```
+
+
+```{r}
+sig.val=pc2.c1.ua.sig.val
+bpcolor=pc2.c1.ua.bpcolor
+total.targets=pc2.c1.ua.total.targets
+toptitle=pc2.c1.ua.toptitle
+bottomtitle=pc2.c1.ua.bottomtitle
+
+par(mar=c(5,10,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=total.targets, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="black",xlim=c(0,max(total.targets)),lwd=3)
+points(x=total.targets, y=.5:(length(sig.val)-.5),pch=21,col="black",bg="white", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)
+
+```
+
+```{r}
+
+sig.val=pc2.c2.ua.sig.val
+bpcolor=pc2.c2.ua.bpcolor
+total.targets=pc2.c2.ua.total.targets
+toptitle=pc2.c2.ua.toptitle
+bottomtitle=pc2.c2.ua.bottomtitle
+
+par(mar=c(5,10,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=total.targets, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="black",xlim=c(0,max(total.targets)),lwd=3)
+points(x=total.targets, y=.5:(length(sig.val)-.5),pch=21,col="black",bg="white", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)
+
+```
+
+
+
+
+
+```{r}
+
+sig.val=pc2.c1c2.ua.sig.val
+bpcolor=pc2.c1c2.ua.bpcolor
+total.targets=pc2.c1c2.ua.total.targets
+toptitle=pc2.c1c2.ua.toptitle
+bottomtitle=pc2.c1c2.ua.bottomtitle
+
+par(mar=c(5,10,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=total.targets, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="black",xlim=c(0,max(total.targets)),lwd=3)
+points(x=total.targets, y=.5:(length(sig.val)-.5),pch=21,col="black",bg="white", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)  
+
+
+```
+
+##For Lab meeting
+```{r}
+
+par(mfrow=c(1,3))
+
+sig.val=pc1.c2.cp.sig.val
+bpcolor=pc1.c2.cp.bpcolor
+ratio=pc1.c2.cp.ratio
+toptitle=pc1.c2.cp.toptitle
+bottomtitle=pc1.c2.cp.bottomtitle
+
+par(mar=c(5,30,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=ratio, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="white",xlim=c(0,1),lwd=3)
+points(x=ratio, y=.5:(length(sig.val)-.5),pch=21,col="white",bg="black", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)  
+
+###
+###
+
+sig.val=pc1.c2.ua.sig.val
+bpcolor=pc1.c2.ua.bpcolor
+total.targets=pc1.c2.ua.total.targets
+toptitle=pc1.c2.ua.toptitle
+bottomtitle=pc1.c2.ua.bottomtitle
+
+par(mar=c(5,10,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=total.targets, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="black",xlim=c(0,max(total.targets)),lwd=3)
+points(x=total.targets, y=.5:(length(sig.val)-.5),pch=21,col="black",bg="white", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)
+
+###
+###
+
+bpdata=pc1slims.bpdata
+bpcolors=pc1slims.bpcolors
+toptitle=pc1slims.toptitle
+bottomtitle=pc1slims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)  
+
+
+
+```
+
+
+
+```{r}
+
+par(mfrow=c(1,3))
+
+sig.val=pc2.c2.cp.sig.val
+bpcolor=pc2.c2.cp.bpcolor
+ratio=pc2.c2.cp.ratio
+toptitle=pc2.c2.cp.toptitle
+bottomtitle=pc2.c2.cp.bottomtitle
+
+par(mar=c(5,30,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=ratio, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="white",xlim=c(0,1),lwd=3)
+points(x=ratio, y=.5:(length(sig.val)-.5),pch=21,col="white",bg="black", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5)  
+
+###
+###
+
+sig.val=pc2.c1c2.ua.sig.val
+bpcolor=pc2.c1c2.ua.bpcolor
+total.targets=pc2.c1c2.ua.total.targets
+toptitle=pc2.c1c2.ua.toptitle
+bottomtitle=pc2.c1c2.ua.bottomtitle
+
+par(mar=c(5,10,5,1))
+barCenters <- barplot(height = sig.val, names.arg = names(sig.val), col = bpcolor, horiz = T, las=2,xlim=c(0,ceiling(max(sig.val))))
+par(new=TRUE)
+plot(x=total.targets, y=.5:(length(sig.val)-.5), type="l", axes=FALSE, ylim=c(0,length(sig.val)), xlab="", ylab="",col="black",xlim=c(0,max(total.targets)),lwd=3)
+points(x=total.targets, y=.5:(length(sig.val)-.5),pch=21,col="black",bg="white", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(toptitle,side=3,line=2.5)
+box()
+mtext(bottomtitle,side=1,col="black",line=2.5) 
+
+###
+###
+
+bpdata=pc2slims.bpdata
+bpcolors=pc2slims.bpcolors
+toptitle=pc2slims.toptitle
+bottomtitle=pc2slims.bottomtitle
+
+par(mar=c(5,20,5,1))
+barCenters <- barplot(height = -log10(bpdata$adjp), names.arg = bpdata$term, col = bpcolors, horiz = T, las=2,xlim=c(0,ceiling(max(-log10(bpdata$adjp)))))
+
+par(new=TRUE)
+plot(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5), type="l", axes=FALSE, xlab="", ylab="",col="black",xlim=c(0,max(bpdata$numDEInCat)),lwd=3,ylim=c(0,length(bpdata$term)))
+points(x=bpdata$numDEInCat, y=.5:(length(bpdata$term)-.5),pch=21,col="black",bg="gold", cex=3,lwd=3)
+axis(3, xlim=c(0,1),col="black",las=1) 
+mtext(pc2slims.toptitle,side=3,line=2.5)
+box()
+mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)  
+
+```

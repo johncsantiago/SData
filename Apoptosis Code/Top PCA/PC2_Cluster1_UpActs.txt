@@ -1,0 +1,30 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Upstream Regulator	Molecule Type	p-value of overlap	B-H corrected p-value	Target Molecules in Dataset	Mechanistic Network
+Lh	complex	1.03E-03	3.69E-02	ARHGAP35,CDK14,RAB4A,TMBIM6	 
+PLA2R1	transmembrane receptor	1.53E-03	3.69E-02	SDHB,UQCRFS1	 
+BFAR	enzyme	2.15E-03	3.69E-02	TMBIM6	 
+COPZ1	transporter	2.15E-03	3.69E-02	NCOA4	 
+FSH	complex	2.64E-03	3.69E-02	ARHGAP35,CDK14,RAB4A,TMBIM6	 
+ESRRG	ligand-dependent nuclear receptor	3.17E-03	3.70E-02	MDH1,SDHB	 
+ZC3H10	other	4.29E-03	3.75E-02	SDHB	 
+PLA2G6	enzyme	4.29E-03	3.75E-02	STIM1	 
+PANX1	transporter	6.42E-03	5.00E-02	NCOA4	 
+DDX5	enzyme	7.60E-03	5.32E-02	MDH1,SDHB	 
+HK2	kinase	1.07E-02	5.94E-02	SDHB	 
+ITGB8	other	1.07E-02	5.94E-02	DIAPH1	 
+SEL1L	other	1.19E-02	5.94E-02	NDUFS2,UQCRFS1	 
+LONP1	peptidase	1.19E-02	5.94E-02	CLPX,UQCRFS1	 
+DSG2	other	1.49E-02	6.28E-02	DIAPH1	 
+NR1D1	ligand-dependent nuclear receptor	1.49E-02	6.28E-02	MDH1	 
+SRF	transcription regulator	1.60E-02	6.28E-02	SCAP,TMEM184C	 
+MTDH	transcription regulator	1.70E-02	6.28E-02	NCOA4	 
+mir-185	microRNA	1.70E-02	6.28E-02	STIM1	 
+RAC2	enzyme	1.91E-02	6.70E-02	DIAPH1	 
+PTCD1	other	2.13E-02	7.03E-02	SDHB	 
+WT1	transcription regulator	2.33E-02	7.03E-02	ETFA,STIM1	 
+APOC3	transporter	2.34E-02	7.03E-02	CLPX	 
+miR-34a-5p (and other miRNAs w/seed GGCAGUG)	mature microRNA	2.41E-02	7.03E-02	KAT2B,STIM1	 
+SGK1	kinase	2.55E-02	7.13E-02	STIM1	 
+ATR	kinase	2.75E-02	7.42E-02	CDK14	 
+ACLY	enzyme	3.79E-02	9.84E-02	SDHB	 

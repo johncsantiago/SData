@@ -1,0 +1,88 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Ingenuity Canonical Pathways	 -log(p-value)	Ratio	z-score	Molecules	
+Adipogenesis pathway	2.95E00	2.29E-02	NaN	FGF2,FOXO1,KLF3	
+p53 Signaling	2.02E00	2.13E-02	NaN	GADD45G,THBS1	
+CDK5 Signaling	1.9E00	1.83E-02	NaN	FOSB,PPP1R10	
+Bladder Cancer Signaling	1.87E00	1.77E-02	NaN	FGF2,THBS1	
+Insulin Receptor Signaling	1.71E00	1.45E-02	NaN	FOXO1,PPP1R10	
+PTEN Signaling	1.64E00	1.34E-02	NaN	CNKSR3,FOXO1	
+Human Embryonic Stem Cell Pluripotency	1.57E00	1.23E-02	NaN	FGF2,FOXO1	
+Tumor Microenvironment Pathway	1.52E00	1.15E-02	NaN	FGF2,FOXO1	
+GADD45 Signaling	1.51E00	5E-02	NaN	GADD45G	
+Regulation Of The Epithelial Mesenchymal Transition By Growth Factors Pathway	1.46E00	1.06E-02	NaN	FGF2,FOXO1	
+Autophagy	1.39E00	9.71E-03	NaN	FGF2,FOXO1	
+Inhibition of Angiogenesis by TSP1	1.3E00	3.03E-02	NaN	THBS1	
+Breast Cancer Regulation by Stathmin1	1.24E00	5.3E-03	NaN	CRHR2,FGF2,PPP1R10	
+Docosahexaenoic Acid (DHA) Signaling	1.24E00	2.63E-02	NaN	FOXO1	
+Sirtuin Signaling Pathway	1.18E00	7.43E-03	NaN	FOXO1,GADD45G	
+PFKFB4 Signaling Pathway	1.17E00	2.22E-02	NaN	FGF2	
+Synaptogenesis Signaling Pathway	1.1E00	6.67E-03	NaN	COMP,THBS1	
+Cancer Drug Resistance By Drug Efflux	1.06E00	1.72E-02	NaN	FOXO1	
+PXR/RXR Activation	1.05E00	1.67E-02	NaN	FOXO1	
+ErbB2-ErbB3 Signaling	1.02E00	1.56E-02	NaN	FOXO1	
+Cell Cycle: G1/S Checkpoint Regulation	1.01E00	1.54E-02	NaN	FOXO1	
+Leptin Signaling in Obesity	9.67E-01	1.37E-02	NaN	FOXO1	
+Dopamine Receptor Signaling	9.59E-01	1.35E-02	NaN	PPP1R10	
+Angiopoietin Signaling	9.47E-01	1.32E-02	NaN	FOXO1	
+Thyroid Cancer Signaling	9.43E-01	1.3E-02	NaN	FOXO1	
+IL-7 Signaling Pathway	9.43E-01	1.3E-02	NaN	FOXO1	
+VDR/RXR Activation	9.39E-01	1.28E-02	NaN	FOXO1	
+IL-3 Signaling	9.39E-01	1.28E-02	NaN	FOXO1	
+HIPPO signaling	9.14E-01	1.2E-02	NaN	PPP1R10	
+FGF Signaling	9.07E-01	1.19E-02	NaN	FGF2	
+Hepatic Fibrosis Signaling Pathway	8.79E-01	4.94E-03	NaN	FGF2,FOXO1	
+ErbB Signaling	8.76E-01	1.1E-02	NaN	FOXO1	
+ATM Signaling	8.57E-01	1.05E-02	NaN	GADD45G	
+VEGF Signaling	8.54E-01	1.04E-02	NaN	FOXO1	
+IGF-1 Signaling	8.3E-01	9.8E-03	NaN	FOXO1	
+Kinetochore Metaphase Signaling Pathway	8.21E-01	9.62E-03	NaN	PPP1R10	
+Airway Pathology in Chronic Obstructive Pulmonary Disease	8.18E-01	9.52E-03	NaN	FGF2	
+Prostate Cancer Signaling	7.96E-01	9.01E-03	NaN	FOXO1	
+FXR/RXR Activation	7.83E-01	8.7E-03	NaN	FOXO1	
+FAK Signaling	7.77E-01	8.62E-03	NaN	ARHGAP26	
+14-3-3-mediated Signaling	7.5E-01	8E-03	NaN	FOXO1	
+Synaptic Long Term Potentiation	7.42E-01	7.87E-03	NaN	PPP1R10	
+Iron homeostasis signaling pathway	7.28E-01	7.58E-03	NaN	FLVCR1	
+STAT3 Pathway	7.19E-01	7.41E-03	NaN	FGF2	
+Hereditary Breast Cancer Signaling	7.08E-01	7.19E-03	NaN	GADD45G	
+NAD Signaling Pathway	6.99E-01	7.04E-03	NaN	FGF2	
+Corticotropin Releasing Hormone Signaling	6.9E-01	6.9E-03	NaN	CRHR2	
+CREB Signaling in Neurons	6.4E-01	3.46E-03	NaN	CRHR2,FGF2	
+Cardiac β-adrenergic Signaling	6.4E-01	6.06E-03	NaN	PPP1R10	
+D-myo-inositol (1,4,5,6)-Tetrakisphosphate Biosynthesis	6.36E-01	5.99E-03	NaN	PPP1R10	
+D-myo-inositol (3,4,5,6)-tetrakisphosphate Biosynthesis	6.36E-01	5.99E-03	NaN	PPP1R10	
+Glioblastoma Multiforme Signaling	6.35E-01	5.95E-03	NaN	FOXO1	
+Xenobiotic Metabolism PXR Signaling Pathway	6.31E-01	5.92E-03	NaN	PPP1R10	
+Tight Junction Signaling	6.25E-01	5.81E-03	NaN	CNKSR3	
+Dopamine-DARPP32 Feedback in cAMP Signaling	6.14E-01	5.65E-03	NaN	PPP1R10	
+Production of Nitric Oxide and Reactive Oxygen Species in Macrophages	6.13E-01	5.62E-03	NaN	PPP1R10	
+B Cell Receptor Signaling	6.13E-01	5.62E-03	NaN	FOXO1	
+3-phosphoinositide Degradation	6.09E-01	5.59E-03	NaN	PPP1R10	
+Clathrin-mediated Endocytosis Signaling	6.06E-01	5.52E-03	NaN	FGF2	
+D-myo-inositol-5-phosphate Metabolism	6.02E-01	5.46E-03	NaN	PPP1R10	
+Hepatic Fibrosis / Hepatic Stellate Cell Activation	5.93E-01	5.35E-03	NaN	FGF2	
+HER-2 Signaling in Breast Cancer	5.92E-01	5.32E-03	NaN	FOXO1	
+3-phosphoinositide Biosynthesis	5.82E-01	5.18E-03	NaN	PPP1R10	
+Regulation of the Epithelial-Mesenchymal Transition Pathway	5.82E-01	5.18E-03	NaN	FGF2	
+PI3K/AKT Signaling	5.73E-01	5.08E-03	NaN	FOXO1	
+HIF1α Signaling	5.67E-01	4.98E-03	NaN	FGF2	
+Integrin Signaling	5.61E-01	4.9E-03	NaN	ARHGAP26	
+ERK/MAPK Signaling	5.58E-01	4.85E-03	NaN	PPP1R10	
+Role of Osteoblasts, Osteoclasts and Chondrocytes in Rheumatoid Arthritis	5.38E-01	4.61E-03	NaN	FOXO1	
+NRF2-mediated Oxidative Stress Response	5.35E-01	4.57E-03	NaN	MAFF	
+Superpathway of Inositol Phosphate Compounds	5.3E-01	4.5E-03	NaN	PPP1R10	
+Osteoarthritis Pathway	5.24E-01	4.44E-03	NaN	FGF2	
+LPS/IL-1 Mediated Inhibition of RXR Function	5.2E-01	4.39E-03	NaN	PPARGC1B	
+Actin Cytoskeleton Signaling	5.07E-01	4.24E-03	NaN	FGF2	
+AMPK Signaling	5.04E-01	4.2E-03	NaN	FOXO1	
+Systemic Lupus Erythematosus In B Cell Signaling Pathway	4.89E-01	4.03E-03	NaN	FOXO1	
+Opioid Signaling Pathway	4.65E-01	3.76E-03	NaN	FOSB	
+Senescence Pathway	4.44E-01	3.53E-03	NaN	GADD45G	
+Role of Macrophages, Fibroblasts and Endothelial Cells in Rheumatoid Arthritis	4.15E-01	3.25E-03	NaN	FGF2	
+T Cell Exhaustion Signaling Pathway	3.74E-01	2.87E-03	NaN	FOXO1	
+Protein Kinase A Signaling	3.47E-01	2.65E-03	NaN	PPP1R10	
+Estrogen Receptor Signaling	3.32E-01	2.53E-03	NaN	FOXO1	
+Molecular Mechanisms of Cancer	3.04E-01	2.31E-03	NaN	FOXO1	
+Axonal Guidance Signaling	2.68E-01	2.05E-03	NaN	SEMA4C	
+Cardiac Hypertrophy Signaling (Enhanced)	2.5E-01	1.92E-03	NaN	FGF2	

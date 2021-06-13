@@ -1,0 +1,46 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Ingenuity Canonical Pathways	 -log(p-value)	Ratio	z-score	Molecules	
+TCA Cycle II (Eukaryotic)	2.94E00	8.33E-02	NaN	MDH1,SDHB	
+Oxidative Phosphorylation	2.87E00	2.88E-02	NaN	NDUFS2,SDHB,UQCRFS1	
+Mitochondrial Dysfunction	2.31E00	1.83E-02	NaN	NDUFS2,SDHB,UQCRFS1	
+Androgen Signaling	2.28E00	1.79E-02	NaN	KAT2B,NCOA4,POLR2C	
+Glucocorticoid Receptor Signaling	2.28E00	9.26E-03	NaN	KAT2B,NDUFS2,POLR2C,SDHB,UQCRFS1	
+AMPK Signaling	1.85E00	1.24E-02	NaN	KAT2B,PPM1A,STIM1	
+Aspartate Degradation II	1.84E00	1.43E-01	NaN	MDH1	
+Sirtuin Signaling Pathway	1.66E00	1.06E-02	NaN	NDUFS2,SDHB,UQCRFS1	
+NAD Signaling Pathway	1.43E00	1.38E-02	NaN	ETFA,POLR2C	
+Estrogen Receptor Signaling	1.3E00	7.56E-03	NaN	NDUFS2,SDHB,UQCRFS1	
+Gluconeogenesis I	1.29E00	4E-02	NaN	MDH1	
+Nucleotide Excision Repair Pathway	1.15E00	2.86E-02	NaN	POLR2C	
+Actin Cytoskeleton Signaling	1.04E00	8.33E-03	NaN	ARHGAP35,DIAPH1	
+Assembly of RNA Polymerase II Complex	1E00	2E-02	NaN	POLR2C	
+Cell Cycle: G2/M DNA Damage Checkpoint Regulation	1E00	2E-02	NaN	KAT2B	
+Cell Cycle Control of Chromosomal Replication	9.55E-01	1.79E-02	NaN	CDK14	
+Huntington's Disease Signaling	9.43E-01	7.25E-03	NaN	POLR2C,SDHB	
+Role of Wnt/GSK-3β Signaling in the Pathogenesis of Influenza	8.42E-01	1.35E-02	NaN	NCOA4	
+TR/RXR Activation	7.9E-01	1.19E-02	NaN	NCOA4	
+Unfolded protein response	7.67E-01	1.12E-02	NaN	SCAP	
+TGF-β Signaling	7.38E-01	1.04E-02	NaN	ZFYVE9	
+p53 Signaling	7.28E-01	1.02E-02	NaN	KAT2B	
+Systemic Lupus Erythematosus In T Cell Signaling Pathway	7.21E-01	5.26E-03	NaN	RAB4A,STIM1	
+NER (Nucleotide Excision Repair, Enhanced Pathway)	7.14E-01	9.8E-03	NaN	POLR2C	
+Amyotrophic Lateral Sclerosis Signaling	6.7E-01	8.77E-03	NaN	ALS2	
+RhoA Signaling	6.44E-01	8.2E-03	NaN	ARHGAP35	
+Ferroptosis Signaling Pathway	6.42E-01	8.13E-03	NaN	NCOA4	
+Adipogenesis pathway	6.13E-01	7.52E-03	NaN	KAT2B	
+Hereditary Breast Cancer Signaling	5.95E-01	7.19E-03	NaN	POLR2C	
+Endocannabinoid Neuronal Synapse Pathway	5.77E-01	6.85E-03	NaN	NDUFS2	
+HMGB1 Signaling	5.45E-01	6.29E-03	NaN	KAT2B	
+Xenobiotic Metabolism PXR Signaling Pathway	5.09E-01	5.68E-03	NaN	PPM1A	
+Leukocyte Extravasation Signaling	4.83E-01	5.29E-03	NaN	ARHGAP35	
+Clathrin-mediated Endocytosis Signaling	4.78E-01	5.21E-03	NaN	RAB4A	
+RAR Activation	4.75E-01	5.18E-03	NaN	KAT2B	
+RhoGDI Signaling	4.42E-01	4.72E-03	NaN	ARHGAP35	
+Senescence Pathway	3.34E-01	3.4E-03	NaN	KAT2B	
+Cdc42 Signaling	3.12E-01	3.17E-03	NaN	DIAPH1	
+Hepatic Fibrosis Signaling Pathway	2.34E-01	2.43E-03	NaN	SDHB	
+Molecular Mechanisms of Cancer	2.18E-01	2.29E-03	NaN	CDK14	
+Axonal Guidance Signaling	-0E00	2.05E-03	NaN	AFG3L2	
+CREB Signaling in Neurons	-0E00	1.69E-03	NaN	POLR2C	
+Cardiac Hypertrophy Signaling (Enhanced)	-0E00	1.9E-03	NaN	DIAPH1	

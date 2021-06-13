@@ -1,0 +1,548 @@
+---
+title: "Streamlining WGCNA"
+author: "John Santiago"
+date: "4/22/2021"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r include=F}
+##setwd("/Users/johnc/Documents/GitHub/SData/WGCNA Example1/")
+setwd("/Users/johncsantiago/Documents/GitHub/SData/WGCNA Example1/")
+library(WGCNA)
+library(visNetwork)
+library(gplots)
+library(heatmaply)
+library("biomaRt")
+library("goseq")
+library(plot3D)
+library(edgeR)
+library(RcisTarget)
+ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+##go_slim=getBM(attributes="goslim_goa_accession",mart=ensembl)
+##reactome=getBM(attributes = "reactome",mart=ensembl)
+##kegg_enzyme=getBM(attributes="kegg_enzyme", mart=ensembl)
+
+options(stringsAsFactors = FALSE)
+##enableWGCNAThreads(nThreads = NULL)
+##disableWGCNAThreads()
+
+motifRankings <- importRankings("/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/MGH Project/Lean Liver Project/John R Output/hg19-tss-centered-10kb-7species.mc9nr.feather")
+data(motifAnnotations_hgnc)
+
+##Step 1: Clean Data
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+annot =read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/AnnotationData.csv",row.names=1)
+
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+
+##EdgeR comparisons
+countdata=countdata[,row.names(groups)]
+x <- countdata
+group <- factor(groups$Group)
+y <- DGEList(counts=x,group=group)
+keep <- filterByExpr(y)
+y <- y[keep,,keep.lib.sizes=FALSE] 
+z <- calcNormFactors(y, method = "TMM") 
+cpmdata=cpm(z)
+design<-model.matrix(~0+groups$Group)
+colnames(design) <- levels(group)
+z = estimateGLMCommonDisp(z,design, verbose=T)
+z = estimateGLMTrendedDisp(z,design)
+z = estimateGLMTagwiseDisp(z,design)
+fit <- glmFit(z, design)
+
+##comparisons
+##3 hour CN vs 0 hour CN
+compare = makeContrasts((CN2-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN2=G_X_E$table
+
+##6 hour CN vs 0 hour CN
+compare = makeContrasts((CN3-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CN3=G_X_E$table
+
+##3 hour CV vs 0 hour CV
+compare = makeContrasts((CV2-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV2=G_X_E$table
+
+##6 hour CV vs 0 hour CV
+compare = makeContrasts((CV3-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CV3=G_X_E$table
+
+##3 hour EM vs 0 hour EM
+compare = makeContrasts((EM2-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM2=G_X_E$table
+
+##6 hour EM vs 0 hour EM
+compare = makeContrasts((EM3-EM1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EM3=G_X_E$table
+
+##0 hour CV vs 0 hour CN
+compare = makeContrasts((CV1-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN1=G_X_E$table
+
+##0 hour EM vs 0 hour CN
+compare = makeContrasts((EM1-CN1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN1=G_X_E$table
+
+##0 hour EM vs 0 hour CV
+compare = makeContrasts((EM1-CV1), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV1=G_X_E$table
+
+##3 hour CV vs 3 hour CN
+compare = makeContrasts((CV2-CN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN2=G_X_E$table
+
+##3 hour EM vs 3 hour CN
+compare = makeContrasts((EM2-CN2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN2=G_X_E$table
+
+##3 hour EM vs 3 hour CV
+compare = makeContrasts((EM2-CV2), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV2=G_X_E$table
+
+##6 hour CV vs 6 hour CN
+compare = makeContrasts((CV3-CN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+CVCN3=G_X_E$table
+
+##6 hour EM vs 6 hour CN
+compare = makeContrasts((EM3-CN3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCN3=G_X_E$table
+
+##6 hour EM vs 6 hour CV
+compare = makeContrasts((EM3-CV3), levels=design)
+lrt <- glmLRT(fit,contrast=as.vector(compare))		
+G_X_E<-topTags(lrt,adjust.method="BH",n = nrow(z$counts), sort.by="PValue")
+EMCV3=G_X_E$table
+
+sCV2=CV2[CV2$FDR<.05,]
+sCV3=CV3[CV3$FDR<.05,]
+sCN2=CN2[CN2$FDR<.05,]
+sCN3=CN3[CN3$FDR<.05,]
+sEM2=EM2[EM2$FDR<.05,]
+sEM3=EM3[EM3$FDR<.05,]
+
+sCVCN1=CVCN1[CVCN1$FDR<.05,]
+sEMCN1=EMCN1[EMCN1$FDR<.05,]
+sEMCV1=EMCV1[EMCV1$FDR<.05,]
+
+sCVCN2=CVCN2[CVCN2$FDR<.05,]
+sEMCN2=EMCN2[EMCN2$FDR<.05,]
+sEMCV2=EMCV2[EMCV2$FDR<.05,]
+
+sCVCN3=CVCN3[CVCN3$FDR<.05,]
+sEMCN3=EMCN3[EMCN3$FDR<.05,]
+sEMCV3=EMCV3[EMCV3$FDR<.05,]
+
+sCVgenes=unique(c(row.names(sCV2),row.names(sCV3)))
+sCNgenes=unique(c(row.names(sCN2),row.names(sCN3)))
+sCVCNgenes=unique(c(row.names(sCVCN1),row.names(sCVCN2),row.names(sCVCN3)))
+
+```
+
+```{r}
+
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+annot =read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/AnnotationData.csv",row.names=1)
+countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
+cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
+groups=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMetadata.csv",row.names=1)
+groups=groups[substring(groups$Library.ID,1,2)!="EM",]
+cpmdata=cpmdata[,row.names(groups)]
+traitData=traitData[substring(traitData$liver,1,2)!="EM",]
+traitData=traitData[,substring(colnames(traitData),1,2)!="Em"]
+
+traitData$NegCon1=sample(1:100,size=nrow(traitData))
+traitData$NegCon2=sample(1:100,size=nrow(traitData))
+traitData$NegCon3=sample(1:100,size=nrow(traitData))
+traitData$NegCon4=sample(1:100,size=nrow(traitData))
+traitData$NegCon5=sample(1:100,size=nrow(traitData))
+
+traitData=traitData[,c(1,3:14,16:18,22,25)]
+
+colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
+datExpr0 = as.data.frame(t(cpmdata))
+names(datExpr0) = row.names(cpmdata)
+rownames(datExpr0) = names(cpmdata)
+gsg = goodSamplesGenes(datExpr0, verbose = 3)
+sampleTree = hclust(dist(datExpr0), method = "average")
+clust = cutreeStatic(sampleTree, cutHeight = 80000, minSize = 10)
+
+```
+
+
+
+```{r}
+sampleTree = hclust(dist(datExpr0), method = "average")
+par(cex = 0.6);
+par(mar = c(0,4,2,0))
+plot(sampleTree, main = "Sample clustering to detect outliers", sub="", xlab="", cex.lab = 1.5,
+     cex.axis = 1.5, cex.main = 2)
+##abline(h = 80000, col = "red")
+
+```
+```{r}
+keepSamples = (clust==1)
+datExpr = datExpr0[keepSamples, ]
+datExpr = datExpr0[,gsg$goodGenes]
+nGenes = ncol(datExpr)
+nSamples = nrow(datExpr)
+allTraits = traitData
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+rownames(datTraits) = allTraits[traitRows, 1]
+collectGarbage()
+```
+
+```{r}
+
+# Plot the sample dendrogram and the colors underneath.
+liverSamples = rownames(datExpr)
+traitRows = match(liverSamples, allTraits$liver)
+datTraits = allTraits[traitRows, -1]
+traitColors = numbers2colors(datTraits, signed = FALSE)
+plotDendroAndColors(sampleTree, traitColors,
+                    groupLabels = names(datTraits),
+                    main = "Sample dendrogram and trait heatmap")
+
+con.datExpr=datExpr
+
+```
+
+
+
+```{r}
+
+cor <- WGCNA::cor
+net = blockwiseModules(datExpr, power = 5,
+                       TOMType = "unsigned", 
+                       minModuleSize = 30,maxBlockSize=20000,
+                       reassignThreshold = 0, mergeCutHeight = 0.25,
+                       numericLabels = TRUE, pamRespectsDendro = FALSE,
+                       saveTOMs = TRUE,
+                       saveTOMFileBase = "LiverTOM",
+                       verbose = 3)
+
+```
+
+
+
+
+
+```{r include=F}
+moduleColors = labels2colors(net$colors)
+nGenes = ncol(datExpr);
+nSamples = nrow(datExpr);
+MEs0 = moduleEigengenes(datExpr, moduleColors)$eigengenes
+MEs = orderMEs(MEs0)
+moduleTraitCor = cor(MEs, datTraits, use = "p");
+moduleTraitPvalue = corPvalueStudent(moduleTraitCor, nSamples);
+textMatrix = paste(signif(moduleTraitCor, 2), "\n(",
+                   signif(moduleTraitPvalue, 1), ")", sep = "");
+dim(textMatrix) = dim(moduleTraitCor)
+
+```
+
+```{r}
+mostsig=moduleTraitPvalue[1,]
+mostsig.color=mostsig
+for(i in names(mostsig)){
+  mostsig[i]=min(moduleTraitPvalue[,i])
+  mostsig.color[i]=row.names(moduleTraitPvalue)[moduleTraitPvalue[,i]==mostsig[i]]
+}
+mostsig=-log(mostsig)
+mostsig.color=substring(mostsig.color,3)
+
+barplot(height=mostsig, col=mostsig.color,border="black", las=3)
+abline(h=-log(0.05),col="red",lty=2,lwd=2)
+
+```
+
+```{r}
+
+i=1
+while(i<=nrow(moduleTraitCor)){
+  moduleTraitCor[i,moduleTraitPvalue[i,]>.05]=NA
+  textMatrix[i,moduleTraitPvalue[i,]>.05]=NA
+  i=i+1
+}
+
+hm=heatmaply(moduleTraitPvalue,scale="none",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,col=hmcolors, dendrogram = "both")
+
+temp=unlist(strsplit((hm$x$data[[4]][[4]])[1,],split ="<br>"))
+temp=temp[substring(temp,1,3)=="col"]
+col.order=substring(temp,9,)
+
+temp=unlist(strsplit((hm$x$data[[4]][[4]])[,1],split ="<br>"))
+temp=temp[substring(temp,1,3)=="row"]
+row.order=substring(temp,6,)
+
+colnames(textMatrix)=colnames(moduleTraitCor)
+row.names(textMatrix)=row.names(moduleTraitCor)
+
+```
+
+```{r}
+par(mar = c(10, 13.5, 5, 5));
+con.modtraitheatmap=labeledHeatmap(Matrix = moduleTraitCor[row.order,col.order],
+               xLabels = col.order,
+               yLabels = row.order,
+               ySymbols = row.order,
+               colorLabels = FALSE,
+               colors = hmcolors,
+               textMatrix = textMatrix[row.order,col.order],
+               setStdMargins = FALSE,
+               cex.text = 0.5,
+               zlim = c(-1,1),
+               main = paste("Module-trait relationships"))
+con.modtraitheatmap
+
+```
+
+
+```{r}
+
+##generates a correlation and correlation p-value matrix for each gene with each trait and module
+  trait.var = as.data.frame(datTraits);
+  
+  ##MEs are the Module Eigengenes
+  modNames = substring(names(MEs), 3)
+  ##calculations correlation of each gene with each module eigengene
+  geneModuleMembership = as.data.frame(cor(datExpr, MEs, use = "p"));
+  ##calculates the correlation p-value for each gene with each module eigengene
+  MMPvalue = as.data.frame(corPvalueStudent(as.matrix(geneModuleMembership), nSamples));
+  names(geneModuleMembership) = modNames;
+  names(MMPvalue) = paste("p.", modNames, sep="");
+
+  ##calculates the correlation of each gene with the trait
+  geneTraitSignificance = as.data.frame(cor(datExpr, trait.var, use = "p"));
+  ##calculates the correlation p-value for each gene with the trait
+  GSPvalue = as.data.frame(corPvalueStudent(as.matrix(geneTraitSignificance), nSamples));
+  names(geneTraitSignificance) = names(trait.var);
+  names(GSPvalue) = paste("p.", names(trait.var), sep="");
+
+  names(annot)=c("ensembl","symbol")
+  annot=as.data.frame(annot)
+  ensembl = names(datExpr)
+  ensembl2annot = annot[ensembl,2]
+
+  geneInfo = data.frame(genes = ensembl,
+                       geneSymbol = ensembl2annot,
+                       moduleColor = moduleColors,
+                       geneTraitSignificance,
+                       GSPvalue,
+                       geneModuleMembership,
+                       MMPvalue)
+
+sig.trait.genes=geneInfo
+sig.data=c(names(MMPvalue),names(GSPvalue))
+for(i in sig.data){
+sig.trait.genes[,paste("adj",i,sep="")]=p.adjust(sig.trait.genes[,i],method="BH")
+}
+con.sigtraitgenes=sig.trait.genes
+con.cpmdata=cpmdata
+cor<-stats::cor
+```
+
+```{r}
+
+adjp.data=colnames(sig.trait.genes)[substring(colnames(sig.trait.genes),1,4)=="adjp"]
+totalsig=c(1:length(adjp.data))
+names(totalsig)=adjp.data
+for(i in adjp.data){
+ totalsig[i]=length(sig.trait.genes[,i][sig.trait.genes[,i]<.05]) 
+}
+
+par(mar = c(10, 5, 5, 5));
+barplot(height=totalsig,las=3)
+
+```
+
+
+
+```{r}
+
+##trait="male"
+##trait="alactate"
+##trait="height"
+##trait="Emricasan"
+##trait = "violet"
+##trait="paleturquoise"
+trait="purple"
+
+maxgenes=100000
+hmtitle=""
+hmgenes=con.sigtraitgenes[,c(trait,paste("adjp.",trait,sep=""))]
+hmgenes=hmgenes[hmgenes[,2]<.05,]
+hmgene.names=row.names(hmgenes[order(hmgenes[,2]),])[1:min(nrow(hmgenes),maxgenes)]
+hmplotdata=con.cpmdata[hmgene.names,]
+heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+con.lactgenes=hmgene.names
+```
+
+
+
+```{r}
+s.hmplotdata=cpmdata[intersect(hmgene.names, c(sCVgenes,sCNgenes,sCVCNgenes)),]
+temp=groups
+row.names(temp)=temp$Old.ID
+
+
+colnames(s.hmplotdata)
+heatmaply(s.hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+
+```
+
+```{r}
+
+##same data with 0H data excluded
+hmplotdata=s.hmplotdata[,colnames(hmplotdata)!="CN21"]
+heatmaply(hmplotdata[,substring(colnames(hmplotdata),3,3)!=1],scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+
+```
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+barplotdata=as.data.frame(sig.slimsbp[order(sig.slimsbp$numDEInCat),c("term","numDEInCat","adjp")])
+barplotdata[,1]=factor(barplotdata[,1],levels=barplotdata[,1])
+ggplot(barplotdata) + geom_bar(aes(x = term,
+                          y = numDEInCat), stat = 'identity') +
+                     coord_flip()
++ scale_fill_gradient(low = "blue",high = "red", space = "Lab")
+
+```
+
+
+```{r}
+##tfop="EdgeRSigs_LV_6vs0"
+##gs1=as.vector(unlist(x1[gs]))
+##gs2=as.vector(unlist(x2[gs1]))
+geneLists=(row.names(scaled))
+
+motifEnrichmentTable_wGenes <- cisTarget(geneLists, motifRankings, motifAnnot=motifAnnotations_hgnc)
+enrtf=as.data.frame(motifEnrichmentTable_wGenes)
+##write.csv(enrtf,paste("Transcription Factor Outputs/",tfop,".csv",sep=""))
+
+sigTF=enrtf[,c("NES","TF_highConf","nEnrGenes","enrichedGenes")]
+write.csv(sigTF,"/Users/johncsantiago/Documents/scratch/VioletTFs.csv")
+sigTF=read.csv("/Users/johncsantiago/Documents/scratch/VioletTFsEdited.csv")
+TFnames=unique(sigTF$TF_highConf)[unique(sigTF$TF_highConf)!=""]
+temp=c(1:length(TFnames))
+i=1
+while(i<=length(TFnames)){
+  temp2=c("")
+  j=1
+  while(j<=nrow(sigTF)){
+    if(sigTF$TF_highConf[j]==TFnames[i]){
+      temp2=c(temp2,sigTF[j,5:890])
+    }
+    j=j+1
+  }
+temp[i]=length(unique(temp2[temp2!=""]))
+i=i+1
+}
+
+gmt=matrix("",nrow=length(TFnames),ncol=(max(temp)+2))
+gmt[,1:2]=TFnames
+
+i=1
+while(i<=length(TFnames)){
+  temp2=c("")
+  j=1
+  while(j<=nrow(sigTF)){
+    if(sigTF$TF_highConf[j]==TFnames[i]){
+      temp2=c(temp2,as.character(sigTF[j,5:890]))
+    }
+    j=j+1
+  }
+  temp2=unique(temp2[temp2!=""])
+gmt[i,3:(length(temp2)+2)]=temp2
+i=i+1
+}
+
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Violet_EnrichedTFs.txt", sep="\t", col.names = F, row.names = F)
+
+```
+
+
+```{r}
+
+##par(mar=c(3,20,2,2))
+
+barplotdata=matrix(0,nrow=nrow(gmt))
+row.names(barplotdata)=gmt[,1]
+i=1
+while(i<=nrow(barplotdata)){
+  barplotdata[i,1]=length(gmt[i,gmt[i,]!=""])-2
+  i=i+1
+}
+barplotdata=barplotdata[order(barplotdata[,1]),]
+barplotdata=as.data.frame(barplotdata)
+barplotdata[,2]=row.names(barplotdata)
+
+colnames(barplotdata)=c("Num.Genes","TranscriptionFactor")
+barplotdata[,2]=factor(barplotdata[,2],levels=barplotdata[,2])
+
+ggplot(barplotdata) + geom_bar(aes(x = TranscriptionFactor,
+                          y = Num.Genes), stat = 'identity') +
+                     coord_flip()
+
+
+```

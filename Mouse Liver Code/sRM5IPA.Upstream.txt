@@ -1,0 +1,353 @@
+© 2000-2021 QIAGEN. All rights reserved.
+
+Upstream Regulator	Expr Log Ratio	Molecule Type	Predicted Activation State	Activation z-score	Flags	p-value of overlap	B-H corrected p-value	Target Molecules in Dataset	Mechanistic Network
+Hmgn3	 	other	Activated	2.630	bias	1.44E-13	1.33E-10	AHSG,AMBP,APOA1,APOA2,AZGP1,FGA,KNG1,Mup1 (includes others),SERPINA1,TTR	 
+IL1B	 	cytokine	 	-0.695	 	2.44E-10	1.14E-07	ADAMTS1,CSF1,DDIT4,ERRFI1,MYOD1,NFKBIA,PLAU,SERPINA3,SERPINF2,SLC25A25,SOCS3,TSC22D3,UCP3,ZFP36	24 (4)
+HMGN1	 	transcription regulator	 	 	 	2.26E-09	7.01E-07	AZGP1,EGFL7,FGA,G0S2,KNG1,Mup1 (includes others),TTR	 
+PPARA	 	ligand-dependent nuclear receptor	Inhibited	-2.936	 	1.13E-07	2.63E-05	ALDOB,ANGPTL4,APOA1,C8A,C9,CEBPD,CES3,FGA,FGG,G0S2,HPX,Mup1 (includes others),NFKBIA,PAH,RBP7,SOCS2,UCP3	 
+ZMPSTE24	 	peptidase	 	0.301	 	1.83E-07	2.91E-05	CISH,DDIT4,GADD45B,GADD45G,SOCS1,SOCS2,SOCS3	 
+LEPR	 	transmembrane receptor	 	0.478	 	1.88E-07	2.91E-05	ANGPTL4,APOA1,APOA2,GADD45B,GADD45G,Mup1 (includes others),SOCS2,SOCS3,TP53INP1,TPRA1,TSC22D3	 
+NR3C1	 	ligand-dependent nuclear receptor	Inhibited	-2.188	 	3.60E-07	4.78E-05	ANGPTL4,APOA2,CEBPD,DDIT4,ERRFI1,NFKBIA,PFKFB3,SERPINA1,SGK1,SLC43A1,TIMP4,TSC22D3,USP54	16 (2)
+STAT	 	group	 	 	 	7.96E-07	7.69E-05	BCL2L1,SOCS1,SOCS3	 
+METTL3	 	enzyme	 	 	 	7.96E-07	7.69E-05	CISH,SOCS1,SOCS3	17 (5)
+ACOX1	 	enzyme	 	1.961	 	8.27E-07	7.69E-05	ADAMTS1,AKR1C4,C4bp,C9,CES3,FAM214A,Mup1 (includes others),PAH,SERPINA1,SGK1	 
+STAT5B	 	transcription regulator	 	0.587	 	1.04E-06	8.79E-05	A1BG,Aox3,BCL2L1,C9,CISH,CYP3A5,G0S2,GADD45B,Mup1 (includes others),SOCS2,UGT2B28,ZFP36	 
+TLR4	 	transmembrane receptor	 	0.239	 	3.86E-06	2.99E-04	CEBPD,CISH,CYP3A5,DLL4,GADD45G,HMOX1,IFI16,LILRB4,NFKBIA,PLK2,SAP30,SOCS1,SOCS3	36 (4)
+TLR9	 	transmembrane receptor	 	1.054	bias	5.54E-06	3.96E-04	BCL2L1,CISH,CSF1,GADD45B,HMOX1,IFI16,LILRB4,PFKFB3,SOCS1,SOCS3	26 (4)
+STEAP3	 	transporter	 	0.816	bias	6.81E-06	4.52E-04	CCN2,ERRFI1,KLF15,NR4A3,S1PR1,TNFRSF12A	 
+TNF	 	cytokine	 	1.063	 	9.03E-06	5.59E-04	ALB,BCL2L1,CEBPD,CSF1,F3,HMOX1,MYOD1,NFKBIA,PDGFB,PLAU,SERPINA3,SOCS3,TSC22D3	40 (7)
+IKBKB	 	kinase	 	-0.263	 	1.20E-05	6.98E-04	ANKRD1,BCL2L1,CCN2,CEBPD,CSF1,HMOX1,IFI16,NFKBIA,SGK1,SOCS3	37 (5)
+HIF1A	 	transcription regulator	 	0.423	 	1.86E-05	1.02E-03	CCN2,CSF1,DDIT4,NFKBIA,NRARP,PDGFA,PDGFB,PFKFB3,SOCS3	23 (4)
+ID2	 	transcription regulator	 	-0.113	 	2.04E-05	1.06E-03	BCL2L1,CSF1,DLL4,GADD45B,GADD45G,IKZF2,NR4A3,PDGFA,SOCS3,TNFRSF19	 
+FLT1	 	kinase	 	 	 	2.71E-05	1.26E-03	APLNR,DEPP1,DLL4	 
+GPD1	 	enzyme	 	 	 	2.81E-05	1.26E-03	Aox3,C8A,C9,Mug1/Mug2,Mup1 (includes others),PFKFB3,SERPINA3	 
+LEP	 	growth factor	 	0.526	 	3.04E-05	1.26E-03	ALDOB,ANGPTL4,APOA1,APOA2,BCL2L1,CYP3A5,F3,Pln,SLC27A5,SOCS3,TPRA1	 
+ADIPOQ	 	other	 	1.979	 	3.18E-05	1.26E-03	APOA1,APOA2,Apoc1,CYP3A5,HMOX1,Mup1 (includes others),NFKBIA,SLC27A5	 
+SLC25A13	 	transporter	 	 	 	3.22E-05	1.26E-03	Aox3,C8A,C9,Mug1/Mug2,Mup1 (includes others),PFKFB3,SERPINA3	 
+TP53	 	transcription regulator	 	-0.195	 	3.25E-05	1.26E-03	ANKRD1,APOA1,BCL2L1,CCN2,CSF1,DDIT4,GADD45B,GADD45G,HMOX1,IFI16,LIMA1,NRARP,PDGFA,PDGFB,PLAU,PLK2,Pln,RHOB,RRAD,SERPINA3,SGK1,SLC6A6,TP53INP1,TSC22D3,UCP3	35 (4)
+IFNG	 	cytokine	 	0.807	 	3.41E-05	1.27E-03	BCL2L1,CCN2,CEBPD,CSF1,FAM107A,HSPA1A/HSPA1B,IFI16,MYOD1,NFKBIA,PDGFB,PFKFB3,PLAU,SLC16A9,SLC6A6,SOCS1,SOCS3	32 (8)
+HNF1A	 	transcription regulator	Activated	2.932	bias	4.15E-05	1.48E-03	ALB,ALDOB,AMBP,C8A,C9,PAH,SERPINA1,SLCO1B3,TTR	 
+TGFBR2	 	kinase	 	-1.265	bias	4.57E-05	1.57E-03	CSF1,DDIT4,FGG,GADD45B,GADD45G,IKZF2,NFKBIA,RRAD,SH3BP2,SOCS3	 
+TP73	 	transcription regulator	 	0.000	 	5.16E-05	1.71E-03	ANGPTL4,DDIT4,PDGFA,PDGFB,PLAU,SERPINA3,TIMP4,TNFRSF12A,TTR	 
+VDR	 	transcription regulator	 	-0.873	 	5.86E-05	1.88E-03	BCL2L1,CISH,CSF1,F3,GADD45G,SERPINA1,SLCO1B3,SOCS1,SOCS3	 
+APOE	 	transporter	 	-0.692	 	6.16E-05	1.91E-03	APOA1,CCN2,CSF1,CYP3A5,F3,HMOX1,Hspa1b,PLAU,SERPINA3,SOCS3	22 (4)
+TFRC	 	transporter	 	0.447	 	9.10E-05	2.64E-03	CHAC1,DDIT4,HMOX1,PFKFB3,TNFRSF12A	 
+CRY1	 	enzyme	 	 	 	9.11E-05	2.64E-03	DBP,PER2,SGK1	 
+ZBTB20	 	transcription regulator	 	-1.109	 	1.00E-04	2.74E-03	CISH,CYP3A5,NFKBIA,SOCS2,SOCS3	 
+XBP1	 	transcription regulator	Activated	2.000	 	1.00E-04	2.74E-03	APOA1,HMOX1,S1PR1,SERPINA1,TTR	 
+SERPINE1	 	other	 	-1.000	 	1.10E-04	2.93E-03	ANKRD1,DBP,PLAU,UCP3,ZFP36	 
+TLR3	 	transmembrane receptor	 	1.268	bias	1.19E-04	3.08E-03	GADD45B,HMOX1,IFI16,LILRB4,PFKFB3,PLK2,SOCS1,SOCS3	26 (4)
+CRY2	 	enzyme	 	 	 	1.24E-04	3.12E-03	DBP,PER2,SGK1	8 (2)
+ADRB	 	group	 	-0.378	 	1.48E-04	3.61E-03	ANGPTL4,ANKRD1,DDIT4,FAM214A,HMOX1,NUDT18,PDGFB	 
+PSMB11	 	peptidase	 	-1.172	bias	1.55E-04	3.70E-03	GADD45B,HMOX1,HSPA1A/HSPA1B,Hspa1b,RHOB,S1PR1,TNFRSF12A	 
+N-cor	 	group	 	 	 	1.63E-04	3.78E-03	PDGFA,PDGFB,RGL1,RHOB,SGK1,SOCS1	12 (2)
+KLF11	 	transcription regulator	 	0.816	 	1.85E-04	4.18E-03	CCN2,PDGFA,PDGFB,PLAU,SERPINA1,TIMP4	 
+DYSF	 	other	 	 	 	1.96E-04	4.34E-03	ANKRD1,ERRFI1,HSPA1A/HSPA1B,IFI16,LILRB4,SERPINA3	 
+CREM	 	transcription regulator	 	-0.168	bias	2.09E-04	4.51E-03	CIART,ERRFI1,GADD45B,Pln,SERTAD1,TIPARP	 
+IL2	 	cytokine	 	1.109	 	2.14E-04	4.52E-03	BCL2L1,CISH,CSF1,IKZF2,LILRB4,PTGIR,SOCS2,SOCS3	26 (6)
+SLC3A2	 	transporter	 	 	 	2.58E-04	5.32E-03	ANKRD1,CCN2	 
+OSM	 	cytokine	 	0.625	 	3.25E-04	6.52E-03	ALB,CISH,FGA,SOCS3,ZFP36	7 (2)
+CLOCK	 	transcription regulator	 	 	 	3.30E-04	6.52E-03	ANGPTL4,DBP,GADD45B,Hspa1b,MID1IP1,PER2,TSPAN4	 
+GNAQ	 	enzyme	 	1.091	bias	3.40E-04	6.59E-03	ADAMTS1,CCN2,SOCS3,TNFRSF12A	 
+IRAK4	 	kinase	 	 	 	3.75E-04	7.11E-03	ERRFI1,NFKBIA,SLC25A25,SOCS1,ZFP36	 
+HDAC1	 	transcription regulator	Inhibited	-2.630	 	3.92E-04	7.28E-03	FAM107A,NFKBIA,PDGFB,PFKFB3,SGK1,TNFRSF19,TSC22D3	 
+BDNF	 	growth factor	 	 	 	4.08E-04	7.43E-03	MYOD1,PER2,PFKFB3,SPRY2,TIPARP,TRIB2	 
+STAT5A	 	transcription regulator	 	0.849	 	4.44E-04	7.93E-03	BCL2L1,CISH,GADD45G,SOCS1,SOCS2,SOCS3,ZFP36	26 (6)
+G protein alphai	 	group	 	1.342	bias	4.93E-04	8.65E-03	ADAMTS1,CEBPD,NR4A3,SOCS3,TNFRSF12A	 
+FST	 	other	 	1.000	 	5.13E-04	8.82E-03	APOA2,Mup1 (includes others),SERPINA1,UCP3	 
+DIO2	 	enzyme	 	 	 	5.22E-04	8.82E-03	DDIT4,GADD45G,HSPA1A/HSPA1B,Hspa1b,KLF15,LILRB4,SLC10A6	 
+IL6ST	 	transmembrane receptor	 	 	 	5.65E-04	9.37E-03	ALB,BCL2L1,HPX,SOCS1	 
+HRH3	 	G-protein coupled receptor	 	 	 	6.19E-04	1.01E-02	ITIH4,Mup1 (includes others),SERPINA3,UCP3	 
+Alpha catenin	 	group	 	-0.640	bias	6.37E-04	1.02E-02	ADAMTS1,NFKBIA,PLAU,SGK1,SOCS3,TNFRSF12A	 
+LIPE	 	enzyme	 	 	 	7.33E-04	1.12E-02	ANKRD1,G0S2,HSPA1A/HSPA1B,MEOX2,NRIP1,RRAD	 
+CASR	 	G-protein coupled receptor	 	-1.633	 	7.33E-04	1.12E-02	BCL2L1,CISH,CSF1,GADD45G,SERPINA1,SOCS3	 
+TNFRSF1A	 	transmembrane receptor	 	0.896	 	7.33E-04	1.12E-02	CCN2,CYP3A5,MYOD1,PDGFA,PLAU,SOCS3	 
+RETNLB	 	other	 	0.447	bias	8.10E-04	1.21E-02	CCN2,KLF15,Mup1 (includes others),MYCT1,SOCS2	 
+SOX15	 	transcription regulator	 	 	 	8.48E-04	1.25E-02	CCN2,MYOD1	 
+CHUK	 	kinase	 	-0.339	bias	9.15E-04	1.33E-02	CEBPD,CSF1,IFI16,NFKBIA,SGK1,SOCS3	 
+YY1	 	transcription regulator	 	 	 	9.70E-04	1.39E-02	ANKRD1,BCL2L1,DDIT4,GADD45G,MYOD1,PDGFA,RND3,TP53INP1	 
+MGP	 	other	 	 	 	1.08E-03	1.49E-02	ALB,PAH,TTR	 
+FSHB	 	other	 	 	 	1.08E-03	1.49E-02	CCN2,PDGFA,SGK1	 
+CLEC4G	 	other	 	1.000	 	1.11E-03	1.50E-02	CCN2,CSF1,NRARP,PDGFA	 
+GPS2	 	transcription regulator	 	0.000	 	1.11E-03	1.50E-02	RGL1,RHOB,SGK1,SOCS1	 
+STAT6	 	transcription regulator	 	1.000	 	1.17E-03	1.51E-02	BCL2L1,CISH,GADD45B,GADD45G,IFI16,LILRB4,NFKBIA,PDGFA,SERPINA1,SOCS2	19 (5)
+TICAM1	 	other	 	-0.875	bias	1.18E-03	1.51E-02	CEBPD,IFI16,NFKBIA,RHOB,SOCS1,SOCS3	 
+STAT5a/b	 	group	 	 	 	1.20E-03	1.51E-02	BCL2L1,CISH,PDGFB,SOCS3	 
+NFAT5	 	transcription regulator	 	 	 	1.20E-03	1.51E-02	F3,Hspa1b,IFI16,SLC6A6	 
+ID3	 	transcription regulator	 	1.000	 	1.21E-03	1.51E-02	BCL2L1,CSF1,GADD45B,GADD45G,IKZF2,NR4A3,SOCS3	 
+ACTL6A	 	other	 	 	 	1.23E-03	1.51E-02	BCL2L1,HMOX1,TP53INP1	 
+TCR	 	complex	 	0.243	bias	1.26E-03	1.51E-02	BCL2L1,CISH,GADD45B,GADD45G,SOCS2	23 (7)
+CREB1	 	transcription regulator	 	0.391	bias	1.26E-03	1.51E-02	CIART,ERRFI1,GADD45B,SERTAD1,TIPARP	6 (2)
+SMAD5	 	transcription regulator	 	 	 	1.26E-03	1.51E-02	PDGFA,PDGFB	 
+PPARG	 	ligand-dependent nuclear receptor	 	0.094	 	1.33E-03	1.57E-02	ANGPTL4,ARL4D,PFKFB3,RGL1,RHOB,SERPINA1,SGK1,SOCS1,TSC22D3,UCP3	 
+TNFAIP3	 	enzyme	 	 	 	1.40E-03	1.58E-02	BCL2L1,CSF1,NFKBIA	26 (6)
+GLI1	 	transcription regulator	 	 	 	1.40E-03	1.58E-02	CSF1,SOCS2,SOCS3	 
+CD14	 	transmembrane receptor	 	 	 	1.40E-03	1.58E-02	CISH,SOCS1,SOCS3	19 (6)
+IL6	 	cytokine	 	0.893	 	1.57E-03	1.75E-02	BCL2L1,CYP3A5,FGA,HPX,SERPINA3,SOCS3,TTR	12 (2)
+PTPRB	 	phosphatase	 	 	 	1.76E-03	1.92E-02	CCN2,PDGFB	 
+EPO	 	cytokine	 	 	 	1.76E-03	1.92E-02	BCL2L1,SOCS3	 
+NR1I3	 	ligand-dependent nuclear receptor	 	1.961	bias	1.78E-03	1.93E-02	APOA1,CYP3A5,GADD45B,SLCO1B3,UGT2B28	 
+OSMR	 	transmembrane receptor	 	 	 	1.84E-03	1.96E-02	CISH,SOCS1,SOCS3,ZFP36	9 (2)
+INHA	 	growth factor	 	-0.179	 	1.87E-03	1.97E-02	ADAMTS1,CCN2,COMP,SGK1,TP53INP1	 
+INSR	 	kinase	 	-1.667	 	1.95E-03	2.02E-02	ALB,ANKRD1,APOA1,APOA2,ARRDC3,HPX,IKZF2,SOCS3,TTR,UCP3	 
+HSD11B1	 	enzyme	 	 	 	1.98E-03	2.02E-02	ANGPTL4,APOA1,FGA	 
+IRAK3	 	kinase	 	 	 	1.98E-03	2.02E-02	CCN2,NFKBIA,SOCS1	 
+PTGER4	 	G-protein coupled receptor	 	-1.300	 	2.02E-03	2.04E-02	ARRDC3,IFI16,PDGFB,S1PR1,SAP30,TP53INP1	 
+ASXL1	 	transcription regulator	 	 	 	2.20E-03	2.20E-02	Apoc1,G0S2,KLF15	 
+Il3	 	cytokine	 	 	 	2.23E-03	2.20E-02	BCL2L1,CISH,CSF1,SOCS1	26 (6)
+GLRX	 	enzyme	 	 	 	2.33E-03	2.26E-02	PDGFA,PDGFB	 
+Hif1	 	complex	 	 	 	2.33E-03	2.26E-02	DDIT4,HIF3A	 
+CX3CL1	 	cytokine	 	0.000	 	2.37E-03	2.27E-02	ADAMTS1,CSF1,HMOX1,IFI16	 
+PPARGC1A	 	transcription regulator	 	-1.134	 	2.39E-03	2.27E-02	CEBPD,HMOX1,SERPINA3,SLC25A25,SOCS1,SOCS3,UCP3	 
+KDM6A	 	enzyme	 	 	 	2.43E-03	2.28E-02	ALB,PAH,TTR	 
+FOS	 	transcription regulator	 	 	 	2.62E-03	2.44E-02	F3,Fhod1,HMOX1,NRIP1,PLK2,RARG,SOCS3,TIPARP	 
+Jnk	 	group	 	 	 	2.67E-03	2.45E-02	BCL2L1,RARG,SOCS3,TNFRSF12A	 
+MYOD1	1.321	transcription regulator	 	 	 	2.69E-03	2.45E-02	IFI16,MYOD1,PDGFA	 
+CD38	 	enzyme	 	1.605	bias	2.76E-03	2.49E-02	CISH,GADD45G,SAP30,SOCS1,SOCS2,SOCS3	 
+MRTFB	 	transcription regulator	 	 	 	2.91E-03	2.60E-02	ANKRD1,BCL2L1,CCN2,G0S2,LILRB4	 
+RORA	 	ligand-dependent nuclear receptor	 	 	 	3.14E-03	2.78E-02	Aox3,CISH,CYP3A5,GADD45B,Mup1 (includes others),NFKBIA	 
+IFIH1	 	enzyme	 	 	 	3.24E-03	2.84E-02	CISH,NFKBIA,RND3	 
+TRPM8	 	ion channel	 	 	 	3.70E-03	3.13E-02	HSPA1A/HSPA1B,UCP3	 
+IL18R1	 	transmembrane receptor	 	 	 	3.70E-03	3.13E-02	SOCS1,SOCS3	 
+HOXA4	 	transcription regulator	 	 	 	3.70E-03	3.13E-02	ANKRD1,CCN2	 
+THRA	 	ligand-dependent nuclear receptor	 	0.762	 	3.74E-03	3.13E-02	ANGPTL4,HMOX1,MYOD1,Pln	 
+CISH	2.727	other	 	-1.000	 	3.74E-03	3.13E-02	BCL2L1,CSF1,HMOX1,NR4A3	 
+CREBBP	 	transcription regulator	 	 	 	3.81E-03	3.16E-02	MCF2L,MYOD1,PLEKHF1,RGL1,SLC43A1,SOCS3,TIPARP,ZFP36L2	 
+STAT3	 	transcription regulator	 	0.704	 	4.35E-03	3.54E-02	BCL2L1,IFI16,IKZF2,MYOD1,SERPINA3,SOCS1,SOCS3,ZFP36	26 (5)
+MEF2	 	group	 	 	 	4.50E-03	3.54E-02	DLL4,MEOX2	 
+Mapk	 	group	 	 	 	4.50E-03	3.54E-02	DBP,PER2	 
+SHC1	 	other	 	 	 	4.50E-03	3.54E-02	BCL2L1,S1PR1	 
+SMAD1	 	transcription regulator	 	 	 	4.50E-03	3.54E-02	PDGFA,PDGFB	 
+GNB2	 	enzyme	 	 	 	4.54E-03	3.54E-02	PLAU,PLK2,TSC22D3	 
+GNB1	 	enzyme	 	 	 	4.54E-03	3.54E-02	PLAU,PLK2,TSC22D3	 
+TNFRSF1B	 	transmembrane receptor	 	1.067	 	4.59E-03	3.55E-02	CYP3A5,MYOD1,PDGFA,SOCS3	 
+IKBKG	 	kinase	 	-0.555	bias	4.64E-03	3.56E-02	CEBPD,CSF1,IFI16,SGK1,SOCS3	 
+MRTFA	 	transcription regulator	 	 	 	4.81E-03	3.61E-02	ANKRD1,BCL2L1,CCN2,G0S2,LILRB4	 
+ATF4	 	transcription regulator	 	 	 	4.81E-03	3.61E-02	ANKRD1,CHAC1,DDIT4,MID1IP1,TNFRSF12A	 
+ESR2	 	ligand-dependent nuclear receptor	Activated	2.000	 	4.82E-03	3.61E-02	BCL2L1,COMP,MYOD1,PDGFA,SOCS2,SOCS3	 
+ABCB4	 	transporter	 	 	 	5.29E-03	3.89E-02	BCL2L1,CCN2,PDGFA	 
+MEF2D	 	transcription regulator	 	 	 	5.29E-03	3.89E-02	CCN2,HMOX1,ZFP36	 
+NELFB	 	other	 	 	 	5.36E-03	3.89E-02	CCN2,GADD45B	 
+MYOG	 	transcription regulator	 	 	 	5.36E-03	3.89E-02	IFI16,PDGFA	 
+EGR1	 	transcription regulator	 	1.980	bias	5.56E-03	4.00E-02	F3,HMOX1,PDGFA,SOCS1	 
+EP300	 	transcription regulator	 	 	 	5.62E-03	4.02E-02	MCF2L,PLEKHF1,RGL1,SLC43A1,SOCS3,TIPARP,ZFP36L2	8 (2)
+IL4	 	cytokine	 	1.826	bias	5.79E-03	4.10E-02	CISH,CSF1,DDIT4,FGG,GADD45B,GADD45G,NFKBIA,RRAD,SH3BP2,SOCS1,SOCS2,SOCS3	23 (7)
+SOCS1	4.423	other	 	 	 	6.09E-03	4.21E-02	BCL2L1,CISH,IFI16,SOCS3	29 (6)
+HDAC2	 	transcription regulator	Inhibited	-2.000	 	6.09E-03	4.21E-02	FAM107A,NFKBIA,PDGFB,TNFRSF19	 
+LCK	 	kinase	 	 	 	6.11E-03	4.21E-02	BCL2L1,CISH,GADD45B	 
+PPARD	 	ligand-dependent nuclear receptor	 	-1.060	 	6.20E-03	4.21E-02	ANGPTL4,APOA1,APOA2,NUDT18,TNFRSF12A,UCP3	 
+SULF2	 	enzyme	 	 	 	6.30E-03	4.21E-02	SOCS2,SOCS3	 
+GAS6	 	growth factor	 	 	 	6.30E-03	4.21E-02	SOCS1,SOCS3	 
+AGTR2	 	G-protein coupled receptor	 	 	 	6.30E-03	4.21E-02	BCL2L1,KNG1	 
+ELANE	 	peptidase	 	 	 	6.30E-03	4.21E-02	CEBPD,SERPINA1	 
+KLF2	 	transcription regulator	 	 	 	6.55E-03	4.32E-02	F3,NFKBIA,S1PR1	 
+SMARCA5	 	transcription regulator	 	-0.447	 	6.56E-03	4.32E-02	BET1,ENC1,OSGIN1,PLK2,RRAD	 
+ZFHX3	 	transcription regulator	 	 	 	6.66E-03	4.36E-02	ALB,APOA1,APOA2,SERPINA1	 
+OGA	 	enzyme	Activated	2.449	 	6.72E-03	4.36E-02	GADD45G,MMRN2,SOCS1,SOCS2,SOCS3,TNFRSF12A	 
+RNA polymerase II	 	complex	 	 	 	7.23E-03	4.55E-02	GADD45B,HSPA1A/HSPA1B,OSGIN1,RALGDS,SOCS3	 
+TPH1	 	enzyme	 	0.000	bias	7.26E-03	4.55E-02	ARRDC3,HMOX1,HSPA1A/HSPA1B,IFI16	 
+NR5A2	 	ligand-dependent nuclear receptor	 	 	 	7.26E-03	4.55E-02	APOA1,CEBPD,GADD45G,Hspa1b	 
+Ptprd	 	phosphatase	 	 	 	7.30E-03	4.55E-02	CEBPD,GADD45G	 
+RETN	 	other	 	 	 	7.30E-03	4.55E-02	APOA1,SOCS3	 
+NFKBIB	 	transcription regulator	 	 	 	7.30E-03	4.55E-02	NFKBIA,TP53INP1	 
+LIF	 	cytokine	 	1.933	 	7.57E-03	4.69E-02	AHSG,FGG,KNG1,SOCS3	 
+RORC	 	ligand-dependent nuclear receptor	 	 	 	7.70E-03	4.74E-02	Aox3,CISH,CYP3A5,GADD45B,Mup1 (includes others)	 
+SQSTM1	 	transcription regulator	 	 	 	7.97E-03	4.84E-02	HMOX1,NFKBIA,PLK2	 
+TAZ	 	enzyme	 	 	 	7.97E-03	4.84E-02	CCN2,HMOX1,PLK2	 
+BMP10	 	growth factor	Activated	2.000	 	8.22E-03	4.96E-02	AHSG,ANGPTL4,NR4A3,SERPINA3	 
+S1PR2	 	G-protein coupled receptor	 	 	 	8.38E-03	5.02E-02	F3,PDGFB	 
+IL1A	 	cytokine	 	 	 	8.48E-03	5.05E-02	ADAMTS1,CYP3A5,SERPINA3	13 (3)
+Hdac	 	group	 	1.000	 	8.56E-03	5.07E-02	ADAMTS1,BCL2L1,MEOX2,SPRY2	 
+IL5	 	cytokine	 	1.387	bias	8.71E-03	5.12E-02	CISH,GADD45G,SAP30,SOCS1,SOCS2	 
+GNAS	 	enzyme	 	 	 	9.01E-03	5.19E-02	ADAMTS1,ARL4D,NR4A3	 
+RET	 	kinase	 	 	 	9.01E-03	5.19E-02	MEOX2,Pln,ZNF335	 
+Hnf3	 	group	 	 	 	9.32E-03	5.19E-02	ALDOB	 
+Ctf2	 	cytokine	 	 	 	9.32E-03	5.19E-02	SOCS3	 
+Cebp	 	complex	 	 	 	9.32E-03	5.19E-02	MYOD1	 
+DLAT	 	enzyme	 	 	 	9.32E-03	5.19E-02	CISH	 
+MAT2B	 	enzyme	 	 	 	9.32E-03	5.19E-02	HMOX1	 
+ZHX2	 	transcription regulator	 	 	 	9.32E-03	5.19E-02	Mup1 (includes others)	 
+MAT2A	 	enzyme	 	 	 	9.32E-03	5.19E-02	HMOX1	 
+NREP	 	other	 	 	 	9.51E-03	5.22E-02	PDGFA,PDGFB	 
+SNAI2	 	transcription regulator	 	 	 	9.51E-03	5.22E-02	ANKRD1,CCN2	 
+mir-155	 	microRNA	 	 	 	9.56E-03	5.22E-02	HMOX1,SOCS1,SOCS3	 
+MYF6	 	transcription regulator	 	 	 	9.64E-03	5.24E-02	ANGPTL4,MYOD1,PDGFA,PDGFB	 
+NFATC2	 	transcription regulator	 	1.000	 	1.01E-02	5.45E-02	BCL2L1,NFKBIA,PLK2,SOCS1,SOCS3	 
+JAK2	 	kinase	 	 	 	1.07E-02	5.70E-02	BCL2L1,PLK2,SOCS3	 
+DDX25	 	enzyme	 	 	 	1.07E-02	5.70E-02	BCL2L1,NFKBIA	 
+SLC13A1	 	transporter	 	1.000	 	1.08E-02	5.70E-02	ARRDC2,C9,G0S2,SLCO1B3	 
+TGFB1	 	growth factor	 	 	 	1.08E-02	5.70E-02	DBP,PDGFA,PDGFB,SOCS3	 
+NR4A1	 	ligand-dependent nuclear receptor	 	-1.969	 	1.13E-02	5.88E-02	CSF1,G0S2,HMOX1,IKZF2,NR4A3,UCP3	 
+CUL3	 	enzyme	 	 	 	1.13E-02	5.88E-02	DBP,RHOB,UCP3	 
+C3	 	peptidase	 	 	 	1.13E-02	5.88E-02	CSF1,TTR,UCP3	 
+NR4A2	 	ligand-dependent nuclear receptor	 	 	 	1.19E-02	6.08E-02	HMOX1,LILRB4,TSC22D3	 
+MAPKAPK2	 	kinase	 	 	 	1.19E-02	6.08E-02	CEBPD,NFKBIA,ZFP36	 
+USP18	 	peptidase	 	 	 	1.20E-02	6.08E-02	SOCS1,SOCS3	 
+COMMD1	 	transporter	 	 	 	1.20E-02	6.08E-02	DDIT4,PFKFB3	 
+NR1H3	 	ligand-dependent nuclear receptor	 	 	 	1.23E-02	6.19E-02	Apoc1,BCL2L1,MID1IP1,NFKBIA,PLAU,SOCS1	 
+PKD1	 	ion channel	 	1.664	 	1.23E-02	6.19E-02	CCN2,KNG1,PAH,SEMA4C,SERPINF2,TTR	 
+ARNTL	 	transcription regulator	 	 	 	1.26E-02	6.26E-02	DBP,HMOX1,PER2	 
+SOX9	 	transcription regulator	 	 	 	1.26E-02	6.26E-02	ADAMTS1,C9,CCN2	 
+CEBPA	 	transcription regulator	 	 	 	1.33E-02	6.37E-02	APLNR,CEBPD,G0S2,RGL1,TIMP4	 
+TNFRSF4	 	transmembrane receptor	 	 	 	1.33E-02	6.37E-02	BCL2L1,SOCS1	 
+NCOR2	 	transcription regulator	 	 	 	1.33E-02	6.37E-02	PDGFA,PDGFB	 
+MAT1A	 	enzyme	 	 	 	1.33E-02	6.37E-02	ALB,APOA1	 
+PLK1	 	kinase	 	 	 	1.33E-02	6.37E-02	ANKRD1,IFI16	 
+FOXF2	 	transcription regulator	 	 	 	1.33E-02	6.37E-02	PDGFA,PDGFB	 
+HSF1	 	transcription regulator	 	 	 	1.34E-02	6.37E-02	CCN2,HSPA1A/HSPA1B,Hspa1b,TTR	 
+GATA4	 	transcription regulator	 	 	 	1.34E-02	6.37E-02	ARRDC2,CCN2,SERPINA3,TRIB2	 
+LDLR	 	transporter	 	 	 	1.43E-02	6.76E-02	BCL2L1,GADD45G,MID1IP1,PLAU,SOCS1,UCP3	 
+CPT1B	 	enzyme	Activated	2.000	 	1.43E-02	6.76E-02	ANGPTL4,NFKBIA,PFKFB3,SOCS1,SOCS2,SOCS3	 
+TCF12	 	transcription regulator	 	 	 	1.47E-02	6.86E-02	LILRB4,RARG,S1PR1	 
+USP19	 	peptidase	 	 	 	1.47E-02	6.86E-02	DDIT4,KLF15	 
+PRKAA1	 	kinase	 	0.914	 	1.48E-02	6.87E-02	ALB,CYP3A5,NFKBIA,SOCS3	 
+S100A8	 	other	 	 	 	1.62E-02	7.46E-02	HMOX1,NFKBIA	 
+BNIP3L	 	other	 	 	 	1.69E-02	7.73E-02	BCL2L1,NFKBIA,PFKFB3	 
+CD69	 	transmembrane receptor	 	 	 	1.77E-02	7.73E-02	S1PR1,SOCS1	 
+ESRRB	 	transcription regulator	 	 	 	1.77E-02	7.73E-02	Hspa1b,SLC6A6	 
+RXRA	 	ligand-dependent nuclear receptor	 	-1.910	 	1.79E-02	7.73E-02	APOA1,CYP3A5,PDGFA,PDGFB	 
+NFkB (complex)	 	complex	 	-0.747	 	1.85E-02	7.73E-02	BCL2L1,CYP3A5,NFKBIA,SOCS3	 
+STAT4	 	transcription regulator	 	 	 	1.85E-02	7.73E-02	BCL2L1,GADD45G,RRAD	 
+JAK	 	group	 	 	 	1.86E-02	7.73E-02	BCL2L1	 
+Rps15a-ps4	 	other	 	 	 	1.86E-02	7.73E-02	NFKBIA	 
+ADRM1	 	other	 	 	 	1.86E-02	7.73E-02	NFKBIA	 
+Integrin alpha 4 beta 1	 	complex	 	 	 	1.86E-02	7.73E-02	BCL2L1	 
+Iga	 	complex	 	 	 	1.86E-02	7.73E-02	PDGFB	 
+MOAP1	 	other	 	 	 	1.86E-02	7.73E-02	HMOX1	 
+FCGRT	 	transmembrane receptor	 	 	 	1.86E-02	7.73E-02	ALB	 
+KLHL40	0.951	other	 	 	 	1.86E-02	7.73E-02	TP53INP1	 
+STRA6	 	transporter	 	 	 	1.86E-02	7.73E-02	SOCS3	 
+AGPS	 	enzyme	 	 	 	1.86E-02	7.73E-02	BCL2L1	 
+PAGR1	 	other	 	 	 	1.86E-02	7.73E-02	CEBPD	 
+ADCYAP1R1	 	G-protein coupled receptor	 	 	 	1.86E-02	7.73E-02	PER2	 
+CIAPIN1	 	other	 	 	 	1.86E-02	7.73E-02	BCL2L1	 
+HSPA1A/HSPA1B	2.680	enzyme	 	 	 	1.86E-02	7.73E-02	Hspa1b	 
+Prl3d1 (includes others)	 	other	 	 	 	1.86E-02	7.73E-02	BCL2L1	 
+DEK	 	transcription regulator	 	 	 	1.86E-02	7.73E-02	NFKBIA	 
+RELA	 	transcription regulator	 	 	 	1.90E-02	7.90E-02	BCL2L1,HMOX1,NFKBIA,PDGFB	 
+LCAT	 	enzyme	 	 	 	1.92E-02	7.90E-02	APOA1,UCP3	 
+ZFP36	-0.751	transcription regulator	 	 	 	1.93E-02	7.90E-02	PLAU,SOCS1,ZFP36	 
+HRAS	 	enzyme	 	 	 	1.93E-02	7.90E-02	ANKRD1,CCN2,PER2	 
+PRKAA2	 	kinase	 	0.152	 	1.96E-02	8.00E-02	ALB,CYP3A5,NFKBIA,SOCS3	 
+TRAF3IP2	 	enzyme	 	 	 	2.02E-02	8.16E-02	CCN2,CSF1,TNFRSF12A	 
+NR1H4	 	ligand-dependent nuclear receptor	 	-0.068	 	2.02E-02	8.16E-02	AMBP,CYP3A5,S1PR1,UCP3	 
+ING1	 	transcription regulator	 	 	 	2.08E-02	8.35E-02	ANGPTL4,ZFP36	 
+PTCH1	 	transmembrane receptor	 	 	 	2.08E-02	8.35E-02	DLL4,MYOD1	 
+GFI1	 	transcription regulator	 	1.951	bias	2.20E-02	8.79E-02	GADD45G,NFKBIA,S1PR1,SGK1	 
+CBL	 	transcription regulator	 	 	 	2.25E-02	8.90E-02	HMOX1,UCP3	 
+EIF2AK2	 	kinase	 	 	 	2.25E-02	8.90E-02	BCL2L1,Hspa1b	 
+PIK3R1	 	kinase	 	 	 	2.28E-02	8.98E-02	BCL2L1,F3,HMOX1	 
+STAT1	 	transcription regulator	 	0.524	 	2.37E-02	9.27E-02	CYP3A5,IFI16,PDGFA,SOCS1,SOCS3	 
+TSC1	 	other	 	 	 	2.37E-02	9.27E-02	CCN2,HMOX1,PLAU	 
+IRS1	 	enzyme	 	 	 	2.40E-02	9.31E-02	CEBPD,HMOX1,PDGFA,UCP3	 
+FCGR2B	 	transmembrane receptor	 	 	 	2.42E-02	9.31E-02	SOCS1,SOCS3	 
+DLL4	0.730	other	 	 	 	2.42E-02	9.31E-02	EGFL7,PDGFB	 
+JUND	 	transcription regulator	 	 	 	2.42E-02	9.31E-02	IKZF2,SOCS1	 
+ERK1/2	 	group	 	 	 	2.47E-02	9.44E-02	F3,PLAU,SOCS3	 
+KCNE3	 	ion channel	 	 	 	2.57E-02	9.73E-02	CISH,HSPA1A/HSPA1B,OSGIN1	 
+FAS	 	transmembrane receptor	 	 	 	2.57E-02	9.73E-02	CCN2,CSF1,NFKBIA	 
+SNAI1	 	transcription regulator	 	 	 	2.60E-02	9.83E-02	ANKRD1,CCN2	 
+REL	 	transcription regulator	 	0.277	bias	2.74E-02	9.84E-02	BCL2L1,DCLRE1B,NR4A3,NRARP,PLK2	 
+FADD	 	other	 	 	 	2.76E-02	9.84E-02	GADD45B,SOCS1,TIPARP	 
+HNF4A	 	transcription regulator	 	1.216	 	2.77E-02	9.84E-02	CYP3A5,EFNA1,GADD45B,HPX,PYGO1,SERPINA1,ZFP36	 
+FH	 	enzyme	 	 	 	2.77E-02	9.84E-02	HMOX1	 
+AGTRAP	 	G-protein coupled receptor	 	 	 	2.77E-02	9.84E-02	HMOX1	 
+KLK3	 	peptidase	 	 	 	2.77E-02	9.84E-02	KNG1	 
+mir-483	 	microRNA	 	 	 	2.77E-02	9.84E-02	SOCS3	 
+LRPAP1	 	other	 	 	 	2.77E-02	9.84E-02	SERPINA3	 
+UGDH	 	enzyme	 	 	 	2.77E-02	9.84E-02	SPRY2	 
+HCRT	 	other	 	 	 	2.77E-02	9.84E-02	PER2	 
+FGF18	 	growth factor	 	 	 	2.77E-02	9.84E-02	CSF1	 
+MAP1S	 	enzyme	 	 	 	2.77E-02	9.84E-02	BCL2L1	 
+CUL4B	 	other	 	 	 	2.77E-02	9.84E-02	ZFP36	 
+BCL2A1	 	other	 	 	 	2.77E-02	9.84E-02	BCL2L1	 
+miR-338-3p (miRNAs w/seed CCAGCAU)	 	mature microRNA	 	 	 	2.79E-02	9.84E-02	PDGFA,PDGFB	 
+miR-335-3p (miRNAs w/seed UUUUCAU)	 	mature microRNA	 	 	 	2.79E-02	9.84E-02	PDGFA,PDGFB	 
+BRCA1	 	transcription regulator	 	 	 	2.79E-02	9.84E-02	GADD45B,HMOX1	 
+JUN	 	transcription regulator	 	 	 	2.81E-02	9.91E-02	IFI16,PLAU,RARG,SOCS3	 
+SCARB1	 	transporter	 	 	 	2.97E-02	1.04E-01	APOA1,DDIT4	 
+CHADL	 	other	 	 	 	2.97E-02	1.04E-01	FAM107A,PDGFA	 
+IRF9	 	transcription regulator	 	 	 	2.97E-02	1.04E-01	SOCS1,SOCS3	 
+EGLN	 	group	 	 	 	3.08E-02	1.07E-01	A1BG,EFNA1,Mup1 (includes others)	 
+FOXP3	 	transcription regulator	 	 	 	3.12E-02	1.08E-01	CSF1,IKZF2,NR4A3,SOCS2	 
+JAK1	 	kinase	 	 	 	3.17E-02	1.08E-01	MYOD1,SOCS3	 
+FECH	 	enzyme	 	 	 	3.17E-02	1.08E-01	CYP3A5,HMOX1	 
+IL12A	 	cytokine	 	 	 	3.17E-02	1.08E-01	SOCS1,SOCS3	 
+SMARCA4	 	transcription regulator	 	 	 	3.19E-02	1.08E-01	GADD45B,GADD45G,SOCS2	 
+BTNL2	 	transmembrane receptor	 	 	 	3.30E-02	1.10E-01	Hspa1b,IKZF2,RALGDS	 
+Rxr	 	group	 	 	 	3.37E-02	1.10E-01	PDGFA,PDGFB	 
+miR-29b-3p (and other miRNAs w/seed AGCACCA)	 	mature microRNA	 	 	 	3.37E-02	1.10E-01	PDGFA,PDGFB	 
+AGTR1	 	G-protein coupled receptor	 	 	 	3.37E-02	1.10E-01	HMOX1,SGK1	 
+TNFSF12	 	cytokine	 	 	 	3.53E-02	1.10E-01	KLF15,MYOD1,NFKBIA	 
+ALDH1A2	 	enzyme	 	 	 	3.57E-02	1.10E-01	CCN2,CSF1	 
+STAT2	 	transcription regulator	 	 	 	3.57E-02	1.10E-01	SOCS1,SOCS3	 
+NOS3	 	enzyme	 	 	 	3.57E-02	1.10E-01	CCN2,F3	 
+Gm15807/Hmgn5	 	other	 	 	 	3.57E-02	1.10E-01	AZGP1,Mup1 (includes others)	 
+PML	 	transcription regulator	 	 	 	3.64E-02	1.10E-01	APOA1,HMOX1,UCP3	 
+MNK1/2	 	group	 	 	 	3.68E-02	1.10E-01	SPRY2	 
+MYLK2	 	kinase	 	 	 	3.68E-02	1.10E-01	MYOD1	 
+PANX1	 	transporter	 	 	 	3.68E-02	1.10E-01	HMOX1	 
+SAR1B	 	enzyme	 	 	 	3.68E-02	1.10E-01	APOA1	 
+FLT4	 	transmembrane receptor	 	 	 	3.68E-02	1.10E-01	SOCS1	 
+DIO1	 	enzyme	 	 	 	3.68E-02	1.10E-01	UCP3	 
+NOTCH4	 	transcription regulator	 	 	 	3.68E-02	1.10E-01	DLL4	 
+CD8A	 	other	 	 	 	3.68E-02	1.10E-01	BCL2L1	 
+CD93	 	other	 	 	 	3.68E-02	1.10E-01	ZNF503	 
+mir-365	 	microRNA	 	 	 	3.68E-02	1.10E-01	MYOD1	 
+miR-1-3p (and other miRNAs w/seed GGAAUGU)	 	mature microRNA	 	 	 	3.68E-02	1.10E-01	Mup1 (includes others)	 
+STRN	 	other	 	 	 	3.68E-02	1.10E-01	SGK1	 
+HS6ST1	 	enzyme	 	 	 	3.68E-02	1.10E-01	SPRY2	 
+LPAR1	 	G-protein coupled receptor	 	 	 	3.68E-02	1.10E-01	CCN2	 
+ATF1	 	transcription regulator	 	 	 	3.68E-02	1.10E-01	UCP3	 
+TRHR	 	G-protein coupled receptor	 	 	 	3.68E-02	1.10E-01	SOCS3	 
+Ifi202b	 	other	 	 	 	3.68E-02	1.10E-01	MYOD1	 
+RAPSN	 	other	 	 	 	3.68E-02	1.10E-01	SOCS3	 
+GCH1	 	enzyme	 	 	 	3.68E-02	1.10E-01	HMOX1	 
+CDK6	 	kinase	 	 	 	3.68E-02	1.10E-01	SOCS3	 
+GFI1B	 	transcription regulator	 	 	 	3.68E-02	1.10E-01	SOCS1	 
+FBLN5	 	other	 	 	 	3.68E-02	1.10E-01	SERPINA1	 
+ELK3	 	transcription regulator	 	 	 	3.68E-02	1.10E-01	HMOX1	 
+EPC1	 	transcription regulator	 	 	 	3.68E-02	1.10E-01	MYOD1	 
+BAG1	 	other	 	 	 	3.68E-02	1.10E-01	Hspa1b	 
+RRM2B	 	enzyme	 	 	 	3.68E-02	1.10E-01	TP53INP1	 
+IFNAR1	 	transmembrane receptor	 	 	 	3.68E-02	1.10E-01	CSF1,IFI16,SOCS1,SOCS3	 
+ARHGAP31	 	other	 	 	 	3.78E-02	1.12E-01	CCN2,GADD45B	 
+HNF1B	 	transcription regulator	 	 	 	3.78E-02	1.12E-01	ALDOB,AMBP	 
+ADAM10	 	peptidase	 	 	 	4.13E-02	1.23E-01	CSF1,GADD45G,Pln	 
+IL7	 	cytokine	 	 	 	4.20E-02	1.24E-01	BCL2L1,SOCS1	 
+PAK2	 	kinase	 	 	 	4.20E-02	1.24E-01	IFI16,LDLRAP1	 
+PI3K (complex)	 	complex	 	 	 	4.25E-02	1.24E-01	BCL2L1,DDIT4,HMOX1	 
+ITGB2	 	transmembrane receptor	 	 	 	4.43E-02	1.24E-01	BCL2L1,GADD45B	 
+IL21	 	cytokine	 	 	 	4.43E-02	1.24E-01	BCL2L1,SOCS3	 
+IL27RA	 	transmembrane receptor	 	 	 	4.43E-02	1.24E-01	DLL4,SOCS3	 
+PYGO2	 	other	 	 	 	4.57E-02	1.24E-01	PDGFB	 
+JUN/JUNB/JUND	 	group	 	 	 	4.57E-02	1.24E-01	BCL2L1	 
+IgG	 	complex	 	 	 	4.57E-02	1.24E-01	CSF1	 
+MLYCD	 	enzyme	 	 	 	4.57E-02	1.24E-01	UCP3	 
+SOX11	 	transcription regulator	 	 	 	4.57E-02	1.24E-01	MYOD1	 
+IDO	 	group	 	 	 	4.57E-02	1.24E-01	SOCS3	 
+ALDH3A2	 	enzyme	 	 	 	4.57E-02	1.24E-01	HMOX1	 
+ERCC2	 	enzyme	 	 	 	4.57E-02	1.24E-01	UCP3	 
+PSMB9	 	peptidase	 	 	 	4.57E-02	1.24E-01	NFKBIA	 
+MC3R	 	G-protein coupled receptor	 	 	 	4.57E-02	1.24E-01	HMOX1	 
+HSD11B2	 	enzyme	 	 	 	4.57E-02	1.24E-01	TSC22D3	 
+BDKRB1	 	G-protein coupled receptor	 	 	 	4.57E-02	1.24E-01	CCN2	 
+UACA	 	other	 	 	 	4.57E-02	1.24E-01	CEBPD	 
+STAU1	 	transporter	 	 	 	4.57E-02	1.24E-01	MYOD1	 
+SMURF2	 	enzyme	 	 	 	4.57E-02	1.24E-01	CCN2	 
+CBLC	 	enzyme	 	 	 	4.57E-02	1.24E-01	HMOX1	 
+PAK1	 	kinase	 	 	 	4.57E-02	1.24E-01	F3	 
+GNA11	 	enzyme	 	 	 	4.57E-02	1.24E-01	ADAMTS1	 
+Cxcl3	 	cytokine	 	 	 	4.57E-02	1.24E-01	CEBPD	 
+Muc1	 	transmembrane receptor	 	 	 	4.57E-02	1.24E-01	PDGFA	 
+RECK	 	other	 	 	 	4.57E-02	1.24E-01	SPRY2	 
+STK17B	 	kinase	 	 	 	4.57E-02	1.24E-01	BCL2L1	 
+YAP/TAZ	 	group	 	 	 	4.57E-02	1.24E-01	HSPA1A/HSPA1B	 
+MET	 	kinase	 	 	 	4.65E-02	1.26E-01	Hspa1b,PLK2,SOCS3	 
+MEX3A	 	other	 	 	 	4.88E-02	1.31E-01	ANGPTL4,APOA1	 
+EIF2S1	 	translation regulator	 	 	 	4.88E-02	1.31E-01	CHAC1,HMOX1	 
+MED13	 	transcription regulator	 	 	 	4.88E-02	1.31E-01	Apoc1,KNG1	 
+SLC16A2	 	transporter	 	 	 	4.88E-02	1.31E-01	SLCO1B3,UCP3	 
+SAMSN1	 	other	 	 	 	4.92E-02	1.31E-01	SAP30,SOCS1,SOCS3	 
+Tcf7	 	transcription regulator	 	-1.982	 	5.72E-02	1.43E-01	CISH,RARG,SOCS2,SOCS3,TNFRSF19	 
+NOS2	 	enzyme	Activated	2.000	 	6.06E-02	1.44E-01	AZGP1,ITIH4,LILRB4,SERPINA3	 
