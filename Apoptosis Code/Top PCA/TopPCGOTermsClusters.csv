@@ -1,284 +1,284 @@
-﻿Category,PC,Cluster,Term,ClusterName
-ACTIVATION OF IMMUNE RESPONSE,PC2,Cluster 2,activation of immune response,Activation of Immune Response
-ALPHA-BETA T CELL PROLIFERATION,PC2,Cluster 2,alpha-beta T cell proliferation,Activation of Immune Response
-ANTIGEN RECEPTOR-MEDIATED SIGNALING PATHWAY,PC2,Cluster 2,antigen receptor-mediated signaling pathway,Activation of Immune Response
-ATP SYNTHESIS COUPLED ELECTRON TRANSPORT,PC2,Cluster 2,ATP synthesis coupled electron transport,Oxidative Phosphorylation
-B CELL RECEPTOR SIGNALING PATHWAY,PC2,Cluster 2,B cell receptor signaling pathway,Activation of Immune Response
-BIOLOGICAL ADHESION,PC2,Cluster 2,biological adhesion,Activation of Immune Response
-CALCIUM ION HOMEOSTASIS,PC2,Cluster 2,calcium ion homeostasis,Calcium Homeostasis
-CATABOLIC PROCESS,PC1,Cluster 2,catabolic process,Catabolic Process
-CATION TRANSPORT,PC2,Cluster 2,cation transport,Other
-CELL ACTIVATION,PC2,Cluster 2,cell activation,Activation of Immune Response
-CELL ADHESION,PC2,Cluster 2,cell adhesion,Activation of Immune Response
-CELL COMMUNICATION,PC2,Cluster 2,cell communication,Cell Signaling in Response to Stumulus
-CELL MIGRATION,PC2,Cluster 2,cell migration,Cell Migration
-CELL MOTILITY,PC2,Cluster 2,cell motility,Cell Migration
-CELL POPULATION PROLIFERATION,PC2,Cluster 2,cell population proliferation,Other
-CELL-CELL ADHESION,PC2,Cluster 2,cell-cell adhesion,Activation of Immune Response
-CELLULAR AROMATIC COMPOUND METABOLIC PROCESS,PC1,Cluster 2,cellular aromatic compound metabolic process,Gene Transcription and RNA Biosynthesis
-CELLULAR CALCIUM ION HOMEOSTASIS,PC2,Cluster 2,cellular calcium ion homeostasis,Calcium Homeostasis
-CELLULAR CATABOLIC PROCESS,PC1,Cluster 2,cellular catabolic process,Catabolic Process
-CELLULAR COMPONENT BIOGENESIS,PC1,Cluster 2,cellular component biogenesis,Cellular Component Organization
-CELLULAR COMPONENT ORGANIZATION,PC1,Cluster 2,cellular component organization,Cellular Component Organization
-CELLULAR COMPONENT ORGANIZATION OR BIOGENESIS,PC1,Cluster 2,cellular component organization or biogenesis,Cellular Component Organization
-CELLULAR DIVALENT INORGANIC CATION HOMEOSTASIS,PC2,Cluster 2,cellular divalent inorganic cation homeostasis,Calcium Homeostasis
-CELLULAR LOCALIZATION,PC1,Cluster 2,cellular localization,Protein Transport
-CELLULAR MACROMOLECULE BIOSYNTHETIC PROCESS,PC1,Cluster 2,cellular macromolecule biosynthetic process,Gene Transcription and RNA Biosynthesis
-CELLULAR MACROMOLECULE CATABOLIC PROCESS,PC1,Cluster 2,cellular macromolecule catabolic process,Catabolic Process
-CELLULAR MACROMOLECULE LOCALIZATION,PC1,Cluster 2,cellular macromolecule localization,Protein Transport
-CELLULAR MACROMOLECULE METABOLIC PROCESS,PC1,Cluster 2,cellular macromolecule metabolic process,Gene Transcription and RNA Biosynthesis
-CELLULAR METABOLIC PROCESS,PC1,Cluster 2,cellular metabolic process,Gene Transcription and RNA Biosynthesis
-CELLULAR NITROGEN COMPOUND BIOSYNTHETIC PROCESS,PC1,Cluster 2,cellular nitrogen compound biosynthetic process,Gene Transcription and RNA Biosynthesis
-CELLULAR NITROGEN COMPOUND METABOLIC PROCESS,PC1,Cluster 2,cellular nitrogen compound metabolic process,Gene Transcription and RNA Biosynthesis
-CELLULAR PROTEIN LOCALIZATION,PC1,Cluster 2,cellular protein localization,Protein Transport
-CELLULAR PROTEIN METABOLIC PROCESS,PC1,Cluster 2,cellular protein metabolic process,Gene Transcription and RNA Biosynthesis
-CELLULAR PROTEIN MODIFICATION PROCESS,PC1,Cluster 2,cellular protein modification process,Gene Transcription and RNA Biosynthesis
-CELLULAR RESPONSE TO HEAT,PC1,Cluster 2,cellular response to heat,Other
-CELLULAR RESPONSE TO STIMULUS,PC2,Cluster 2,cellular response to stimulus,Cell Signaling in Response to Stumulus
-CHROMOSOME ORGANIZATION,PC1,Cluster 2,chromosome organization,Other
-DEFENSE RESPONSE TO OTHER ORGANISM,PC2,Cluster 2,defense response to other organism,Other
-DIVALENT INORGANIC CATION HOMEOSTASIS,PC2,Cluster 2,divalent inorganic cation homeostasis,Calcium Homeostasis
-ENDOMEMBRANE SYSTEM ORGANIZATION,PC1,Cluster 2,endomembrane system organization,Other
-ENDOTHELIAL CELL PROLIFERATION,PC2,Cluster 2,endothelial cell proliferation,Other
-ENVELOPE,PC2,Cluster 1,envelope,Mitochondrial Membrane
-EPITHELIAL CELL PROLIFERATION,PC2,Cluster 2,epithelial cell proliferation,Other
-ESTABLISHMENT OF LOCALIZATION IN CELL,PC1,Cluster 2,establishment of localization in cell,Protein Transport
-ESTABLISHMENT OF PROTEIN LOCALIZATION,PC1,Cluster 2,establishment of protein localization,Protein Transport
-ESTABLISHMENT OF PROTEIN LOCALIZATION TO CHROMOSOME,PC1,Cluster 2,establishment of protein localization to chromosome,RNA and Protein Localization to Telomere
-ESTABLISHMENT OF PROTEIN LOCALIZATION TO ORGANELLE,PC1,Cluster 2,establishment of protein localization to organelle,Protein Transport
-ESTABLISHMENT OF PROTEIN LOCALIZATION TO TELOMERE,PC1,Cluster 2,establishment of protein localization to telomere,RNA and Protein Localization to Telomere
-ESTABLISHMENT OF RNA LOCALIZATION,PC1,Cluster 2,establishment of RNA localization,RNA Export from Nucleus
-G PROTEIN-COUPLED RECEPTOR SIGNALING PATHWAY,PC2,Cluster 2,G protein-coupled receptor signaling pathway,Other
-GENE EXPRESSION,PC1,Cluster 2,gene expression,Gene Transcription and RNA Biosynthesis
-GOLGI VESICLE BUDDING,PC1,Cluster 2,Golgi vesicle budding,Other
-HETEROCYCLE METABOLIC PROCESS,PC1,Cluster 2,heterocycle metabolic process,Gene Transcription and RNA Biosynthesis
-I-KAPPAB KINASE/NF-KAPPAB SIGNALING,PC1,Cluster 2,I-kappaB kinase/NF-kappaB signaling,NFKB Signaling
-IMMUNE RESPONSE,PC2,Cluster 2,immune response,Activation of Immune Response
-IMMUNE RESPONSE-ACTIVATING CELL SURFACE RECEPTOR SIGNALING PATHWAY,PC2,Cluster 2,immune response-activating cell surface receptor signaling pathway,Activation of Immune Response
-IMMUNE RESPONSE-ACTIVATING SIGNAL TRANSDUCTION,PC2,Cluster 2,immune response-activating signal transduction,Activation of Immune Response
-IMMUNE RESPONSE-REGULATING CELL SURFACE RECEPTOR SIGNALING PATHWAY,PC2,Cluster 2,immune response-regulating cell surface receptor signaling pathway,Activation of Immune Response
-IMMUNE RESPONSE-REGULATING SIGNALING PATHWAY,PC2,Cluster 2,immune response-regulating signaling pathway,Activation of Immune Response
-IMMUNE SYSTEM PROCESS,PC2,Cluster 2,immune system process,Activation of Immune Response
-IMPORT INTO NUCLEUS,PC1,Cluster 2,import into nucleus,RNA Export from Nucleus
-INTERSPECIES INTERACTION BETWEEN ORGANISMS,PC1,Cluster 2,interspecies interaction between organisms,Other
-INTRACELLULAR PROTEIN TRANSPORT,PC1,Cluster 2,intracellular protein transport,Protein Transport
-INTRACELLULAR SIGNAL TRANSDUCTION,PC2,Cluster 2,intracellular signal transduction,Cell Signaling in Response to Stumulus
-INTRACELLULAR TRANSPORT,PC1,Cluster 2,intracellular transport,Protein Transport
-LEUKOCYTE ACTIVATION,PC2,Cluster 2,leukocyte activation,Activation of Immune Response
-LEUKOCYTE AGGREGATION,PC2,Cluster 2,leukocyte aggregation,Other
-LEUKOCYTE CELL-CELL ADHESION,PC2,Cluster 2,leukocyte cell-cell adhesion,Activation of Immune Response
-LEUKOCYTE PROLIFERATION,PC2,Cluster 2,leukocyte proliferation,Activation of Immune Response
-LOCALIZATION OF CELL,PC2,Cluster 2,localization of cell,Cell Migration
-LYMPHOCYTE ACTIVATION,PC2,Cluster 2,lymphocyte activation,Activation of Immune Response
-LYMPHOCYTE AGGREGATION,PC2,Cluster 2,lymphocyte aggregation,Other
-LYMPHOCYTE DIFFERENTIATION,PC2,Cluster 2,lymphocyte differentiation,Activation of Immune Response
-LYMPHOCYTE MIGRATION,PC2,Cluster 2,lymphocyte migration,Immune Cell Migration
-LYMPHOCYTE PROLIFERATION,PC2,Cluster 2,lymphocyte proliferation,Activation of Immune Response
-MACROMOLECULE BIOSYNTHETIC PROCESS,PC1,Cluster 2,macromolecule biosynthetic process,Gene Transcription and RNA Biosynthesis
-MACROMOLECULE CATABOLIC PROCESS,PC1,Cluster 2,macromolecule catabolic process,Catabolic Process
-MACROMOLECULE LOCALIZATION,PC1,Cluster 2,macromolecule localization,Protein Transport
-MACROMOLECULE METABOLIC PROCESS,PC1,Cluster 2,macromolecule metabolic process,Gene Transcription and RNA Biosynthesis
-MACROMOLECULE METHYLATION,PC1,Cluster 2,macromolecule methylation,Other
-MACROMOLECULE MODIFICATION,PC1,Cluster 2,macromolecule modification,Gene Transcription and RNA Biosynthesis
-MEMBRANE ORGANIZATION,PC1,Cluster 2,membrane organization,Other
-METABOLIC PROCESS,PC1,Cluster 2,metabolic process,Gene Transcription and RNA Biosynthesis
-MITOCHONDRIAL ATP SYNTHESIS COUPLED ELECTRON TRANSPORT,PC2,Cluster 2,mitochondrial ATP synthesis coupled electron transport,Oxidative Phosphorylation
-MITOCHONDRIAL ENVELOPE,PC2,Cluster 1,mitochondrial envelope,Mitochondrial Membrane
-MITOCHONDRIAL INNER MEMBRANE,PC2,Cluster 1,mitochondrial inner membrane,Mitochondrial Membrane
-MITOCHONDRIAL MEMBRANE,PC2,Cluster 1,mitochondrial membrane,Mitochondrial Membrane
-MITOCHONDRIAL PROTEIN COMPLEX,PC2,Cluster 1,mitochondrial protein complex,Mitochondrial Membrane
-MITOCHONDRION,PC2,Cluster 1,mitochondrion,Mitochondrial Membrane
-MONONUCLEAR CELL PROLIFERATION,PC2,Cluster 2,mononuclear cell proliferation,Activation of Immune Response
-MRNA EXPORT FROM NUCLEUS,PC1,Cluster 2,mRNA export from nucleus,RNA Export from Nucleus
-MRNA METABOLIC PROCESS,PC1,Cluster 2,mRNA metabolic process,RNA Processing
-MRNA PROCESSING,PC1,Cluster 2,mRNA processing,RNA Processing
-"MRNA SPLICING, VIA SPLICEOSOME",PC1,Cluster 2,"mRNA splicing, via spliceosome",RNA Processing
-MRNA TRANSPORT,PC1,Cluster 2,mRNA transport,RNA Export from Nucleus
-MRNA-CONTAINING RIBONUCLEOPROTEIN COMPLEX EXPORT FROM NUCLEUS,PC1,Cluster 2,mRNA-containing ribonucleoprotein complex export from nucleus,RNA Export from Nucleus
-NCRNA EXPORT FROM NUCLEUS,PC1,Cluster 2,ncRNA export from nucleus,RNA Export from Nucleus
-NCRNA METABOLIC PROCESS,PC1,Cluster 2,ncRNA metabolic process,RNA Processing
-NCRNA PROCESSING,PC1,Cluster 2,ncRNA processing,RNA Processing
-NEGATIVE REGULATION OF BIOLOGICAL PROCESS,PC1,Cluster 2,negative regulation of biological process,Other
-NEGATIVE REGULATION OF CYTOKINE-MEDIATED SIGNALING PATHWAY,PC2,Cluster 2,negative regulation of cytokine-mediated signaling pathway,Other
-NITROGEN COMPOUND METABOLIC PROCESS,PC1,Cluster 2,nitrogen compound metabolic process,Gene Transcription and RNA Biosynthesis
-NUCLEAR EXPORT,PC1,Cluster 2,nuclear export,RNA Export from Nucleus
-NUCLEAR TRANSPORT,PC1,Cluster 2,nuclear transport,RNA Export from Nucleus
-NUCLEIC ACID METABOLIC PROCESS,PC1,Cluster 2,nucleic acid metabolic process,Gene Transcription and RNA Biosynthesis
-NUCLEIC ACID TRANSPORT,PC1,Cluster 2,nucleic acid transport,RNA Export from Nucleus
-NUCLEOBASE-CONTAINING COMPOUND METABOLIC PROCESS,PC1,Cluster 2,nucleobase-containing compound metabolic process,Gene Transcription and RNA Biosynthesis
-NUCLEOCYTOPLASMIC TRANSPORT,PC1,Cluster 2,nucleocytoplasmic transport,RNA Export from Nucleus
-NUCLEUS ORGANIZATION,PC1,Cluster 2,nucleus organization,Other
-ORGANELLE ENVELOPE,PC2,Cluster 1,organelle envelope,Mitochondrial Membrane
-ORGANELLE INNER MEMBRANE,PC2,Cluster 1,organelle inner membrane,Mitochondrial Membrane
-ORGANELLE MEMBRANE,PC2,Cluster 1,organelle membrane,Other
-ORGANELLE ORGANIZATION,PC1,Cluster 2,organelle organization,Cellular Component Organization
-ORGANIC CYCLIC COMPOUND METABOLIC PROCESS,PC1,Cluster 2,organic cyclic compound metabolic process,Gene Transcription and RNA Biosynthesis
-ORGANIC SUBSTANCE METABOLIC PROCESS,PC1,Cluster 2,organic substance metabolic process,Gene Transcription and RNA Biosynthesis
-ORGANONITROGEN COMPOUND METABOLIC PROCESS,PC1,Cluster 2,organonitrogen compound metabolic process,Gene Transcription and RNA Biosynthesis
-OXIDATIVE PHOSPHORYLATION,PC2,Cluster 2,oxidative phosphorylation,Oxidative Phosphorylation
-PEPTIDYL-LYSINE MODIFICATION,PC1,Cluster 2,peptidyl-lysine modification,Other
-PHOSPHATIDYLINOSITOL 3-KINASE SIGNALING,PC2,Cluster 2,phosphatidylinositol 3-kinase signaling,PI3-Kinase Signaling
-POSITIVE REGULATION OF ALPHA-BETA T CELL PROLIFERATION,PC2,Cluster 2,positive regulation of alpha-beta T cell proliferation,Activation of Immune Response
-POSITIVE REGULATION OF BIOLOGICAL PROCESS,PC1,Cluster 2,positive regulation of biological process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF BIOSYNTHETIC PROCESS,PC1,Cluster 2,positive regulation of biosynthetic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF CATALYTIC ACTIVITY,PC2,Cluster 2,positive regulation of catalytic activity,Other
-POSITIVE REGULATION OF CELL ACTIVATION,PC2,Cluster 2,positive regulation of cell activation,Activation of Immune Response
-POSITIVE REGULATION OF CELL COMMUNICATION,PC2,Cluster 2,positive regulation of cell communication,Cell Signaling in Response to Stumulus
-POSITIVE REGULATION OF CELL MOTILITY,PC2,Cluster 2,positive regulation of cell motility,Cell Migration
-POSITIVE REGULATION OF CELL POPULATION PROLIFERATION,PC2,Cluster 2,positive regulation of cell population proliferation,Other
-POSITIVE REGULATION OF CELLULAR BIOSYNTHETIC PROCESS,PC1,Cluster 2,positive regulation of cellular biosynthetic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF CELLULAR COMPONENT MOVEMENT,PC2,Cluster 2,positive regulation of cellular component movement,Cell Migration
-POSITIVE REGULATION OF CELLULAR METABOLIC PROCESS,PC1,Cluster 2,positive regulation of cellular metabolic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF CELLULAR PROCESS,PC2,Cluster 2,positive regulation of cellular process,Cell Signaling in Response to Stumulus
-POSITIVE REGULATION OF CELLULAR PROCESS,PC1,Cluster 2,positive regulation of cellular process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF CYTOSOLIC CALCIUM ION CONCENTRATION,PC2,Cluster 2,positive regulation of cytosolic calcium ion concentration,Calcium Homeostasis
-POSITIVE REGULATION OF ESTABLISHMENT OF PROTEIN LOCALIZATION TO TELOMERE,PC1,Cluster 2,positive regulation of establishment of protein localization to telomere,RNA and Protein Localization to Telomere
-POSITIVE REGULATION OF GENE EXPRESSION,PC1,Cluster 2,positive regulation of gene expression,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF I-KAPPAB KINASE/NF-KAPPAB SIGNALING,PC1,Cluster 2,positive regulation of I-kappaB kinase/NF-kappaB signaling,NFKB Signaling
-POSITIVE REGULATION OF IMMUNE RESPONSE,PC2,Cluster 2,positive regulation of immune response,Activation of Immune Response
-POSITIVE REGULATION OF IMMUNE SYSTEM PROCESS,PC2,Cluster 2,positive regulation of immune system process,Activation of Immune Response
-POSITIVE REGULATION OF INTRACELLULAR SIGNAL TRANSDUCTION,PC2,Cluster 2,positive regulation of intracellular signal transduction,Cell Signaling in Response to Stumulus
-POSITIVE REGULATION OF LEUKOCYTE ACTIVATION,PC2,Cluster 2,positive regulation of leukocyte activation,Activation of Immune Response
-POSITIVE REGULATION OF LEUKOCYTE PROLIFERATION,PC2,Cluster 2,positive regulation of leukocyte proliferation,Activation of Immune Response
-POSITIVE REGULATION OF LOCOMOTION,PC2,Cluster 2,positive regulation of locomotion,Cell Migration
-POSITIVE REGULATION OF LYMPHOCYTE ACTIVATION,PC2,Cluster 2,positive regulation of lymphocyte activation,Activation of Immune Response
-POSITIVE REGULATION OF LYMPHOCYTE MIGRATION,PC2,Cluster 2,positive regulation of lymphocyte migration,Immune Cell Migration
-POSITIVE REGULATION OF LYMPHOCYTE PROLIFERATION,PC2,Cluster 2,positive regulation of lymphocyte proliferation,Activation of Immune Response
-POSITIVE REGULATION OF MACROMOLECULE BIOSYNTHETIC PROCESS,PC1,Cluster 2,positive regulation of macromolecule biosynthetic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF MACROMOLECULE METABOLIC PROCESS,PC1,Cluster 2,positive regulation of macromolecule metabolic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF METABOLIC PROCESS,PC1,Cluster 2,positive regulation of metabolic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF MOLECULAR FUNCTION,PC2,Cluster 2,positive regulation of molecular function,Other
-POSITIVE REGULATION OF MONONUCLEAR CELL PROLIFERATION,PC2,Cluster 2,positive regulation of mononuclear cell proliferation,Activation of Immune Response
-POSITIVE REGULATION OF NITROGEN COMPOUND METABOLIC PROCESS,PC1,Cluster 2,positive regulation of nitrogen compound metabolic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF NUCLEIC ACID-TEMPLATED TRANSCRIPTION,PC1,Cluster 2,positive regulation of nucleic acid-templated transcription,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF NUCLEOBASE-CONTAINING COMPOUND METABOLIC PROCESS,PC1,Cluster 2,positive regulation of nucleobase-containing compound metabolic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF PHOSPHATIDYLINOSITOL 3-KINASE SIGNALING,PC2,Cluster 2,positive regulation of phosphatidylinositol 3-kinase signaling,PI3-Kinase Signaling
-POSITIVE REGULATION OF PROTEIN LOCALIZATION TO CAJAL BODY,PC1,Cluster 2,positive regulation of protein localization to Cajal body,RNA and Protein Localization to Telomere
-"POSITIVE REGULATION OF PROTEIN LOCALIZATION TO CHROMOSOME, TELOMERIC REGION",PC1,Cluster 2,"positive regulation of protein localization to chromosome, telomeric region",RNA and Protein Localization to Telomere
-POSITIVE REGULATION OF RESPONSE TO STIMULUS,PC2,Cluster 2,positive regulation of response to stimulus,Cell Signaling in Response to Stumulus
-POSITIVE REGULATION OF RHO PROTEIN SIGNAL TRANSDUCTION,PC2,Cluster 2,positive regulation of Rho protein signal transduction,Other
-POSITIVE REGULATION OF RNA BIOSYNTHETIC PROCESS,PC1,Cluster 2,positive regulation of RNA biosynthetic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF RNA METABOLIC PROCESS,PC1,Cluster 2,positive regulation of RNA metabolic process,Gene Transcription and RNA Biosynthesis
-POSITIVE REGULATION OF SIGNAL TRANSDUCTION,PC2,Cluster 2,positive regulation of signal transduction,Cell Signaling in Response to Stumulus
-POSITIVE REGULATION OF SIGNALING,PC2,Cluster 2,positive regulation of signaling,Cell Signaling in Response to Stumulus
-POSITIVE REGULATION OF SMALL GTPASE MEDIATED SIGNAL TRANSDUCTION,PC2,Cluster 2,positive regulation of small GTPase mediated signal transduction,Other
-POSITIVE REGULATION OF T CELL MIGRATION,PC2,Cluster 2,positive regulation of T cell migration,Immune Cell Migration
-POSITIVE REGULATION OF T CELL PROLIFERATION,PC2,Cluster 2,positive regulation of T cell proliferation,Activation of Immune Response
-POSITIVE REGULATION OF TELOMERASE RNA LOCALIZATION TO CAJAL BODY,PC1,Cluster 2,positive regulation of telomerase RNA localization to Cajal body,RNA and Protein Localization to Telomere
-POSITIVE REGULATION OF TRANSCRIPTION BY RNA POLYMERASE II,PC1,Cluster 2,positive regulation of transcription by RNA polymerase II,Gene Transcription and RNA Biosynthesis
-"POSITIVE REGULATION OF TRANSCRIPTION, DNA-TEMPLATED",PC1,Cluster 2,"positive regulation of transcription, DNA-templated",Gene Transcription and RNA Biosynthesis
-POSITIVE T CELL SELECTION,PC2,Cluster 2,positive T cell selection,Activation of Immune Response
-POSITIVE THYMIC T CELL SELECTION,PC2,Cluster 2,positive thymic T cell selection,Activation of Immune Response
-POSTTRANSCRIPTIONAL REGULATION OF GENE EXPRESSION,PC1,Cluster 2,posttranscriptional regulation of gene expression,Other
-PRIMARY METABOLIC PROCESS,PC1,Cluster 2,primary metabolic process,Gene Transcription and RNA Biosynthesis
-PROTEIN EXPORT FROM NUCLEUS,PC1,Cluster 2,protein export from nucleus,RNA Export from Nucleus
-PROTEIN IMPORT INTO NUCLEUS,PC1,Cluster 2,protein import into nucleus,RNA Export from Nucleus
-PROTEIN K63-LINKED UBIQUITINATION,PC1,Cluster 2,protein K63-linked ubiquitination,Other
-PROTEIN LOCALIZATION,PC1,Cluster 2,protein localization,Protein Transport
-PROTEIN LOCALIZATION TO CAJAL BODY,PC1,Cluster 2,protein localization to Cajal body,RNA and Protein Localization to Telomere
-PROTEIN LOCALIZATION TO CHROMOSOME,PC1,Cluster 2,protein localization to chromosome,RNA and Protein Localization to Telomere
-"PROTEIN LOCALIZATION TO CHROMOSOME, TELOMERIC REGION",PC1,Cluster 2,"protein localization to chromosome, telomeric region",RNA and Protein Localization to Telomere
-PROTEIN LOCALIZATION TO NUCLEAR BODY,PC1,Cluster 2,protein localization to nuclear body,RNA and Protein Localization to Telomere
-PROTEIN LOCALIZATION TO NUCLEOPLASM,PC1,Cluster 2,protein localization to nucleoplasm,RNA and Protein Localization to Telomere
-PROTEIN LOCALIZATION TO NUCLEUS,PC1,Cluster 2,protein localization to nucleus,RNA Export from Nucleus
-PROTEIN LOCALIZATION TO ORGANELLE,PC1,Cluster 2,protein localization to organelle,Protein Transport
-PROTEIN METABOLIC PROCESS,PC1,Cluster 2,protein metabolic process,Gene Transcription and RNA Biosynthesis
-PROTEIN MODIFICATION BY SMALL PROTEIN CONJUGATION,PC1,Cluster 2,protein modification by small protein conjugation,Other
-PROTEIN MODIFICATION BY SMALL PROTEIN CONJUGATION OR REMOVAL,PC1,Cluster 2,protein modification by small protein conjugation or removal,Other
-PROTEIN MODIFICATION PROCESS,PC1,Cluster 2,protein modification process,Gene Transcription and RNA Biosynthesis
-PROTEIN SUMOYLATION,PC1,Cluster 2,protein sumoylation,Other
-PROTEIN TRANSPORT,PC1,Cluster 2,protein transport,Protein Transport
-PROTEIN UBIQUITINATION,PC1,Cluster 2,protein ubiquitination,Other
-PROTEIN-CONTAINING COMPLEX ASSEMBLY,PC1,Cluster 2,protein-containing complex assembly,Cellular Component Organization
-PROTEIN-CONTAINING COMPLEX SUBUNIT ORGANIZATION,PC1,Cluster 2,protein-containing complex subunit organization,Cellular Component Organization
-REGULATION OF ALPHA-BETA T CELL PROLIFERATION,PC2,Cluster 2,regulation of alpha-beta T cell proliferation,Activation of Immune Response
-REGULATION OF APOPTOTIC PROCESS,PC2,Cluster 2,regulation of apoptotic process,Cell Death
-REGULATION OF BIOLOGICAL PROCESS,PC2,Cluster 2,regulation of biological process,Cell Signaling in Response to Stumulus
-REGULATION OF CATABOLIC PROCESS,PC1,Cluster 2,regulation of catabolic process,Catabolic Process
-REGULATION OF CELL ACTIVATION,PC2,Cluster 2,regulation of cell activation,Activation of Immune Response
-REGULATION OF CELL ADHESION,PC2,Cluster 2,regulation of cell adhesion,Activation of Immune Response
-REGULATION OF CELL DEATH,PC2,Cluster 2,regulation of cell death,Cell Death
-REGULATION OF CELL MOTILITY,PC2,Cluster 2,regulation of cell motility,Cell Migration
-REGULATION OF CELL POPULATION PROLIFERATION,PC2,Cluster 2,regulation of cell population proliferation,Other
-REGULATION OF CELL-CELL ADHESION,PC2,Cluster 2,regulation of cell-cell adhesion,Activation of Immune Response
-REGULATION OF CELLULAR CATABOLIC PROCESS,PC1,Cluster 2,regulation of cellular catabolic process,Catabolic Process
-REGULATION OF CELLULAR LOCALIZATION,PC1,Cluster 2,regulation of cellular localization,Other
-REGULATION OF CELLULAR METABOLIC PROCESS,PC1,Cluster 2,regulation of cellular metabolic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF CELLULAR PROTEIN LOCALIZATION,PC1,Cluster 2,regulation of cellular protein localization,Other
-REGULATION OF ESTABLISHMENT OF PROTEIN LOCALIZATION TO CHROMOSOME,PC1,Cluster 2,regulation of establishment of protein localization to chromosome,RNA and Protein Localization to Telomere
-REGULATION OF ESTABLISHMENT OF PROTEIN LOCALIZATION TO TELOMERE,PC1,Cluster 2,regulation of establishment of protein localization to telomere,RNA and Protein Localization to Telomere
-REGULATION OF GENE EXPRESSION,PC1,Cluster 2,regulation of gene expression,Gene Transcription and RNA Biosynthesis
-REGULATION OF I-KAPPAB KINASE/NF-KAPPAB SIGNALING,PC1,Cluster 2,regulation of I-kappaB kinase/NF-kappaB signaling,NFKB Signaling
-REGULATION OF IMMUNE RESPONSE,PC2,Cluster 2,regulation of immune response,Activation of Immune Response
-REGULATION OF IMMUNE SYSTEM PROCESS,PC2,Cluster 2,regulation of immune system process,Activation of Immune Response
-REGULATION OF ION TRANSPORT,PC2,Cluster 2,regulation of ion transport,Other
-REGULATION OF LEUKOCYTE ACTIVATION,PC2,Cluster 2,regulation of leukocyte activation,Activation of Immune Response
-REGULATION OF LEUKOCYTE CELL-CELL ADHESION,PC2,Cluster 2,regulation of leukocyte cell-cell adhesion,Activation of Immune Response
-REGULATION OF LEUKOCYTE PROLIFERATION,PC2,Cluster 2,regulation of leukocyte proliferation,Activation of Immune Response
-REGULATION OF LOCOMOTION,PC2,Cluster 2,regulation of locomotion,Cell Migration
-REGULATION OF LYMPHOCYTE ACTIVATION,PC2,Cluster 2,regulation of lymphocyte activation,Activation of Immune Response
-REGULATION OF LYMPHOCYTE MIGRATION,PC2,Cluster 2,regulation of lymphocyte migration,Immune Cell Migration
-REGULATION OF LYMPHOCYTE PROLIFERATION,PC2,Cluster 2,regulation of lymphocyte proliferation,Activation of Immune Response
-REGULATION OF MACROMOLECULE BIOSYNTHETIC PROCESS,PC1,Cluster 2,regulation of macromolecule biosynthetic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF MACROMOLECULE METABOLIC PROCESS,PC1,Cluster 2,regulation of macromolecule metabolic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF METABOLIC PROCESS,PC1,Cluster 2,regulation of metabolic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF MICROTUBULE BINDING,PC1,Cluster 2,regulation of microtubule binding,Other
-REGULATION OF MOLECULAR FUNCTION,PC2,Cluster 2,regulation of molecular function,Other
-REGULATION OF MONONUCLEAR CELL PROLIFERATION,PC2,Cluster 2,regulation of mononuclear cell proliferation,Activation of Immune Response
-REGULATION OF MRNA METABOLIC PROCESS,PC1,Cluster 2,regulation of mRNA metabolic process,RNA Processing
-"REGULATION OF MRNA SPLICING, VIA SPLICEOSOME",PC1,Cluster 2,"regulation of mRNA splicing, via spliceosome",RNA Processing
-REGULATION OF NERVOUS SYSTEM PROCESS,PC2,Cluster 2,regulation of nervous system process,Other
-REGULATION OF NITROGEN COMPOUND METABOLIC PROCESS,PC1,Cluster 2,regulation of nitrogen compound metabolic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF NUCLEOBASE-CONTAINING COMPOUND METABOLIC PROCESS,PC1,Cluster 2,regulation of nucleobase-containing compound metabolic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF PHOSPHATIDYLINOSITOL 3-KINASE SIGNALING,PC2,Cluster 2,regulation of phosphatidylinositol 3-kinase signaling,PI3-Kinase Signaling
-REGULATION OF PRIMARY METABOLIC PROCESS,PC1,Cluster 2,regulation of primary metabolic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF PROGRAMMED CELL DEATH,PC2,Cluster 2,regulation of programmed cell death,Cell Death
-REGULATION OF PROTEIN LOCALIZATION TO CAJAL BODY,PC1,Cluster 2,regulation of protein localization to Cajal body,RNA and Protein Localization to Telomere
-"REGULATION OF PROTEIN LOCALIZATION TO CHROMOSOME, TELOMERIC REGION",PC1,Cluster 2,"regulation of protein localization to chromosome, telomeric region",RNA and Protein Localization to Telomere
-REGULATION OF PROTEIN LOCALIZATION TO NUCLEUS,PC1,Cluster 2,regulation of protein localization to nucleus,RNA Export from Nucleus
-REGULATION OF RESPONSE TO STIMULUS,PC2,Cluster 2,regulation of response to stimulus,Cell Signaling in Response to Stumulus
-REGULATION OF RNA METABOLIC PROCESS,PC1,Cluster 2,regulation of RNA metabolic process,Gene Transcription and RNA Biosynthesis
-REGULATION OF SMALL GTPASE MEDIATED SIGNAL TRANSDUCTION,PC2,Cluster 2,regulation of small GTPase mediated signal transduction,Other
-REGULATION OF SYNAPSE MATURATION,PC2,Cluster 2,regulation of synapse maturation,Other
-REGULATION OF T CELL ACTIVATION,PC2,Cluster 2,regulation of T cell activation,Activation of Immune Response
-REGULATION OF T CELL MIGRATION,PC2,Cluster 2,regulation of T cell migration,Immune Cell Migration
-REGULATION OF T CELL PROLIFERATION,PC2,Cluster 2,regulation of T cell proliferation,Activation of Immune Response
-REGULATION OF TELOMERASE RNA LOCALIZATION TO CAJAL BODY,PC1,Cluster 2,regulation of telomerase RNA localization to Cajal body,RNA and Protein Localization to Telomere
-RESPONSE TO BIOTIC STIMULUS,PC2,Cluster 2,response to biotic stimulus,Other
-RESPONSE TO EXTERNAL BIOTIC STIMULUS,PC2,Cluster 2,response to external biotic stimulus,Other
-RESPONSE TO HEAT,PC1,Cluster 2,response to heat,Other
-RESPONSE TO OTHER ORGANISM,PC2,Cluster 2,response to other organism,Other
-RESPONSE TO STIMULUS,PC2,Cluster 2,response to stimulus,Cell Signaling in Response to Stumulus
-RIBONUCLEOPROTEIN COMPLEX BIOGENESIS,PC1,Cluster 2,ribonucleoprotein complex biogenesis,RNA Processing
-RIBONUCLEOPROTEIN COMPLEX EXPORT FROM NUCLEUS,PC1,Cluster 2,ribonucleoprotein complex export from nucleus,RNA Export from Nucleus
-RIBONUCLEOPROTEIN COMPLEX LOCALIZATION,PC1,Cluster 2,ribonucleoprotein complex localization,RNA Export from Nucleus
-RIBOSOMAL LARGE SUBUNIT BIOGENESIS,PC1,Cluster 2,ribosomal large subunit biogenesis,Other
-RIBOSOMAL SMALL SUBUNIT BIOGENESIS,PC1,Cluster 2,ribosomal small subunit biogenesis,Other
-RIBOSOME BIOGENESIS,PC1,Cluster 2,ribosome biogenesis,RNA Processing
-RNA EXPORT FROM NUCLEUS,PC1,Cluster 2,RNA export from nucleus,RNA Export from Nucleus
-RNA LOCALIZATION,PC1,Cluster 2,RNA localization,RNA Export from Nucleus
-RNA LOCALIZATION TO CAJAL BODY,PC1,Cluster 2,RNA localization to Cajal body,RNA and Protein Localization to Telomere
-RNA LOCALIZATION TO NUCLEUS,PC1,Cluster 2,RNA localization to nucleus,RNA and Protein Localization to Telomere
-RNA METABOLIC PROCESS,PC1,Cluster 2,RNA metabolic process,Gene Transcription and RNA Biosynthesis
-RNA PROCESSING,PC1,Cluster 2,RNA processing,RNA Processing
-RNA SPLICING,PC1,Cluster 2,RNA splicing,RNA Processing
-"RNA SPLICING, VIA TRANSESTERIFICATION REACTIONS",PC1,Cluster 2,"RNA splicing, via transesterification reactions",RNA Processing
-"RNA SPLICING, VIA TRANSESTERIFICATION REACTIONS WITH BULGED ADENOSINE AS NUCLEOPHILE",PC1,Cluster 2,"RNA splicing, via transesterification reactions with bulged adenosine as nucleophile",RNA Processing
-RNA TRANSPORT,PC1,Cluster 2,RNA transport,RNA Export from Nucleus
-RRNA METABOLIC PROCESS,PC1,Cluster 2,rRNA metabolic process,RNA Processing
-RRNA PROCESSING,PC1,Cluster 2,rRNA processing,RNA Processing
-SIGNAL TRANSDUCTION,PC2,Cluster 2,signal transduction,Cell Signaling in Response to Stumulus
-SIGNALING,PC2,Cluster 2,signaling,Cell Signaling in Response to Stumulus
-SYMBIOTIC PROCESS,PC1,Cluster 2,symbiotic process,Other
-T CELL ACTIVATION,PC2,Cluster 2,T cell activation,Activation of Immune Response
-T CELL DIFFERENTIATION,PC2,Cluster 2,T cell differentiation,Activation of Immune Response
-T CELL DIFFERENTIATION IN THYMUS,PC2,Cluster 2,T cell differentiation in thymus,Activation of Immune Response
-T CELL MIGRATION,PC2,Cluster 2,T cell migration,Immune Cell Migration
-T CELL PROLIFERATION,PC2,Cluster 2,T cell proliferation,Activation of Immune Response
-T CELL SELECTION,PC2,Cluster 2,T cell selection,Activation of Immune Response
-TELOMERASE RNA LOCALIZATION,PC1,Cluster 2,telomerase RNA localization,RNA and Protein Localization to Telomere
-TELOMERASE RNA LOCALIZATION TO CAJAL BODY,PC1,Cluster 2,telomerase RNA localization to Cajal body,RNA and Protein Localization to Telomere
-THYMIC T CELL SELECTION,PC2,Cluster 2,thymic T cell selection,Activation of Immune Response
-VESICLE BUDDING FROM MEMBRANE,PC1,Cluster 2,vesicle budding from membrane,Other
-VESICLE ORGANIZATION,PC1,Cluster 2,vesicle organization,Other
-VIRAL PROCESS,PC1,Cluster 2,viral process,Other
+"","Category","PC","Cluster","Term","ClusterName","NumDEInCat","FDR"
+"1","ACTIVATION OF IMMUNE RESPONSE","PC2","Cluster 2","activation of immune response","Activation of Immune Response",22,0.00812399376877123
+"2","ALPHA-BETA T CELL PROLIFERATION","PC2","Cluster 2","alpha-beta T cell proliferation","Activation of Immune Response",5,0.03842399358569
+"3","ANTIGEN RECEPTOR-MEDIATED SIGNALING PATHWAY","PC2","Cluster 2","antigen receptor-mediated signaling pathway","Activation of Immune Response",17,0.00213499537401225
+"4","ATP SYNTHESIS COUPLED ELECTRON TRANSPORT","PC2","Cluster 2","ATP synthesis coupled electron transport","Oxidative Phosphorylation",7,0.0476165806573418
+"5","B CELL RECEPTOR SIGNALING PATHWAY","PC2","Cluster 2","B cell receptor signaling pathway","Activation of Immune Response",10,0.00304516596977763
+"6","BIOLOGICAL ADHESION","PC2","Cluster 2","biological adhesion","Activation of Immune Response",47,0.00187863772538275
+"7","CALCIUM ION HOMEOSTASIS","PC2","Cluster 2","calcium ion homeostasis","Calcium Homeostasis",19,0.00945435916091827
+"8","CATABOLIC PROCESS","PC1","Cluster 2","catabolic process","Catabolic Process",102,0.0462108802934698
+"9","CATION TRANSPORT","PC2","Cluster 2","cation transport","Other",31,0.0437629256648768
+"10","CELL ACTIVATION","PC2","Cluster 2","cell activation","Activation of Immune Response",53,1.18396784759911e-05
+"11","CELL ADHESION","PC2","Cluster 2","cell adhesion","Activation of Immune Response",47,0.00169221180156904
+"12","CELL COMMUNICATION","PC2","Cluster 2","cell communication","Cell Signaling in Response to Stumulus",133,9.66008369837228e-05
+"13","CELL MIGRATION","PC2","Cluster 2","cell migration","Cell Migration",43,0.0312122836040459
+"14","CELL MOTILITY","PC2","Cluster 2","cell motility","Cell Migration",46,0.0253833927051374
+"15","CELL POPULATION PROLIFERATION","PC2","Cluster 2","cell population proliferation","Other",51,0.011675176460155
+"16","CELL-CELL ADHESION","PC2","Cluster 2","cell-cell adhesion","Activation of Immune Response",33,0.00203494338855187
+"17","CELLULAR AROMATIC COMPOUND METABOLIC PROCESS","PC1","Cluster 2","cellular aromatic compound metabolic process","Gene Transcription and RNA Biosynthesis",197,0.0102718368109263
+"18","CELLULAR CALCIUM ION HOMEOSTASIS","PC2","Cluster 2","cellular calcium ion homeostasis","Calcium Homeostasis",19,0.00720095293464702
+"19","CELLULAR CATABOLIC PROCESS","PC1","Cluster 2","cellular catabolic process","Catabolic Process",93,0.0221313853265272
+"20","CELLULAR COMPONENT BIOGENESIS","PC1","Cluster 2","cellular component biogenesis","Cellular Component Organization",139,1.84610950853342e-06
+"21","CELLULAR COMPONENT ORGANIZATION","PC1","Cluster 2","cellular component organization","Cellular Component Organization",212,0.0321951513069783
+"22","CELLULAR COMPONENT ORGANIZATION OR BIOGENESIS","PC1","Cluster 2","cellular component organization or biogenesis","Cellular Component Organization",239,5.22717672192426e-06
+"23","CELLULAR DIVALENT INORGANIC CATION HOMEOSTASIS","PC2","Cluster 2","cellular divalent inorganic cation homeostasis","Calcium Homeostasis",19,0.0149616075569843
+"24","CELLULAR LOCALIZATION","PC1","Cluster 2","cellular localization","Protein Transport",142,0.000139963496079358
+"25","CELLULAR MACROMOLECULE BIOSYNTHETIC PROCESS","PC1","Cluster 2","cellular macromolecule biosynthetic process","Gene Transcription and RNA Biosynthesis",164,0.0368745041216197
+"26","CELLULAR MACROMOLECULE CATABOLIC PROCESS","PC1","Cluster 2","cellular macromolecule catabolic process","Catabolic Process",60,0.00182170029258267
+"27","CELLULAR MACROMOLECULE LOCALIZATION","PC1","Cluster 2","cellular macromolecule localization","Protein Transport",96,3.15278311568598e-05
+"28","CELLULAR MACROMOLECULE METABOLIC PROCESS","PC1","Cluster 2","cellular macromolecule metabolic process","Gene Transcription and RNA Biosynthesis",281,2.18438937296869e-06
+"29","CELLULAR METABOLIC PROCESS","PC1","Cluster 2","cellular metabolic process","Gene Transcription and RNA Biosynthesis",339,5.81463062172024e-06
+"30","CELLULAR NITROGEN COMPOUND BIOSYNTHETIC PROCESS","PC1","Cluster 2","cellular nitrogen compound biosynthetic process","Gene Transcription and RNA Biosynthesis",163,0.0303195825487051
+"31","CELLULAR NITROGEN COMPOUND METABOLIC PROCESS","PC1","Cluster 2","cellular nitrogen compound metabolic process","Gene Transcription and RNA Biosynthesis",217,0.000939924345284876
+"32","CELLULAR PROTEIN LOCALIZATION","PC1","Cluster 2","cellular protein localization","Protein Transport",96,2.55413538029925e-05
+"33","CELLULAR PROTEIN METABOLIC PROCESS","PC1","Cluster 2","cellular protein metabolic process","Gene Transcription and RNA Biosynthesis",194,2.09210577577575e-05
+"34","CELLULAR PROTEIN MODIFICATION PROCESS","PC1","Cluster 2","cellular protein modification process","Gene Transcription and RNA Biosynthesis",164,4.31919509875368e-05
+"35","CELLULAR RESPONSE TO HEAT","PC1","Cluster 2","cellular response to heat","Other",13,0.0155010223084464
+"36","CELLULAR RESPONSE TO STIMULUS","PC2","Cluster 2","cellular response to stimulus","Cell Signaling in Response to Stumulus",138,0.0170976407102084
+"37","CHROMOSOME ORGANIZATION","PC1","Cluster 2","chromosome organization","Other",56,0.0326377401333696
+"38","DEFENSE RESPONSE TO OTHER ORGANISM","PC2","Cluster 2","defense response to other organism","Other",33,0.0156833707159673
+"39","DIVALENT INORGANIC CATION HOMEOSTASIS","PC2","Cluster 2","divalent inorganic cation homeostasis","Calcium Homeostasis",19,0.0224076421104087
+"40","ENDOMEMBRANE SYSTEM ORGANIZATION","PC1","Cluster 2","endomembrane system organization","Other",30,0.00695963509839874
+"41","ENDOTHELIAL CELL PROLIFERATION","PC2","Cluster 2","endothelial cell proliferation","Other",10,0.0358785269993868
+"42","ENVELOPE","PC2","Cluster 1","envelope","Mitochondrial Membrane",14,0.00455384502713335
+"43","EPITHELIAL CELL PROLIFERATION","PC2","Cluster 2","epithelial cell proliferation","Other",18,0.0149616075569843
+"44","ESTABLISHMENT OF LOCALIZATION IN CELL","PC1","Cluster 2","establishment of localization in cell","Protein Transport",114,0.00199792627091284
+"45","ESTABLISHMENT OF PROTEIN LOCALIZATION","PC1","Cluster 2","establishment of protein localization","Protein Transport",90,0.00255048555647029
+"46","ESTABLISHMENT OF PROTEIN LOCALIZATION TO CHROMOSOME","PC1","Cluster 2","establishment of protein localization to chromosome","RNA and Protein Localization to Telomere",6,0.0130575276841187
+"47","ESTABLISHMENT OF PROTEIN LOCALIZATION TO ORGANELLE","PC1","Cluster 2","establishment of protein localization to organelle","Protein Transport",35,0.00146601888259068
+"48","ESTABLISHMENT OF PROTEIN LOCALIZATION TO TELOMERE","PC1","Cluster 2","establishment of protein localization to telomere","RNA and Protein Localization to Telomere",5,0.0180081948351123
+"49","ESTABLISHMENT OF RNA LOCALIZATION","PC1","Cluster 2","establishment of RNA localization","RNA Export from Nucleus",18,0.00393480808902821
+"50","G PROTEIN-COUPLED RECEPTOR SIGNALING PATHWAY","PC2","Cluster 2","G protein-coupled receptor signaling pathway","Other",31,0.000151994875790502
+"51","GENE EXPRESSION","PC1","Cluster 2","gene expression","Gene Transcription and RNA Biosynthesis",210,1.03857417294326e-05
+"52","GOLGI VESICLE BUDDING","PC1","Cluster 2","Golgi vesicle budding","Other",10,0.0198328019574609
+"53","HETEROCYCLE METABOLIC PROCESS","PC1","Cluster 2","heterocycle metabolic process","Gene Transcription and RNA Biosynthesis",198,0.00488245841305043
+"54","I-KAPPAB KINASE/NF-KAPPAB SIGNALING","PC1","Cluster 2","I-kappaB kinase/NF-kappaB signaling","NFKB Signaling",21,0.0155727508580111
+"55","IMMUNE RESPONSE","PC2","Cluster 2","immune response","Activation of Immune Response",62,5.14022328126806e-05
+"56","IMMUNE RESPONSE-ACTIVATING CELL SURFACE RECEPTOR SIGNALING PATHWAY","PC2","Cluster 2","immune response-activating cell surface receptor signaling pathway","Activation of Immune Response",19,0.0145440885656433
+"57","IMMUNE RESPONSE-ACTIVATING SIGNAL TRANSDUCTION","PC2","Cluster 2","immune response-activating signal transduction","Activation of Immune Response",19,0.0145440885656433
+"58","IMMUNE RESPONSE-REGULATING CELL SURFACE RECEPTOR SIGNALING PATHWAY","PC2","Cluster 2","immune response-regulating cell surface receptor signaling pathway","Activation of Immune Response",19,0.0285039928176106
+"59","IMMUNE RESPONSE-REGULATING SIGNALING PATHWAY","PC2","Cluster 2","immune response-regulating signaling pathway","Activation of Immune Response",19,0.0301026776516226
+"60","IMMUNE SYSTEM PROCESS","PC2","Cluster 2","immune system process","Activation of Immune Response",79,0.000227192735334067
+"61","IMPORT INTO NUCLEUS","PC1","Cluster 2","import into nucleus","RNA Export from Nucleus",15,0.0165262306686696
+"62","INTERSPECIES INTERACTION BETWEEN ORGANISMS","PC1","Cluster 2","interspecies interaction between organisms","Other",82,0.0215390470799337
+"63","INTRACELLULAR PROTEIN TRANSPORT","PC1","Cluster 2","intracellular protein transport","Protein Transport",60,0.00128133665258924
+"64","INTRACELLULAR SIGNAL TRANSDUCTION","PC2","Cluster 2","intracellular signal transduction","Cell Signaling in Response to Stumulus",74,0.00251046294790277
+"65","INTRACELLULAR TRANSPORT","PC1","Cluster 2","intracellular transport","Protein Transport",85,0.000222366602798139
+"66","LEUKOCYTE ACTIVATION","PC2","Cluster 2","leukocyte activation","Activation of Immune Response",45,0.000261297583205652
+"67","LEUKOCYTE AGGREGATION","PC2","Cluster 2","leukocyte aggregation","Other",4,0.0170976407102084
+"68","LEUKOCYTE CELL-CELL ADHESION","PC2","Cluster 2","leukocyte cell-cell adhesion","Activation of Immune Response",20,0.000776295934632872
+"69","LEUKOCYTE PROLIFERATION","PC2","Cluster 2","leukocyte proliferation","Activation of Immune Response",15,0.011675176460155
+"70","LOCALIZATION OF CELL","PC2","Cluster 2","localization of cell","Cell Migration",46,0.0253833927051374
+"71","LYMPHOCYTE ACTIVATION","PC2","Cluster 2","lymphocyte activation","Activation of Immune Response",33,7.30759172940708e-05
+"72","LYMPHOCYTE AGGREGATION","PC2","Cluster 2","lymphocyte aggregation","Other",3,0.0149616075569843
+"73","LYMPHOCYTE DIFFERENTIATION","PC2","Cluster 2","lymphocyte differentiation","Activation of Immune Response",17,0.0170976407102084
+"74","LYMPHOCYTE MIGRATION","PC2","Cluster 2","lymphocyte migration","Immune Cell Migration",10,0.00257452525202591
+"75","LYMPHOCYTE PROLIFERATION","PC2","Cluster 2","lymphocyte proliferation","Activation of Immune Response",14,0.0133949833476066
+"76","MACROMOLECULE BIOSYNTHETIC PROCESS","PC1","Cluster 2","macromolecule biosynthetic process","Gene Transcription and RNA Biosynthesis",170,0.018848809852231
+"77","MACROMOLECULE CATABOLIC PROCESS","PC1","Cluster 2","macromolecule catabolic process","Catabolic Process",63,0.0310395100089558
+"78","MACROMOLECULE LOCALIZATION","PC1","Cluster 2","macromolecule localization","Protein Transport",121,0.0170522248187747
+"79","MACROMOLECULE METABOLIC PROCESS","PC1","Cluster 2","macromolecule metabolic process","Gene Transcription and RNA Biosynthesis",314,5.53841799693718e-07
+"80","MACROMOLECULE METHYLATION","PC1","Cluster 2","macromolecule methylation","Other",22,0.0134032362903191
+"81","MACROMOLECULE MODIFICATION","PC1","Cluster 2","macromolecule modification","Gene Transcription and RNA Biosynthesis",172,2.19826030273468e-05
+"82","MEMBRANE ORGANIZATION","PC1","Cluster 2","membrane organization","Other",43,0.0494356098960506
+"83","METABOLIC PROCESS","PC1","Cluster 2","metabolic process","Gene Transcription and RNA Biosynthesis",346,0.00119918902146586
+"84","MITOCHONDRIAL ATP SYNTHESIS COUPLED ELECTRON TRANSPORT","PC2","Cluster 2","mitochondrial ATP synthesis coupled electron transport","Oxidative Phosphorylation",7,0.0457180261165241
+"85","MITOCHONDRIAL ENVELOPE","PC2","Cluster 1","mitochondrial envelope","Mitochondrial Membrane",12,0.00152800559268805
+"86","MITOCHONDRIAL INNER MEMBRANE","PC2","Cluster 1","mitochondrial inner membrane","Mitochondrial Membrane",10,0.00151436555183073
+"87","MITOCHONDRIAL MEMBRANE","PC2","Cluster 1","mitochondrial membrane","Mitochondrial Membrane",12,0.00151436555183073
+"88","MITOCHONDRIAL PROTEIN COMPLEX","PC2","Cluster 1","mitochondrial protein complex","Mitochondrial Membrane",8,0.00151436555183073
+"89","MITOCHONDRION","PC2","Cluster 1","mitochondrion","Mitochondrial Membrane",15,0.0227734506964359
+"90","MONONUCLEAR CELL PROLIFERATION","PC2","Cluster 2","mononuclear cell proliferation","Activation of Immune Response",14,0.0145440885656433
+"91","MRNA EXPORT FROM NUCLEUS","PC1","Cluster 2","mRNA export from nucleus","RNA Export from Nucleus",12,0.013277458607696
+"92","MRNA METABOLIC PROCESS","PC1","Cluster 2","mRNA metabolic process","RNA Processing",49,0.000193311789637645
+"93","MRNA PROCESSING","PC1","Cluster 2","mRNA processing","RNA Processing",32,0.00577692327454498
+"94","MRNA SPLICING, VIA SPLICEOSOME","PC1","Cluster 2","mRNA splicing, via spliceosome","RNA Processing",27,0.000784588685226003
+"95","MRNA TRANSPORT","PC1","Cluster 2","mRNA transport","RNA Export from Nucleus",14,0.0155010223084464
+"96","MRNA-CONTAINING RIBONUCLEOPROTEIN COMPLEX EXPORT FROM NUCLEUS","PC1","Cluster 2","mRNA-containing ribonucleoprotein complex export from nucleus","RNA Export from Nucleus",12,0.013277458607696
+"97","NCRNA EXPORT FROM NUCLEUS","PC1","Cluster 2","ncRNA export from nucleus","RNA Export from Nucleus",7,0.0221313853265272
+"98","NCRNA METABOLIC PROCESS","PC1","Cluster 2","ncRNA metabolic process","RNA Processing",33,0.000822041756986931
+"99","NCRNA PROCESSING","PC1","Cluster 2","ncRNA processing","RNA Processing",31,0.000100352824948481
+"100","NEGATIVE REGULATION OF BIOLOGICAL PROCESS","PC1","Cluster 2","negative regulation of biological process","Other",184,0.0250127883390085
+"101","NEGATIVE REGULATION OF CYTOKINE-MEDIATED SIGNALING PATHWAY","PC2","Cluster 2","negative regulation of cytokine-mediated signaling pathway","Other",6,0.0383378886815122
+"102","NITROGEN COMPOUND METABOLIC PROCESS","PC1","Cluster 2","nitrogen compound metabolic process","Gene Transcription and RNA Biosynthesis",314,5.85048806612757e-05
+"103","NUCLEAR EXPORT","PC1","Cluster 2","nuclear export","RNA Export from Nucleus",17,0.0138154371862095
+"104","NUCLEAR TRANSPORT","PC1","Cluster 2","nuclear transport","RNA Export from Nucleus",28,0.000468543253912128
+"105","NUCLEIC ACID METABOLIC PROCESS","PC1","Cluster 2","nucleic acid metabolic process","Gene Transcription and RNA Biosynthesis",182,0.00131973995110886
+"106","NUCLEIC ACID TRANSPORT","PC1","Cluster 2","nucleic acid transport","RNA Export from Nucleus",18,0.00296496623697849
+"107","NUCLEOBASE-CONTAINING COMPOUND METABOLIC PROCESS","PC1","Cluster 2","nucleobase-containing compound metabolic process","Gene Transcription and RNA Biosynthesis",196,0.00170743815592255
+"108","NUCLEOCYTOPLASMIC TRANSPORT","PC1","Cluster 2","nucleocytoplasmic transport","RNA Export from Nucleus",27,0.00100346400190022
+"109","NUCLEUS ORGANIZATION","PC1","Cluster 2","nucleus organization","Other",14,0.00529192354739207
+"110","ORGANELLE ENVELOPE","PC2","Cluster 1","organelle envelope","Mitochondrial Membrane",14,0.00455384502713335
+"111","ORGANELLE INNER MEMBRANE","PC2","Cluster 1","organelle inner membrane","Mitochondrial Membrane",10,0.00231888119578543
+"112","ORGANELLE MEMBRANE","PC2","Cluster 1","organelle membrane","Other",25,0.00152800559268805
+"113","ORGANELLE ORGANIZATION","PC1","Cluster 2","organelle organization","Cellular Component Organization",155,0.00101191679130754
+"114","ORGANIC CYCLIC COMPOUND METABOLIC PROCESS","PC1","Cluster 2","organic cyclic compound metabolic process","Gene Transcription and RNA Biosynthesis",199,0.0375152242937396
+"115","ORGANIC SUBSTANCE METABOLIC PROCESS","PC1","Cluster 2","organic substance metabolic process","Gene Transcription and RNA Biosynthesis",336,0.000251543392307198
+"116","ORGANONITROGEN COMPOUND METABOLIC PROCESS","PC1","Cluster 2","organonitrogen compound metabolic process","Gene Transcription and RNA Biosynthesis",215,0.0269595057899695
+"117","OXIDATIVE PHOSPHORYLATION","PC2","Cluster 2","oxidative phosphorylation","Oxidative Phosphorylation",9,0.0272304320234221
+"118","PEPTIDYL-LYSINE MODIFICATION","PC1","Cluster 2","peptidyl-lysine modification","Other",28,0.00455679598216165
+"119","PHOSPHATIDYLINOSITOL 3-KINASE SIGNALING","PC2","Cluster 2","phosphatidylinositol 3-kinase signaling","PI3-Kinase Signaling",10,0.0458132444177929
+"120","POSITIVE REGULATION OF ALPHA-BETA T CELL PROLIFERATION","PC2","Cluster 2","positive regulation of alpha-beta T cell proliferation","Activation of Immune Response",5,0.00607200509566963
+"121","POSITIVE REGULATION OF BIOLOGICAL PROCESS","PC1","Cluster 2","positive regulation of biological process","Gene Transcription and RNA Biosynthesis",216,0.000108756032950203
+"122","POSITIVE REGULATION OF BIOSYNTHETIC PROCESS","PC1","Cluster 2","positive regulation of biosynthetic process","Gene Transcription and RNA Biosynthesis",85,0.00199169311707228
+"123","POSITIVE REGULATION OF CATALYTIC ACTIVITY","PC2","Cluster 2","positive regulation of catalytic activity","Other",42,0.0378736114722723
+"124","POSITIVE REGULATION OF CELL ACTIVATION","PC2","Cluster 2","positive regulation of cell activation","Activation of Immune Response",19,0.00511602408126598
+"125","POSITIVE REGULATION OF CELL COMMUNICATION","PC2","Cluster 2","positive regulation of cell communication","Cell Signaling in Response to Stumulus",49,0.0216726996467721
+"126","POSITIVE REGULATION OF CELL MOTILITY","PC2","Cluster 2","positive regulation of cell motility","Cell Migration",22,0.0286950540627721
+"127","POSITIVE REGULATION OF CELL POPULATION PROLIFERATION","PC2","Cluster 2","positive regulation of cell population proliferation","Other",31,0.00676803146197474
+"128","POSITIVE REGULATION OF CELLULAR BIOSYNTHETIC PROCESS","PC1","Cluster 2","positive regulation of cellular biosynthetic process","Gene Transcription and RNA Biosynthesis",84,0.0018780526584672
+"129","POSITIVE REGULATION OF CELLULAR COMPONENT MOVEMENT","PC2","Cluster 2","positive regulation of cellular component movement","Cell Migration",22,0.0392000709932608
+"130","POSITIVE REGULATION OF CELLULAR METABOLIC PROCESS","PC1","Cluster 2","positive regulation of cellular metabolic process","Gene Transcription and RNA Biosynthesis",137,3.31422072473283e-05
+"131","POSITIVE REGULATION OF CELLULAR PROCESS","PC2","Cluster 2","positive regulation of cellular process","Cell Signaling in Response to Stumulus",116,0.0174421541443343
+"132","POSITIVE REGULATION OF CELLULAR PROCESS","PC1","Cluster 2","positive regulation of cellular process","Gene Transcription and RNA Biosynthesis",202,5.93387740580412e-05
+"133","POSITIVE REGULATION OF CYTOSOLIC CALCIUM ION CONCENTRATION","PC2","Cluster 2","positive regulation of cytosolic calcium ion concentration","Calcium Homeostasis",14,0.0262926974720972
+"134","POSITIVE REGULATION OF ESTABLISHMENT OF PROTEIN LOCALIZATION TO TELOMERE","PC1","Cluster 2","positive regulation of establishment of protein localization to telomere","RNA and Protein Localization to Telomere",5,0.000939924345284876
+"135","POSITIVE REGULATION OF GENE EXPRESSION","PC1","Cluster 2","positive regulation of gene expression","Gene Transcription and RNA Biosynthesis",88,0.0240431495480849
+"136","POSITIVE REGULATION OF I-KAPPAB KINASE/NF-KAPPAB SIGNALING","PC1","Cluster 2","positive regulation of I-kappaB kinase/NF-kappaB signaling","NFKB Signaling",16,0.0221313853265272
+"137","POSITIVE REGULATION OF IMMUNE RESPONSE","PC2","Cluster 2","positive regulation of immune response","Activation of Immune Response",25,0.0241079901890531
+"138","POSITIVE REGULATION OF IMMUNE SYSTEM PROCESS","PC2","Cluster 2","positive regulation of immune system process","Activation of Immune Response",38,0.000690688895528025
+"139","POSITIVE REGULATION OF INTRACELLULAR SIGNAL TRANSDUCTION","PC2","Cluster 2","positive regulation of intracellular signal transduction","Cell Signaling in Response to Stumulus",33,0.0211248520531011
+"140","POSITIVE REGULATION OF LEUKOCYTE ACTIVATION","PC2","Cluster 2","positive regulation of leukocyte activation","Activation of Immune Response",19,0.00350991122361518
+"141","POSITIVE REGULATION OF LEUKOCYTE PROLIFERATION","PC2","Cluster 2","positive regulation of leukocyte proliferation","Activation of Immune Response",11,0.00431613068669709
+"142","POSITIVE REGULATION OF LOCOMOTION","PC2","Cluster 2","positive regulation of locomotion","Cell Migration",22,0.03842399358569
+"143","POSITIVE REGULATION OF LYMPHOCYTE ACTIVATION","PC2","Cluster 2","positive regulation of lymphocyte activation","Activation of Immune Response",17,0.00720095293464702
+"144","POSITIVE REGULATION OF LYMPHOCYTE MIGRATION","PC2","Cluster 2","positive regulation of lymphocyte migration","Immune Cell Migration",6,0.00821631455546627
+"145","POSITIVE REGULATION OF LYMPHOCYTE PROLIFERATION","PC2","Cluster 2","positive regulation of lymphocyte proliferation","Activation of Immune Response",11,0.00242894822736179
+"146","POSITIVE REGULATION OF MACROMOLECULE BIOSYNTHETIC PROCESS","PC1","Cluster 2","positive regulation of macromolecule biosynthetic process","Gene Transcription and RNA Biosynthesis",83,0.000531481819074679
+"147","POSITIVE REGULATION OF MACROMOLECULE METABOLIC PROCESS","PC1","Cluster 2","positive regulation of macromolecule metabolic process","Gene Transcription and RNA Biosynthesis",139,0.000127499379179607
+"148","POSITIVE REGULATION OF METABOLIC PROCESS","PC1","Cluster 2","positive regulation of metabolic process","Gene Transcription and RNA Biosynthesis",149,9.81250568556174e-05
+"149","POSITIVE REGULATION OF MOLECULAR FUNCTION","PC2","Cluster 2","positive regulation of molecular function","Other",52,0.00979653283740957
+"150","POSITIVE REGULATION OF MONONUCLEAR CELL PROLIFERATION","PC2","Cluster 2","positive regulation of mononuclear cell proliferation","Activation of Immune Response",11,0.00251046294790277
+"151","POSITIVE REGULATION OF NITROGEN COMPOUND METABOLIC PROCESS","PC1","Cluster 2","positive regulation of nitrogen compound metabolic process","Gene Transcription and RNA Biosynthesis",130,4.83603557004705e-05
+"152","POSITIVE REGULATION OF NUCLEIC ACID-TEMPLATED TRANSCRIPTION","PC1","Cluster 2","positive regulation of nucleic acid-templated transcription","Gene Transcription and RNA Biosynthesis",72,0.00211242229119369
+"153","POSITIVE REGULATION OF NUCLEOBASE-CONTAINING COMPOUND METABOLIC PROCESS","PC1","Cluster 2","positive regulation of nucleobase-containing compound metabolic process","Gene Transcription and RNA Biosynthesis",86,0.00010037843033655
+"154","POSITIVE REGULATION OF PHOSPHATIDYLINOSITOL 3-KINASE SIGNALING","PC2","Cluster 2","positive regulation of phosphatidylinositol 3-kinase signaling","PI3-Kinase Signaling",8,0.0277271533295905
+"155","POSITIVE REGULATION OF PROTEIN LOCALIZATION TO CAJAL BODY","PC1","Cluster 2","positive regulation of protein localization to Cajal body","RNA and Protein Localization to Telomere",5,0.00176831974497296
+"156","POSITIVE REGULATION OF PROTEIN LOCALIZATION TO CHROMOSOME, TELOMERIC REGION","PC1","Cluster 2","positive regulation of protein localization to chromosome, telomeric region","RNA and Protein Localization to Telomere",6,0.000170750715566245
+"157","POSITIVE REGULATION OF RESPONSE TO STIMULUS","PC2","Cluster 2","positive regulation of response to stimulus","Cell Signaling in Response to Stumulus",63,0.00347903972437167
+"158","POSITIVE REGULATION OF RHO PROTEIN SIGNAL TRANSDUCTION","PC2","Cluster 2","positive regulation of Rho protein signal transduction","Other",6,0.00407152521384661
+"159","POSITIVE REGULATION OF RNA BIOSYNTHETIC PROCESS","PC1","Cluster 2","positive regulation of RNA biosynthetic process","Gene Transcription and RNA Biosynthesis",72,0.00215510535918724
+"160","POSITIVE REGULATION OF RNA METABOLIC PROCESS","PC1","Cluster 2","positive regulation of RNA metabolic process","Gene Transcription and RNA Biosynthesis",76,0.00137276441197451
+"161","POSITIVE REGULATION OF SIGNAL TRANSDUCTION","PC2","Cluster 2","positive regulation of signal transduction","Cell Signaling in Response to Stumulus",45,0.0285039928176106
+"162","POSITIVE REGULATION OF SIGNALING","PC2","Cluster 2","positive regulation of signaling","Cell Signaling in Response to Stumulus",49,0.0235160642377767
+"163","POSITIVE REGULATION OF SMALL GTPASE MEDIATED SIGNAL TRANSDUCTION","PC2","Cluster 2","positive regulation of small GTPase mediated signal transduction","Other",7,0.0478173838163424
+"164","POSITIVE REGULATION OF T CELL MIGRATION","PC2","Cluster 2","positive regulation of T cell migration","Immune Cell Migration",5,0.0225678554026716
+"165","POSITIVE REGULATION OF T CELL PROLIFERATION","PC2","Cluster 2","positive regulation of T cell proliferation","Activation of Immune Response",9,0.00669695769951234
+"166","POSITIVE REGULATION OF TELOMERASE RNA LOCALIZATION TO CAJAL BODY","PC1","Cluster 2","positive regulation of telomerase RNA localization to Cajal body","RNA and Protein Localization to Telomere",5,0.00487714420295249
+"167","POSITIVE REGULATION OF TRANSCRIPTION BY RNA POLYMERASE II","PC1","Cluster 2","positive regulation of transcription by RNA polymerase II","Gene Transcription and RNA Biosynthesis",56,0.00424561124016737
+"168","POSITIVE REGULATION OF TRANSCRIPTION, DNA-TEMPLATED","PC1","Cluster 2","positive regulation of transcription, DNA-templated","Gene Transcription and RNA Biosynthesis",69,0.00237918053808881
+"169","POSITIVE T CELL SELECTION","PC2","Cluster 2","positive T cell selection","Activation of Immune Response",8,0.000169405910143456
+"170","POSITIVE THYMIC T CELL SELECTION","PC2","Cluster 2","positive thymic T cell selection","Activation of Immune Response",5,0.00116633307526606
+"171","POSTTRANSCRIPTIONAL REGULATION OF GENE EXPRESSION","PC1","Cluster 2","posttranscriptional regulation of gene expression","Other",36,0.00765539450141811
+"172","PRIMARY METABOLIC PROCESS","PC1","Cluster 2","primary metabolic process","Gene Transcription and RNA Biosynthesis",321,0.000448619977721279
+"173","PROTEIN EXPORT FROM NUCLEUS","PC1","Cluster 2","protein export from nucleus","RNA Export from Nucleus",16,0.0141325102788668
+"174","PROTEIN IMPORT INTO NUCLEUS","PC1","Cluster 2","protein import into nucleus","RNA Export from Nucleus",13,0.0462108802934698
+"175","PROTEIN K63-LINKED UBIQUITINATION","PC1","Cluster 2","protein K63-linked ubiquitination","Other",8,0.025305237221825
+"176","PROTEIN LOCALIZATION","PC1","Cluster 2","protein localization","Protein Transport",112,0.00575558661256985
+"177","PROTEIN LOCALIZATION TO CAJAL BODY","PC1","Cluster 2","protein localization to Cajal body","RNA and Protein Localization to Telomere",5,0.002625272299914
+"178","PROTEIN LOCALIZATION TO CHROMOSOME","PC1","Cluster 2","protein localization to chromosome","RNA and Protein Localization to Telomere",10,0.0347033522748588
+"179","PROTEIN LOCALIZATION TO CHROMOSOME, TELOMERIC REGION","PC1","Cluster 2","protein localization to chromosome, telomeric region","RNA and Protein Localization to Telomere",6,0.0319297675773142
+"180","PROTEIN LOCALIZATION TO NUCLEAR BODY","PC1","Cluster 2","protein localization to nuclear body","RNA and Protein Localization to Telomere",5,0.002625272299914
+"181","PROTEIN LOCALIZATION TO NUCLEOPLASM","PC1","Cluster 2","protein localization to nucleoplasm","RNA and Protein Localization to Telomere",5,0.00459405031356488
+"182","PROTEIN LOCALIZATION TO NUCLEUS","PC1","Cluster 2","protein localization to nucleus","RNA Export from Nucleus",25,0.000193311789637645
+"183","PROTEIN LOCALIZATION TO ORGANELLE","PC1","Cluster 2","protein localization to organelle","Protein Transport",55,0.000226627371782286
+"184","PROTEIN METABOLIC PROCESS","PC1","Cluster 2","protein metabolic process","Gene Transcription and RNA Biosynthesis",199,0.000850925493986705
+"185","PROTEIN MODIFICATION BY SMALL PROTEIN CONJUGATION","PC1","Cluster 2","protein modification by small protein conjugation","Other",55,0.000119981279648609
+"186","PROTEIN MODIFICATION BY SMALL PROTEIN CONJUGATION OR REMOVAL","PC1","Cluster 2","protein modification by small protein conjugation or removal","Other",67,5.10527921422836e-06
+"187","PROTEIN MODIFICATION PROCESS","PC1","Cluster 2","protein modification process","Gene Transcription and RNA Biosynthesis",164,4.31919509875368e-05
+"188","PROTEIN SUMOYLATION","PC1","Cluster 2","protein sumoylation","Other",12,0.000822041756986931
+"189","PROTEIN TRANSPORT","PC1","Cluster 2","protein transport","Protein Transport",80,0.0442612372129518
+"190","PROTEIN UBIQUITINATION","PC1","Cluster 2","protein ubiquitination","Other",43,0.0319297675773142
+"191","PROTEIN-CONTAINING COMPLEX ASSEMBLY","PC1","Cluster 2","protein-containing complex assembly","Cellular Component Organization",70,0.0105153403586358
+"192","PROTEIN-CONTAINING COMPLEX SUBUNIT ORGANIZATION","PC1","Cluster 2","protein-containing complex subunit organization","Cellular Component Organization",78,0.0185172303041008
+"193","REGULATION OF ALPHA-BETA T CELL PROLIFERATION","PC2","Cluster 2","regulation of alpha-beta T cell proliferation","Activation of Immune Response",5,0.0262926974720972
+"194","REGULATION OF APOPTOTIC PROCESS","PC2","Cluster 2","regulation of apoptotic process","Cell Death",45,0.00480446361305102
+"195","REGULATION OF BIOLOGICAL PROCESS","PC2","Cluster 2","regulation of biological process","Cell Signaling in Response to Stumulus",194,0.031234768150375
+"196","REGULATION OF CATABOLIC PROCESS","PC1","Cluster 2","regulation of catabolic process","Catabolic Process",53,0.00575558661256985
+"197","REGULATION OF CELL ACTIVATION","PC2","Cluster 2","regulation of cell activation","Activation of Immune Response",24,0.0107730853509037
+"198","REGULATION OF CELL ADHESION","PC2","Cluster 2","regulation of cell adhesion","Activation of Immune Response",28,0.00943434247503563
+"199","REGULATION OF CELL DEATH","PC2","Cluster 2","regulation of cell death","Cell Death",48,0.00501041477774975
+"200","REGULATION OF CELL MOTILITY","PC2","Cluster 2","regulation of cell motility","Cell Migration",31,0.0362570458003662
+"201","REGULATION OF CELL POPULATION PROLIFERATION","PC2","Cluster 2","regulation of cell population proliferation","Other",46,0.00804740887883186
+"202","REGULATION OF CELL-CELL ADHESION","PC2","Cluster 2","regulation of cell-cell adhesion","Activation of Immune Response",18,0.0349485377386943
+"203","REGULATION OF CELLULAR CATABOLIC PROCESS","PC1","Cluster 2","regulation of cellular catabolic process","Catabolic Process",46,0.0105153403586358
+"204","REGULATION OF CELLULAR LOCALIZATION","PC1","Cluster 2","regulation of cellular localization","Other",48,0.0347200580404622
+"205","REGULATION OF CELLULAR METABOLIC PROCESS","PC1","Cluster 2","regulation of cellular metabolic process","Gene Transcription and RNA Biosynthesis",224,1.39716256393062e-05
+"206","REGULATION OF CELLULAR PROTEIN LOCALIZATION","PC1","Cluster 2","regulation of cellular protein localization","Other",33,0.0166444614992863
+"207","REGULATION OF ESTABLISHMENT OF PROTEIN LOCALIZATION TO CHROMOSOME","PC1","Cluster 2","regulation of establishment of protein localization to chromosome","RNA and Protein Localization to Telomere",5,0.00274367152511803
+"208","REGULATION OF ESTABLISHMENT OF PROTEIN LOCALIZATION TO TELOMERE","PC1","Cluster 2","regulation of establishment of protein localization to telomere","RNA and Protein Localization to Telomere",5,0.00170743815592255
+"209","REGULATION OF GENE EXPRESSION","PC1","Cluster 2","regulation of gene expression","Gene Transcription and RNA Biosynthesis",166,0.013721105934693
+"210","REGULATION OF I-KAPPAB KINASE/NF-KAPPAB SIGNALING","PC1","Cluster 2","regulation of I-kappaB kinase/NF-kappaB signaling","NFKB Signaling",19,0.0230020808236304
+"211","REGULATION OF IMMUNE RESPONSE","PC2","Cluster 2","regulation of immune response","Activation of Immune Response",35,0.00104616876047371
+"212","REGULATION OF IMMUNE SYSTEM PROCESS","PC2","Cluster 2","regulation of immune system process","Activation of Immune Response",47,0.00298471291568917
+"213","REGULATION OF ION TRANSPORT","PC2","Cluster 2","regulation of ion transport","Other",24,0.00657416392204095
+"214","REGULATION OF LEUKOCYTE ACTIVATION","PC2","Cluster 2","regulation of leukocyte activation","Activation of Immune Response",24,0.00456202143600942
+"215","REGULATION OF LEUKOCYTE CELL-CELL ADHESION","PC2","Cluster 2","regulation of leukocyte cell-cell adhesion","Activation of Immune Response",16,0.0139676138902785
+"216","REGULATION OF LEUKOCYTE PROLIFERATION","PC2","Cluster 2","regulation of leukocyte proliferation","Activation of Immune Response",14,0.00456202143600942
+"217","REGULATION OF LOCOMOTION","PC2","Cluster 2","regulation of locomotion","Cell Migration",32,0.031234768150375
+"218","REGULATION OF LYMPHOCYTE ACTIVATION","PC2","Cluster 2","regulation of lymphocyte activation","Activation of Immune Response",21,0.00804740887883186
+"219","REGULATION OF LYMPHOCYTE MIGRATION","PC2","Cluster 2","regulation of lymphocyte migration","Immune Cell Migration",8,0.00262851721099793
+"220","REGULATION OF LYMPHOCYTE PROLIFERATION","PC2","Cluster 2","regulation of lymphocyte proliferation","Activation of Immune Response",13,0.00719573846989464
+"221","REGULATION OF MACROMOLECULE BIOSYNTHETIC PROCESS","PC1","Cluster 2","regulation of macromolecule biosynthetic process","Gene Transcription and RNA Biosynthesis",140,0.0320103789250701
+"222","REGULATION OF MACROMOLECULE METABOLIC PROCESS","PC1","Cluster 2","regulation of macromolecule metabolic process","Gene Transcription and RNA Biosynthesis",219,0.000742219337391464
+"223","REGULATION OF METABOLIC PROCESS","PC1","Cluster 2","regulation of metabolic process","Gene Transcription and RNA Biosynthesis",238,9.81250568556174e-05
+"224","REGULATION OF MICROTUBULE BINDING","PC1","Cluster 2","regulation of microtubule binding","Other",4,0.0268856090076081
+"225","REGULATION OF MOLECULAR FUNCTION","PC2","Cluster 2","regulation of molecular function","Other",71,0.0277271533295905
+"226","REGULATION OF MONONUCLEAR CELL PROLIFERATION","PC2","Cluster 2","regulation of mononuclear cell proliferation","Activation of Immune Response",13,0.00756548445864455
+"227","REGULATION OF MRNA METABOLIC PROCESS","PC1","Cluster 2","regulation of mRNA metabolic process","RNA Processing",25,0.00270167213120127
+"228","REGULATION OF MRNA SPLICING, VIA SPLICEOSOME","PC1","Cluster 2","regulation of mRNA splicing, via spliceosome","RNA Processing",12,0.0106909669948002
+"229","REGULATION OF NERVOUS SYSTEM PROCESS","PC2","Cluster 2","regulation of nervous system process","Other",9,0.0246823863010454
+"230","REGULATION OF NITROGEN COMPOUND METABOLIC PROCESS","PC1","Cluster 2","regulation of nitrogen compound metabolic process","Gene Transcription and RNA Biosynthesis",202,0.00113794437283214
+"231","REGULATION OF NUCLEOBASE-CONTAINING COMPOUND METABOLIC PROCESS","PC1","Cluster 2","regulation of nucleobase-containing compound metabolic process","Gene Transcription and RNA Biosynthesis",142,0.0225195947961876
+"232","REGULATION OF PHOSPHATIDYLINOSITOL 3-KINASE SIGNALING","PC2","Cluster 2","regulation of phosphatidylinositol 3-kinase signaling","PI3-Kinase Signaling",9,0.0470315003936476
+"233","REGULATION OF PRIMARY METABOLIC PROCESS","PC1","Cluster 2","regulation of primary metabolic process","Gene Transcription and RNA Biosynthesis",209,0.000742219337391464
+"234","REGULATION OF PROGRAMMED CELL DEATH","PC2","Cluster 2","regulation of programmed cell death","Cell Death",45,0.00653406954458305
+"235","REGULATION OF PROTEIN LOCALIZATION TO CAJAL BODY","PC1","Cluster 2","regulation of protein localization to Cajal body","RNA and Protein Localization to Telomere",5,0.00176831974497296
+"236","REGULATION OF PROTEIN LOCALIZATION TO CHROMOSOME, TELOMERIC REGION","PC1","Cluster 2","regulation of protein localization to chromosome, telomeric region","RNA and Protein Localization to Telomere",6,0.000500438546621401
+"237","REGULATION OF PROTEIN LOCALIZATION TO NUCLEUS","PC1","Cluster 2","regulation of protein localization to nucleus","RNA Export from Nucleus",12,0.0321951513069783
+"238","REGULATION OF RESPONSE TO STIMULUS","PC2","Cluster 2","regulation of response to stimulus","Cell Signaling in Response to Stumulus",93,0.0231716657614921
+"239","REGULATION OF RNA METABOLIC PROCESS","PC1","Cluster 2","regulation of RNA metabolic process","Gene Transcription and RNA Biosynthesis",132,0.0396745991631932
+"240","REGULATION OF SMALL GTPASE MEDIATED SIGNAL TRANSDUCTION","PC2","Cluster 2","regulation of small GTPase mediated signal transduction","Other",17,0.0253833927051374
+"241","REGULATION OF SYNAPSE MATURATION","PC2","Cluster 2","regulation of synapse maturation","Other",4,0.0242017263530618
+"242","REGULATION OF T CELL ACTIVATION","PC2","Cluster 2","regulation of T cell activation","Activation of Immune Response",15,0.0392000709932608
+"243","REGULATION OF T CELL MIGRATION","PC2","Cluster 2","regulation of T cell migration","Immune Cell Migration",7,0.00211542258451305
+"244","REGULATION OF T CELL PROLIFERATION","PC2","Cluster 2","regulation of T cell proliferation","Activation of Immune Response",11,0.0115437453634173
+"245","REGULATION OF TELOMERASE RNA LOCALIZATION TO CAJAL BODY","PC1","Cluster 2","regulation of telomerase RNA localization to Cajal body","RNA and Protein Localization to Telomere",5,0.0151187264927003
+"246","RESPONSE TO BIOTIC STIMULUS","PC2","Cluster 2","response to biotic stimulus","Other",40,0.0253833927051374
+"247","RESPONSE TO EXTERNAL BIOTIC STIMULUS","PC2","Cluster 2","response to external biotic stimulus","Other",40,0.0170976407102084
+"248","RESPONSE TO HEAT","PC1","Cluster 2","response to heat","Other",14,0.0375152242937396
+"249","RESPONSE TO OTHER ORGANISM","PC2","Cluster 2","response to other organism","Other",40,0.0170976407102084
+"250","RESPONSE TO STIMULUS","PC2","Cluster 2","response to stimulus","Cell Signaling in Response to Stumulus",166,0.000496925788452848
+"251","RIBONUCLEOPROTEIN COMPLEX BIOGENESIS","PC1","Cluster 2","ribonucleoprotein complex biogenesis","RNA Processing",49,7.03868730380433e-13
+"252","RIBONUCLEOPROTEIN COMPLEX EXPORT FROM NUCLEUS","PC1","Cluster 2","ribonucleoprotein complex export from nucleus","RNA Export from Nucleus",15,0.00113794437283214
+"253","RIBONUCLEOPROTEIN COMPLEX LOCALIZATION","PC1","Cluster 2","ribonucleoprotein complex localization","RNA Export from Nucleus",15,0.00119918902146586
+"254","RIBOSOMAL LARGE SUBUNIT BIOGENESIS","PC1","Cluster 2","ribosomal large subunit biogenesis","Other",11,0.000714071881434066
+"255","RIBOSOMAL SMALL SUBUNIT BIOGENESIS","PC1","Cluster 2","ribosomal small subunit biogenesis","Other",9,0.0167502063294612
+"256","RIBOSOME BIOGENESIS","PC1","Cluster 2","ribosome biogenesis","RNA Processing",38,1.57730602571657e-11
+"257","RNA EXPORT FROM NUCLEUS","PC1","Cluster 2","RNA export from nucleus","RNA Export from Nucleus",16,0.00082696509503657
+"258","RNA LOCALIZATION","PC1","Cluster 2","RNA localization","RNA Export from Nucleus",23,0.000120126385465491
+"259","RNA LOCALIZATION TO CAJAL BODY","PC1","Cluster 2","RNA localization to Cajal body","RNA and Protein Localization to Telomere",5,0.0184868898946875
+"260","RNA LOCALIZATION TO NUCLEUS","PC1","Cluster 2","RNA localization to nucleus","RNA and Protein Localization to Telomere",5,0.0184868898946875
+"261","RNA METABOLIC PROCESS","PC1","Cluster 2","RNA metabolic process","Gene Transcription and RNA Biosynthesis",173,6.66217513326678e-05
+"262","RNA PROCESSING","PC1","Cluster 2","RNA processing","RNA Processing",61,8.19438497690751e-07
+"263","RNA SPLICING","PC1","Cluster 2","RNA splicing","RNA Processing",30,0.00261965839302133
+"264","RNA SPLICING, VIA TRANSESTERIFICATION REACTIONS","PC1","Cluster 2","RNA splicing, via transesterification reactions","RNA Processing",27,0.000860020682276499
+"265","RNA SPLICING, VIA TRANSESTERIFICATION REACTIONS WITH BULGED ADENOSINE AS NUCLEOPHILE","PC1","Cluster 2","RNA splicing, via transesterification reactions with bulged adenosine as nucleophile","RNA Processing",27,0.000784588685226003
+"266","RNA TRANSPORT","PC1","Cluster 2","RNA transport","RNA Export from Nucleus",18,0.00296496623697849
+"267","RRNA METABOLIC PROCESS","PC1","Cluster 2","rRNA metabolic process","RNA Processing",27,3.79372875270438e-07
+"268","RRNA PROCESSING","PC1","Cluster 2","rRNA processing","RNA Processing",27,1.24119720620039e-07
+"269","SIGNAL TRANSDUCTION","PC2","Cluster 2","signal transduction","Cell Signaling in Response to Stumulus",123,0.00023003812120204
+"270","SIGNALING","PC2","Cluster 2","signaling","Cell Signaling in Response to Stumulus",133,8.64684401853414e-05
+"271","SYMBIOTIC PROCESS","PC1","Cluster 2","symbiotic process","Other",54,0.000550523696767485
+"272","T CELL ACTIVATION","PC2","Cluster 2","T cell activation","Activation of Immune Response",24,0.00050555736504186
+"273","T CELL DIFFERENTIATION","PC2","Cluster 2","T cell differentiation","Activation of Immune Response",15,0.00676803146197474
+"274","T CELL DIFFERENTIATION IN THYMUS","PC2","Cluster 2","T cell differentiation in thymus","Activation of Immune Response",8,0.0119202374371739
+"275","T CELL MIGRATION","PC2","Cluster 2","T cell migration","Immune Cell Migration",9,0.000496925788452848
+"276","T CELL PROLIFERATION","PC2","Cluster 2","T cell proliferation","Activation of Immune Response",12,0.0124303522502861
+"277","T CELL SELECTION","PC2","Cluster 2","T cell selection","Activation of Immune Response",9,0.000154855903156207
+"278","TELOMERASE RNA LOCALIZATION","PC1","Cluster 2","telomerase RNA localization","RNA and Protein Localization to Telomere",5,0.0184868898946875
+"279","TELOMERASE RNA LOCALIZATION TO CAJAL BODY","PC1","Cluster 2","telomerase RNA localization to Cajal body","RNA and Protein Localization to Telomere",5,0.0184868898946875
+"280","THYMIC T CELL SELECTION","PC2","Cluster 2","thymic T cell selection","Activation of Immune Response",6,0.000690688895528025
+"281","VESICLE BUDDING FROM MEMBRANE","PC1","Cluster 2","vesicle budding from membrane","Other",13,0.00428040383751681
+"282","VESICLE ORGANIZATION","PC1","Cluster 2","vesicle organization","Other",25,0.00488245841305043
+"283","VIRAL PROCESS","PC1","Cluster 2","viral process","Other",54,0.00013927074377377

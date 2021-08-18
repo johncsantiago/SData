@@ -20,6 +20,9 @@ library(heatmaply)
 library(gplots)
 library(org.Mm.eg.db)
 
+##ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+##ID.conversion=getBM(attributes=c("ensembl_gene_id","external_gene_name"),mart=ensembl)
+
 ```
 
 

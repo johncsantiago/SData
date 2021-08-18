@@ -31,8 +31,8 @@ options(stringsAsFactors = FALSE)
 ##enableWGCNAThreads(nThreads = NULL)
 ##disableWGCNAThreads()
 
-motifRankings <- importRankings("/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/MGH Project/Lean Liver Project/John R Output/hg19-tss-centered-10kb-7species.mc9nr.feather")
-data(motifAnnotations_hgnc)
+##motifRankings <- importRankings("/Users/johncsantiago/Google Drive/My Drive/Sanders Lab Files/MGH Project/Lean Liver Project/John R Output/hg19-tss-centered-10kb-7species.mc9nr.feather")
+##data(motifAnnotations_hgnc)
 
 ##Step 1: Clean Data
 cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
@@ -176,7 +176,9 @@ sCVCNgenes=unique(c(row.names(sCVCN1),row.names(sCVCN2),row.names(sCVCN3)))
 
 ```{r}
 
-traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+##traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data.csv")
+traitData = read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/Liver%20Physiological%20Data%20with%20Times.csv")
+
 annot =read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/AnnotationData.csv",row.names=1)
 countdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisCountdata.csv",row.names=1)
 cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
@@ -192,7 +194,7 @@ traitData$NegCon3=sample(1:100,size=nrow(traitData))
 traitData$NegCon4=sample(1:100,size=nrow(traitData))
 traitData$NegCon5=sample(1:100,size=nrow(traitData))
 
-traitData=traitData[,c(1,3:14,16:18,22,25)]
+##traitData=traitData[,c(1,3:14,16:18,22,25)]
 
 colnames(cpmdata)=groups[colnames(cpmdata),"Library.ID"]
 datExpr0 = as.data.frame(t(cpmdata))
@@ -336,7 +338,7 @@ con.modtraitheatmap
 
 
 ```{r}
-
+cor <- WGCNA::cor
 ##generates a correlation and correlation p-value matrix for each gene with each trait and module
   trait.var = as.data.frame(datTraits);
   
@@ -403,7 +405,7 @@ barplot(height=totalsig,las=3)
 ##trait="Emricasan"
 ##trait = "violet"
 ##trait="paleturquoise"
-trait="purple"
+trait="blue"
 
 maxgenes=100000
 hmtitle=""
@@ -421,6 +423,275 @@ heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol
 
 con.lactgenes=hmgene.names
 ```
+
+```{r}
+
+sigs=hmgene.names
+bg=cpmdata[,1:2]
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+
+```
+
+
+
+```{r}
+
+##trait="male"
+##trait="alactate"
+##trait="height"
+##trait="Emricasan"
+##trait = "violet"
+##trait="paleturquoise"
+trait="age"
+
+trait0H=paste(trait,"0H",sep="")
+trait3H=paste(trait,"3H",sep="")
+trait6H=paste(trait,"6H",sep="")
+
+maxgenes=100000
+hmtitle=""
+hmgenes=con.sigtraitgenes[,c(trait0H,paste("adjp.",trait0H,sep=""))]
+hmgenes=hmgenes[hmgenes[,2]<.05,]
+hmgene.names=row.names(hmgdenes[order(hmgenes[,2]),])[1:min(nrow(hmgenes),maxgenes)]
+hmplotdata=con.cpmdata[hmgene.names,substring(colnames(con.cpmdata),3,3)=="1"]
+heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+hmgenes0h=hmgene.names
+```
+
+
+```{r}
+
+maxgenes=100000
+hmtitle=""
+hmgenes=con.sigtraitgenes[,c(trait3H,paste("adjp.",trait3H,sep=""))]
+hmgenes=hmgenes[hmgenes[,2]<.05,]
+hmgene.names=row.names(hmgenes[order(hmgenes[,2]),])[1:min(nrow(hmgenes),maxgenes)]
+hmplotdata=con.cpmdata[hmgene.names,substring(colnames(con.cpmdata),3,3)=="2"]
+heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+hmgenes3h=hmgene.names
+
+```
+
+
+
+
+```{r}
+
+maxgenes=100000
+hmtitle=""
+hmgenes=con.sigtraitgenes[,c(trait6H,paste("adjp.",trait6H,sep=""))]
+hmgenes=hmgenes[hmgenes[,2]<.05,]
+hmgene.names=row.names(hmgenes[order(hmgenes[,2]),])[1:min(nrow(hmgenes),maxgenes)]
+hmplotdata=con.cpmdata[hmgene.names,substring(colnames(con.cpmdata),3,3)=="3"]
+heatmaply(hmplotdata,scale="row",trace="none",Colv = T,Rowv=T,cexRow = .5,cexCol=1.5,main=hmtitle,col=hmcolors, dendrogram = "column",
+  scale_fill_gradient_fun = ggplot2::scale_fill_gradient2(
+    low = "royalblue4",
+    mid = "white",
+    high = "firebrick4",
+    midpoint = 0,
+    na.value = "grey50"))
+
+hmgenes6h=hmgene.names
+
+```
+
+
+```{r}
+plotgroups=allTraits
+row.names(plotgroups)=allTraits$liver
+plotdata=con.cpmdata[hmgenes6h,substring(colnames(con.cpmdata),3,3)=="3"]
+
+plot(x=as.numeric(plotdata[1,]), y=plotgroups[colnames(plotdata),trait6h])
+i=1
+while(i<=nrow(plotdata)){
+  points(x=as.numeric(plotdata[i,]), y=plotgroups[colnames(plotdata),trait6h])
+  i=i+1
+}
+```
+
+```{r}
+
+sigs=hmgenes0h
+bg=cpmdata[,1:2]
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GO0h=sig.GO
+sig.GOcc0h=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp0h=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf0h=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slims0h=sig.slims
+sig.slimscc0h=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp0h=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf0h=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG0h=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+
+```
+
+```{r}
+
+sigs=hmgenes3h
+bg=cpmdata[,1:2]
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GO3h=sig.GO
+sig.GOcc3h=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp3h=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf3h=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slims3h=sig.slims
+sig.slimscc3h=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp3h=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf3h=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG3h=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+
+```
+
+
+
+```{r}
+
+sigs=hmgenes6h
+bg=cpmdata[,1:2]
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GO6h=sig.GO
+sig.GOcc6h=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp6h=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf6h=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slims6h=sig.slims
+sig.slimscc6h=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp6h=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf6h=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+KEGGnames=(as.list(KEGGPATHID2NAME))
+KEGG.wall$names=""
+for(i in 1:nrow(KEGG.wall)){
+  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+}
+sig.KEGG6h=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+
+```
+
+
 
 
 

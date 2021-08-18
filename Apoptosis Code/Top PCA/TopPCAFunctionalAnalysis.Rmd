@@ -319,7 +319,7 @@ while(i<=nrow(gmt)){
   gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,15),sigs)
   i=i+1
 }
-
+pc1.sig.GObp2.genes=gmt
 write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_GObp.txt", sep="\t", col.names = F, row.names = F)
 write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_genes.csv")
 ```
@@ -500,6 +500,7 @@ while(i<=nrow(gmt)){
   i=i+1
 }
 
+pc2.sig.GOcc1.genes=gmt
 write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_GOcc.txt", sep="\t", col.names = F, row.names = F)
 write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_genes.csv")
 ```
@@ -605,7 +606,7 @@ while(i<=nrow(gmt)){
   gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,15),sigs)
   i=i+1
 }
-
+pc2.sig.GObp2.genes=gmt
 write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_GObp.txt", sep="\t", col.names = F, row.names = F)
 write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_genes.csv")
 ```
@@ -1179,5 +1180,105 @@ axis(3, xlim=c(0,1),col="black",las=1)
 mtext(pc2slims.toptitle,side=3,line=2.5)
 box()
 mtext(pc2slims.bottomtitle,side=1,col="black",line=2.5)  
+
+```
+
+
+
+
+```{r}
+
+GOclustercats=read.csv("/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/TopPCGOTermsClusters.csv")
+
+temp=(pc2.sig.GOcc1)
+row.names(temp)=temp$term
+
+temp2=(pc2.sig.GObp2)
+row.names(temp2)=temp2$term
+
+temp3=(pc1.sig.GObp2)
+row.names(temp3)=temp3$term
+
+GOclustercats[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 1", "NumDEInCat"]=temp[GOclustercats$Term[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 1"],"numDEInCat"]
+
+GOclustercats[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 2", "NumDEInCat"]=temp2[GOclustercats$Term[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 2"],"numDEInCat"]
+
+GOclustercats[GOclustercats$PC=="PC1"&GOclustercats$Cluster=="Cluster 2", "NumDEInCat"]=temp3[GOclustercats$Term[GOclustercats$PC=="PC1"&GOclustercats$Cluster=="Cluster 2"],"numDEInCat"]
+
+GOclustercats[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 1", "FDR"]=temp[GOclustercats$Term[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 1"],"adjp"]
+
+GOclustercats[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 2", "FDR"]=temp2[GOclustercats$Term[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 2"],"adjp"]
+
+GOclustercats[GOclustercats$PC=="PC1"&GOclustercats$Cluster=="Cluster 2", "FDR"]=temp3[GOclustercats$Term[GOclustercats$PC=="PC1"&GOclustercats$Cluster=="Cluster 2"],"adjp"]
+
+write.csv(GOclustercats,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/TopPCGOTermsClusters.csv")
+
+pc2c1terms=GOclustercats[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 1", c("Term","ClusterName")]
+pc2c2terms=GOclustercats[GOclustercats$PC=="PC2"&GOclustercats$Cluster=="Cluster 2", c("Term","ClusterName")]
+pc1c2terms=GOclustercats[GOclustercats$PC=="PC1"&GOclustercats$Cluster=="Cluster 2", c("Term","ClusterName")]
+
+tempdata=pc2c1terms
+tempdata2=pc2.sig.GOcc1.genes
+row.names(tempdata2)=tempdata2[,1]
+tempdata2=tempdata2[,3:ncol(tempdata2)]
+temp4=unique(tempdata$ClusterName)
+tempdata2.genesinterm=matrix("",nrow=length(temp4),ncol=500)
+row.names(tempdata2.genesinterm)=temp4
+i=1
+while(i<=length(temp4)){
+temp5=tempdata[tempdata$ClusterName==temp4[i],]
+tempdata3=as.vector(tempdata2[temp5$Term,])
+tempdata3=unique(tempdata3[tempdata3!=""])
+tempdata3=ID.conversion[tempdata3,2]
+tempdata2.genesinterm[i,1:length(tempdata3)]=tempdata3
+i=i+1
+}
+
+pc2c1.genesinGOclusters=tempdata2.genesinterm[,c(1,1:ncol(tempdata2.genesinterm))]
+pc2c1.genesinGOclusters[,1]="PC2 Cluster 1"
+
+tempdata=pc2c2terms
+tempdata2=pc2.sig.GObp2.genes
+row.names(tempdata2)=tempdata2[,1]
+tempdata2=tempdata2[,3:ncol(tempdata2)]
+temp4=unique(tempdata$ClusterName)
+tempdata2.genesinterm=matrix("",nrow=length(temp4),ncol=500)
+row.names(tempdata2.genesinterm)=temp4
+i=1
+while(i<=length(temp4)){
+temp5=tempdata[tempdata$ClusterName==temp4[i],]
+tempdata3=as.vector(tempdata2[temp5$Term,])
+tempdata3=unique(tempdata3[tempdata3!=""])
+tempdata3=ID.conversion[tempdata3,2]
+tempdata2.genesinterm[i,1:length(tempdata3)]=tempdata3
+i=i+1
+}
+
+pc2c2.genesinGOclusters=tempdata2.genesinterm[,c(1,1:ncol(tempdata2.genesinterm))]
+pc2c2.genesinGOclusters[,1]="PC2 Cluster 2"
+
+tempdata=pc1c2terms
+tempdata2=pc1.sig.GObp2.genes
+row.names(tempdata2)=tempdata2[,1]
+tempdata2=tempdata2[,3:ncol(tempdata2)]
+temp4=unique(tempdata$ClusterName)
+tempdata2.genesinterm=matrix("",nrow=length(temp4),ncol=500)
+row.names(tempdata2.genesinterm)=temp4
+i=1
+while(i<=length(temp4)){
+temp5=tempdata[tempdata$ClusterName==temp4[i],]
+tempdata3=as.vector(tempdata2[temp5$Term,])
+tempdata3=unique(tempdata3[tempdata3!=""])
+tempdata3=ID.conversion[tempdata3,2]
+tempdata2.genesinterm[i,1:length(tempdata3)]=tempdata3
+i=i+1
+}
+
+pc1c2.genesinGOclusters=tempdata2.genesinterm[,c(1,1:ncol(tempdata2.genesinterm))]
+pc1c2.genesinGOclusters[,1]="PC1 Cluster 2"
+
+GenesInGOClusters=rbind(pc1c2.genesinGOclusters,rbind(pc2c1.genesinGOclusters,pc2c2.genesinGOclusters))
+
+write.csv(GenesInGOClusters,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/GenesInEachGOCluster.csv")
 
 ```

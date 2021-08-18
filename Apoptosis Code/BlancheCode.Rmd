@@ -1,0 +1,51 @@
+---
+title: "Blanche Data"
+author: "John Santiago"
+date: "6/30/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.13")
+
+blanche=read.csv("/Users/johncsantiago/Documents/GitHub/SData/BlancheData.csv")
+
+tempIDs=unique(blanche[,2])
+IDs= strsplit(tempIDs[1],split = "; ")[[1]]
+
+i=2
+while(i<length(tempIDs)){
+  temptempIDs=strsplit(tempIDs[i],split = "; ")[[1]]
+  IDs=c(IDs,temptempIDs)
+  i=i+1
+}
+
+blanche=na.omit(blanche)
+
+uniProt <- useMart(biomart = "unimart")
+
+##human = useMart("ensembl", dataset = "hsapiens_gene_ensembl")
+
+##proteinID1=getBM(attributes=c("uniprot_gn_symbol","uniprotswissprot","uniprotsptrembl"),mart=ensembl)
+##proteinID2=getBM(attributes=c("uniprot_gn_symbol","uniprot_gn_id","uniprot_isoform"),mart=ensembl)
+
+
+i=1
+while(i<=nrow(blanche)){
+result=t.test(blanche[i,3:5],blanche[i,6:8])
+blanche$pval[i]=result$p.value
+i=i+1
+}
+
+blanche$fdr=p.adjust(blanche$pval,method="BH")
+
+
+```
+
