@@ -1,0 +1,130 @@
+---
+title: "Mouse IPA"
+author: "John Santiago"
+date: "8/18/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+library(ggplot2)
+lcp=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Mouse%20Liver%20Code/LiverCP_RvC2H.csv",row.names=1,header=T)
+lur=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Mouse%20Liver%20Code/LiverUR_RvC2H.csv",row.names=1,header=T)
+mcp=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Mouse%20Liver%20Code/MuscleCP_RvC2H.csv",row.names=1,header=T)
+mur=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Mouse%20Liver%20Code/MuscleUR_RvC2H.csv",row.names=1,header=T)
+
+slcp=lcp[,c(3,1)]
+smcp=mcp[,c(3,1)]
+slur=lur[,4:5]
+smur=mur[,4:5]
+
+slcp[,1]=as.numeric(slcp[,1])
+smcp[,1]=as.numeric(smcp[,1])
+slur[,1]=as.numeric(slur[,1])
+smur[,1]=as.numeric(smur[,1])
+
+##slcp=na.omit(slcp)
+##smcp=na.omit(smcp)
+##slur=na.omit(slur)
+##smur=na.omit(smur)
+
+##slcp=slcp[slcp[,2]>-log(.05)&abs((slcp[,1]))>1,]
+##smcp=smcp[smcp[,2]>-log(.05)&abs((smcp[,1]))>1,]
+##slur=slur[slur[,2]<.00001&abs(slur[,1])>1,]
+##smur=smur[smur[,2]<.00001&abs(smur[,1])>1,]
+
+slcp=slcp[slcp[,2]>-log(.05),]
+smcp=smcp[smcp[,2]>-log(.05),]
+##slur=slur[slur[,2]<.00001,]
+##smur=smur[smur[,2]<.00001,]
+slur=slur[1:25,]
+smur=smur[1:25,]
+
+slur[,2]=-log(slur[,2])
+smur[,2]=-log(smur[,2])
+
+slcp[,3]=row.names(slcp)
+smcp[,3]=row.names(smcp)
+slur[,3]=row.names(slur)
+smur[,3]=row.names(smur)
+
+colnames(slcp)=c("z-score", "p-value", "CP")
+colnames(smcp)=c("z-score", "p-value", "CP")
+colnames(slur)=c("z-score", "p-value", "UR.")
+colnames(smur)=c("z-score", "p-value", "UR")
+
+slcp=as.data.frame(slcp[order(slcp[,2]),])
+smcp=as.data.frame(smcp[order(smcp[,2]),])
+
+slur=as.data.frame(slur[order(slur[,2]),])
+smur=as.data.frame(smur[order(smur[,2]),])
+
+slcp[,3]=factor(c(slcp[,3]), levels=c(slcp[,3]))
+smcp[,3]=factor(c(smcp[,3]), levels=c(smcp[,3]))
+slur[,3]=factor(c(slur[,3]), levels=c(slur[,3]))
+smur[,3]=factor(c(smur[,3]), levels=c(smur[,3]))
+
+```
+
+```{r}
+
+ggdata=slcp
+maintitle="Liver Canonical Pathways"
+ggplot(ggdata, aes(x=ggdata[,2],y=ggdata[,3]))+
+  geom_bar(stat="identity") +
+  geom_col(aes(fill = ggdata[,1])) + 
+  scale_fill_gradient2(low = "blue",high = "red",name="Activation z-score")+
+  labs(title=maintitle,"Muscle Canonical Pathways", x="-log(p-value)", y = "Pathway")
+
+```
+
+
+
+```{r}
+
+ggdata=smcp
+maintitle="Muscle Canonical Pathways"
+ggplot(ggdata, aes(x=ggdata[,2],y=ggdata[,3]))+
+  geom_bar(stat="identity") +
+  geom_col(aes(fill = ggdata[,1])) + 
+  scale_fill_gradient2(low = "blue",high = "red",name="Activation z-score")+
+  labs(title=maintitle,"Muscle Canonical Pathways", x="-log(p-value)", y = "Pathway")
+
+```
+
+
+```{r}
+
+ggdata=slur
+maintitle="Liver Upstream Regulators"
+ggplot(ggdata, aes(x=ggdata[,2],y=ggdata[,3]))+
+  geom_bar(stat="identity") +
+  geom_col(aes(fill = ggdata[,1])) + 
+  scale_fill_gradient2(low = "blue",high = "red",name="Activation z-score")+
+  labs(title=maintitle,"Muscle Canonical Pathways", x="-log(p-value)", y = "Pathway")
+
+```
+
+
+```{r}
+
+ggdata=smur
+maintitle="Muscle Upstream Regulators"
+ggplot(ggdata, aes(x=ggdata[,2],y=ggdata[,3]))+
+  geom_bar(stat="identity") +
+  xlim(0,50)+
+  geom_col(aes(fill = ggdata[,1])) + 
+  scale_fill_gradient2(low = "blue",high = "red",name="Activation z-score")+
+  labs(title=maintitle,"Muscle Canonical Pathways", x="-log(p-value)", y = "Pathway")
+
+```
+
+
+
+
+
+
+

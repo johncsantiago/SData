@@ -43,8 +43,16 @@ ID.conversion=ID.conversion[row.names(cpmdata),]
 
 pca <- prcomp(t(cpmdata), scale.=TRUE) 
 gr <- factor(row.names(groups))
-
 contribution=pca$rotation
+
+##these add up to the total variation attributed to PC2 (or whatever PC you pick)
+PCcontribute=contribution[,"PC2"]
+
+##These are the percent of the total PC2 variation that each gene contributes.
+percents=(PCcontribute*PCcontribute)
+
+##Top of the list is the highest contributor to PC2 variation
+percents=percents[order(percents,decreasing=T)]
 
 ##i=1
 ##meancpm=cpmdata[,1:9]
@@ -89,8 +97,13 @@ percent.variation=signif(ve,4)
 ##The column sum of squares of the loadings (pca$rotation) are the variances of PCs.
 percents=(PCcontribute*PCcontribute)
 percents=percents[order(percents,decreasing=T)]
+
+
+
 loading=loading[names(percents)]
 percent2=percents
+
+
 temppercent=0
 i=1
 while(i<=length(percents)){

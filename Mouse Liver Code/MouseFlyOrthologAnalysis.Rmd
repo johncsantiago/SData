@@ -21,7 +21,7 @@ library(heatmaply)
 library("biomaRt")
 library("goseq")
 library(dendextend)
-library(KEGG.db)
+##library(KEGG.db)
 
 ensembl = useMart("ensembl",dataset="mmusculus_gene_ensembl")
 ID.conversion=getBM(attributes=c("ensembl_gene_id","external_gene_name"),mart=ensembl)
@@ -400,7 +400,7 @@ mousefly.orthologs$fbgn=dgeneName[temp,1]
 
 ##Liver Control Code
 ```{r}
-dataset=lmeancpm[(sCL),]
+dataset=lmeancpm[sRCL,]
 branches=4
 scaled=(t(scale(t(dataset))))
 flyscaled=t(scale(t(dmeancpm)))
@@ -423,7 +423,7 @@ heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Col
 
 ```{r}
 
-mousegenes=intersect(sCL,mousefly.orthologs[,"mouse.ensembl"])
+mousegenes=intersect(sRCL,mousefly.orthologs[,"mouse.ensembl"])
 i=2
 sCL.orthologs=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.ensembl"]==mousegenes[1],])
 while(i<=length(mousegenes)){
@@ -490,7 +490,207 @@ while(i<=length(mousegenes)){
 ##genesV2 = getLDS(attributes = c("hgnc_symbol"), filters = "hgnc_symbol", values = x , mart = human, attributesL = c("mgi_symbol"), martL = mouse, uniqueRows=T)
 ```
 
+```{r}
+hmdata=cbind(scaled[sCLC1.orthologs$mouse.symbol,],flyscaled[sCLC1.orthologs$fbgn,])
+linedata=matrix(0,nrow=18,ncol=5)
 
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.","Species")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5),rep("Control",4),rep("Rapamycin",4))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4,0,1,2,4,0,1,2,4))
+linedata[,5]=c(rep("Mouse",10),rep("Fly",8))
+linedata[,5]=paste(linedata[,5],linedata[,1])
+linedata[,3]=as.numeric(c(mean(hmdata[,1]),mean(hmdata[,2]),mean(hmdata[,3]),mean(hmdata[,4]),mean(hmdata[,5]), mean(hmdata[,1]),mean(hmdata[,6]),mean(hmdata[,7]),mean(hmdata[,8]),mean(hmdata[,9]),
+                        mean(hmdata[,10]),mean(hmdata[,11]),mean(hmdata[,12]),mean(hmdata[,13]),mean(hmdata[,10]), mean(hmdata[,14]),mean(hmdata[,15]),mean(hmdata[,16])))
+
+
+linedata[,4]=as.numeric(c(sd(hmdata[,1]),sd(hmdata[,2]),sd(hmdata[,3]),sd(hmdata[,4]),sd(hmdata[,5]), sd(hmdata[,1]),sd(hmdata[,6]),sd(hmdata[,7]),sd(hmdata[,8]),sd(hmdata[,9]),
+                        sd(hmdata[,10]),sd(hmdata[,11]),sd(hmdata[,12]),sd(hmdata[,13]),sd(hmdata[,10]), sd(hmdata[,14]),sd(hmdata[,15]),sd(hmdata[,16])))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Species, color=Species)) + 
+  geom_line(aes(linetype=Treatment, color=Species)) +
+  scale_linetype_manual(values=c("solid","dashed"))+
+  geom_point()+
+  ylim(-2,3)+
+  ##geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 1", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("darkgreen","gold3","royalblue","firebrick")))
+
+```
+
+```{r}
+hmdata=cbind(scaled[sCLC2.orthologs$mouse.symbol,],flyscaled[sCLC2.orthologs$fbgn,])
+linedata=matrix(0,nrow=18,ncol=5)
+
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.","Species")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5),rep("Control",4),rep("Rapamycin",4))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4,0,1,2,4,0,1,2,4))
+linedata[,5]=c(rep("Mouse",10),rep("Fly",8))
+linedata[,5]=paste(linedata[,5],linedata[,1])
+linedata[,3]=as.numeric(c(mean(hmdata[,1]),mean(hmdata[,2]),mean(hmdata[,3]),mean(hmdata[,4]),mean(hmdata[,5]), mean(hmdata[,1]),mean(hmdata[,6]),mean(hmdata[,7]),mean(hmdata[,8]),mean(hmdata[,9]),
+                        mean(hmdata[,10]),mean(hmdata[,11]),mean(hmdata[,12]),mean(hmdata[,13]),mean(hmdata[,10]), mean(hmdata[,14]),mean(hmdata[,15]),mean(hmdata[,16])))
+
+
+linedata[,4]=as.numeric(c(sd(hmdata[,1]),sd(hmdata[,2]),sd(hmdata[,3]),sd(hmdata[,4]),sd(hmdata[,5]), sd(hmdata[,1]),sd(hmdata[,6]),sd(hmdata[,7]),sd(hmdata[,8]),sd(hmdata[,9]),
+                        sd(hmdata[,10]),sd(hmdata[,11]),sd(hmdata[,12]),sd(hmdata[,13]),sd(hmdata[,10]), sd(hmdata[,14]),sd(hmdata[,15]),sd(hmdata[,16])))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Species, color=Species)) + 
+  geom_line(aes(linetype=Treatment, color=Species)) +
+  scale_linetype_manual(values=c("solid","dashed"))+
+  geom_point()+
+  ylim(-2,3)+
+  ##geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 2", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("darkgreen","gold3","royalblue","firebrick")))
+
+```
+
+```{r}
+hmdata=cbind(scaled[sCLC3.orthologs$mouse.symbol,],flyscaled[sCLC3.orthologs$fbgn,])
+linedata=matrix(0,nrow=18,ncol=5)
+
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.","Species")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5),rep("Control",4),rep("Rapamycin",4))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4,0,1,2,4,0,1,2,4))
+linedata[,5]=c(rep("Mouse",10),rep("Fly",8))
+linedata[,5]=paste(linedata[,5],linedata[,1])
+linedata[,3]=as.numeric(c(mean(hmdata[,1]),mean(hmdata[,2]),mean(hmdata[,3]),mean(hmdata[,4]),mean(hmdata[,5]), mean(hmdata[,1]),mean(hmdata[,6]),mean(hmdata[,7]),mean(hmdata[,8]),mean(hmdata[,9]),
+                        mean(hmdata[,10]),mean(hmdata[,11]),mean(hmdata[,12]),mean(hmdata[,13]),mean(hmdata[,10]), mean(hmdata[,14]),mean(hmdata[,15]),mean(hmdata[,16])))
+
+
+linedata[,4]=as.numeric(c(sd(hmdata[,1]),sd(hmdata[,2]),sd(hmdata[,3]),sd(hmdata[,4]),sd(hmdata[,5]), sd(hmdata[,1]),sd(hmdata[,6]),sd(hmdata[,7]),sd(hmdata[,8]),sd(hmdata[,9]),
+                        sd(hmdata[,10]),sd(hmdata[,11]),sd(hmdata[,12]),sd(hmdata[,13]),sd(hmdata[,10]), sd(hmdata[,14]),sd(hmdata[,15]),sd(hmdata[,16])))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Species, color=Species)) + 
+  geom_line(aes(linetype=Treatment, color=Species)) +
+  scale_linetype_manual(values=c("solid","dashed"))+
+  geom_point()+
+  ylim(-2,3)+
+  ##geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 3", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("darkgreen","gold3","royalblue","firebrick")))
+
+```
+
+```{r}
+hmdata=cbind(scaled[sCLC4.orthologs$mouse.symbol,],flyscaled[sCLC4.orthologs$fbgn,])
+linedata=matrix(0,nrow=18,ncol=5)
+
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.","Species")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5),rep("Control",4),rep("Rapamycin",4))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4,0,1,2,4,0,1,2,4))
+linedata[,5]=c(rep("Mouse",10),rep("Fly",8))
+linedata[,5]=paste(linedata[,5],linedata[,1])
+linedata[,3]=as.numeric(c(mean(hmdata[,1]),mean(hmdata[,2]),mean(hmdata[,3]),mean(hmdata[,4]),mean(hmdata[,5]), mean(hmdata[,1]),mean(hmdata[,6]),mean(hmdata[,7]),mean(hmdata[,8]),mean(hmdata[,9]),
+                        mean(hmdata[,10]),mean(hmdata[,11]),mean(hmdata[,12]),mean(hmdata[,13]),mean(hmdata[,10]), mean(hmdata[,14]),mean(hmdata[,15]),mean(hmdata[,16])))
+
+
+linedata[,4]=as.numeric(c(sd(hmdata[,1]),sd(hmdata[,2]),sd(hmdata[,3]),sd(hmdata[,4]),sd(hmdata[,5]), sd(hmdata[,1]),sd(hmdata[,6]),sd(hmdata[,7]),sd(hmdata[,8]),sd(hmdata[,9]),
+                        sd(hmdata[,10]),sd(hmdata[,11]),sd(hmdata[,12]),sd(hmdata[,13]),sd(hmdata[,10]), sd(hmdata[,14]),sd(hmdata[,15]),sd(hmdata[,16])))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Species, color=Species)) + 
+  geom_line(aes(linetype=Treatment, color=Species)) +
+  scale_linetype_manual(values=c("solid","dashed"))+
+  geom_point()+
+  ylim(-2,3)+
+  ##geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 4", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("darkgreen","gold3","royalblue","firebrick")))
+
+```
+
+
+```{r}
+
+mousegenes=intersect(sRCM,mousefly.orthologs[,"mouse.ensembl"])
+i=2
+sCM[.orthologs=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.ensembl"]==mousegenes[1],])
+while(i<=length(mousegenes)){
+  temp=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.ensembl"]==mousegenes[i],])
+  sCM[.orthologs=rbind(sCM[.orthologs,temp)
+  i=i+1
+}
+
+clusternum=1
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+
+mousegenes=intersect(cluster,mousefly.orthologs[,"mouse.symbol"])
+i=2
+sCM[C1.orthologs=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[1],])
+while(i<=length(mousegenes)){
+  temp=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[i],])
+  sCM[C1.orthologs=rbind(sCM[C1.orthologs,temp)
+  i=i+1
+}
+
+clusternum=2
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+
+mousegenes=intersect(cluster,mousefly.orthologs[,"mouse.symbol"])
+i=2
+sCM[C2.orthologs=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[1],])
+while(i<=length(mousegenes)){
+  temp=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[i],])
+  sCM[C2.orthologs=rbind(sCM[C2.orthologs,temp)
+  i=i+1
+}
+
+
+clusternum=3
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+
+mousegenes=intersect(cluster,mousefly.orthologs[,"mouse.symbol"])
+i=2
+sCM[C3.orthologs=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[1],])
+while(i<=length(mousegenes)){
+  temp=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[i],])
+  sCM[C3.orthologs=rbind(sCM[C3.orthologs,temp)
+  i=i+1
+}
+
+
+clusternum=4
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+
+mousegenes=intersect(cluster,mousefly.orthologs[,"mouse.symbol"])
+i=2
+sCM[C4.orthologs=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[1],])
+while(i<=length(mousegenes)){
+  temp=na.omit(mousefly.orthologs[mousefly.orthologs[,"mouse.symbol"]==mousegenes[i],])
+  sCM[C4.orthologs=rbind(sCM[C4.orthologs,temp)
+  i=i+1
+}
+
+
+##genesV2 = getLDS(attributes = c("hgnc_symbol"), filters = "hgnc_symbol", values = x , mart = human, attributesL = c("mgi_symbol"), martL = mouse, uniqueRows=T)
+```
 
 
 
@@ -519,6 +719,44 @@ colordend=(color_branches(hc, h=cutheight, col=branchcolors))
 heatmap.2(hmdata,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
 
 ```
+
+```{r}
+hmdata=cbind(scaled[sCLC1.orthologs$mouse.symbol,],flyscaled[sCLC1.orthologs$fbgn,])
+linedata=matrix(0,nrow=18,ncol=5)
+
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.","Species")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5),rep("Control",4),rep("Rapamycin",4))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4,0,1,2,4,0,1,2,4))
+linedata[,5]=c(rep("Mouse",10),rep("Fly",8))
+linedata[,5]=paste(linedata[,5],linedata[,1])
+linedata[,3]=as.numeric(c(mean(hmdata[,1]),mean(hmdata[,2]),mean(hmdata[,3]),mean(hmdata[,4]),mean(hmdata[,5]), mean(hmdata[,1]),mean(hmdata[,6]),mean(hmdata[,7]),mean(hmdata[,8]),mean(hmdata[,9]),
+                        mean(hmdata[,10]),mean(hmdata[,11]),mean(hmdata[,12]),mean(hmdata[,13]),mean(hmdata[,10]), mean(hmdata[,14]),mean(hmdata[,15]),mean(hmdata[,16])))
+
+
+linedata[,4]=as.numeric(c(sd(hmdata[,1]),sd(hmdata[,2]),sd(hmdata[,3]),sd(hmdata[,4]),sd(hmdata[,5]), sd(hmdata[,1]),sd(hmdata[,6]),sd(hmdata[,7]),sd(hmdata[,8]),sd(hmdata[,9]),
+                        sd(hmdata[,10]),sd(hmdata[,11]),sd(hmdata[,12]),sd(hmdata[,13]),sd(hmdata[,10]), sd(hmdata[,14]),sd(hmdata[,15]),sd(hmdata[,16])))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Species, color=Species)) + 
+  geom_line(aes(linetype=Treatment, color=Species)) +
+  scale_linetype_manual(values=c("solid","dashed"))+
+  geom_point()+
+  ylim(-2,3)+
+  ##geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 1", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("darkgreen","gold3","royalblue","firebrick")))
+
+```
+
+
+
+
+
 
 ```{r}
 

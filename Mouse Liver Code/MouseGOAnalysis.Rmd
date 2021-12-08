@@ -469,6 +469,282 @@ sCL.genes=sigs
 ```
 
 
+```{r}
+clusternum=4
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl.M4=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+cluster=cluster[cluster!=""]
+
+linedata=matrix(0,nrow=10,ncol=4)
+
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4))
+linedata[,3]=as.numeric(c(mean(scaled[cluster,1]),mean(scaled[cluster,2]),mean(scaled[cluster,3]),mean(scaled[cluster,4]),mean(scaled[cluster,5]),
+               mean(scaled[cluster,1]),mean(scaled[cluster,6]),mean(scaled[cluster,7]),mean(scaled[cluster,8]),mean(scaled[cluster,9])))
+linedata[,4]=as.numeric(c(sd(scaled[cluster,1]),sd(scaled[cluster,2]),sd(scaled[cluster,3]),sd(scaled[cluster,4]),sd(scaled[cluster,5]),
+               sd(scaled[cluster,1]),sd(scaled[cluster,6]),sd(scaled[cluster,7]),sd(scaled[cluster,8]),sd(scaled[cluster,9])))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Treatment, color=Treatment)) + 
+  geom_line() +
+  geom_point()+
+  ylim(-2,3)+
+  ##geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 4", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("royalblue","firebrick")))
+
+```
+
+
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=sRCL
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+sRCL.GO=sig.GO
+sRCL.GObp=sig.GObp
+sRCL.GOmf=sig.GOmf
+sRCL.GOcc=sig.GOcc
+sRCL.slims=sig.slims
+sRCL.slimsbp=sig.slimsbp
+sRCL.slimsmf=sig.slimsmf
+sRCL.slimscc=sig.slimscc
+
+```
+
+
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=row.names(sRC4)
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+sRC4L.GO=sig.GO
+sRC4L.GObp=sig.GObp
+sRC4L.GOmf=sig.GOmf
+sRC4L.GOcc=sig.GOcc
+sRC4L.slims=sig.slims
+sRC4L.slimsbp=sig.slimsbp
+sRC4L.slimsmf=sig.slimsmf
+sRC4L.slimscc=sig.slimscc
+
+```
+
+
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=row.names(sRC5)
+bg=lcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+sRC5L.GO=sig.GO
+sRC5L.GObp=sig.GObp
+sRC5L.GOmf=sig.GOmf
+sRC5L.GOcc=sig.GOcc
+sRC5L.slims=sig.slims
+sRC5L.slimsbp=sig.slimsbp
+sRC5L.slimsmf=sig.slimsmf
+sRC5L.slimscc=sig.slimscc
+
+```
+
+
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=sRCM
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+sRCM.GO=sig.GO
+sRCM.GObp=sig.GObp
+sRCM.GOmf=sig.GOmf
+sRCM.GOcc=sig.GOcc
+sRCM.slims=sig.slims
+sRCM.slimsbp=sig.slimsbp
+sRCM.slimsmf=sig.slimsmf
+sRCM.slimscc=sig.slimscc
+
+```
+
+
+```{r include=F}
+
+##uses genes from "cluster" up above
+sigs=row.names(sRC4m)
+bg=mcpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+
+pwf=nullp(genes,"mm9","ensGene")
+GO.wall=goseq(pwf,"mm9","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+
+
+
+# Now get the mapping between genes and all GO terms
+go=getgo(names(genes),"mm9","ensGene")
+# Filter the list for only GOslim terms
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim]  })
+GOslim.wall=goseq(pwf,"mm9","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+sRC4M.GO=sig.GO
+sRC4M.GObp=sig.GObp
+sRC4M.GOmf=sig.GOmf
+sRC4M.GOcc=sig.GOcc
+sRC4M.slims=sig.slims
+sRC4M.slimsbp=sig.slimsbp
+sRC4M.slimsmf=sig.slimsmf
+sRC4M.slimscc=sig.slimscc
+
+```
+
 
 ##Venn Code
 ``` {r}
@@ -485,8 +761,8 @@ s2=sRCM
 
 
 ##2-way Venn
-  grid.newpage()
-draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("gold","darkgreen"),cex=1.5,cat.cex = 1,category = c(set1,set2), title= "Rapamycin vs Control DEGs",inverted=T)
+grid.newpage()
+##draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect(s1,s2)),fill = c("gold","darkgreen"),cex=1.5,cat.cex = 1,category = c(set1,set2), title= "Rapamycin vs Control DEGs",inverted=T, cat.pos=0)
 
 ```
 
@@ -494,6 +770,47 @@ draw.pairwise.venn(area1=length(s1),area2=length(s2),cross.area=length(intersect
 ```{r}
 barplot(height=c(nrow(sRC2),nrow(sRC3),nrow(sRC4),nrow(sRC5),NA,nrow(sRC2m),nrow(sRC3m),nrow(sRC4m),nrow(sRC5m)),col=c(rep("gold",4),NA,rep("darkgreen",4)),names.arg = c(".5H R/C","1H R/C","2H R/C","4H R/C",NA,".5H R/C","1H R/C","2H R/C","4H R/C"),ylab="Total Sig. DEG",main="Rapamycin Relative to Control",ylim=c(0,1000))
 ```
+
+
+
+##PCA Contribution Plot
+```{r}
+pcgroups=lgroups[lgroups$Time == "1 Hour",]
+pcdata=lcpmdata[,row.names(pcgroups)]
+pcdata=pcdata[pcdata[,1]!=0&pcdata[,2]!=0&pcdata[,3]!=0,]
+pca <- prcomp(t(pcdata), scale.=TRUE) 
+gr <- factor(pcgroups$Group)
+
+xcoords=pca$x[,1]
+ycoords=pca$x[,2]
+
+
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+ve=signif(ve,3)
+
+barplot(height=ve)
+
+```
+
+##PCA PC1 vs PC2
+```{r , fig.align="center",fig.height=10,fig.width=10}
+
+pcacolors=c("gold","royalblue3","red4")
+text2D(x=xcoords,y=ycoords,labels = c(rep("",6)), 
+       col=c(pcacolors[c(rep(2,3),rep(3,3))]),
+       xlab=paste("PC1 (",ve[1],"%)",sep=""),ylab=paste("PC2 (",ve[3],"%)",sep=""),main="Liver Samples")
+
+text2D(x=xcoords[gr=="C4"],y=ycoords[gr=="C4"],labels=c(rep("C2H",3)),colkey=F,col="royalblue3",add=T,cex=1)
+text2D(x=xcoords[gr=="R4"],y=ycoords[gr=="R4"],labels=c(rep("R2H",3)),colkey=F,col="red3",add=T,cex=1)
+
+abline(h=0,lty=2)
+abline(v=0,lty=2)
+
+legend("topleft", legend=c("Control","Rapamycin"),col=c("royalblue3","red3"),lty=1,bty="n",lwd=2)
+```
+
+
 
 ```{r}
 dataset=lmeancpm[(sRCL),]
@@ -555,6 +872,84 @@ print(p+labs(title="Co-expression cluster 1", x="Refeeding Time (hours)", y = "M
    scale_color_manual(values=c("royalblue","firebrick")))
 
 ```
+##using standard error instead of standard deviation
+```{r}
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl.L1=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+  
+linedata=matrix(0,nrow=10,ncol=4)
+
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4))
+linedata[,3]=as.numeric(c(mean(scaled[cluster,1]),mean(scaled[cluster,2]),mean(scaled[cluster,3]),mean(scaled[cluster,4]),mean(scaled[cluster,5]),
+               mean(scaled[cluster,1]),mean(scaled[cluster,6]),mean(scaled[cluster,7]),mean(scaled[cluster,8]),mean(scaled[cluster,9])))
+linedata[,4]=as.numeric(c(sd(scaled[cluster,1])/sqrt(length(cluster)),sd(scaled[cluster,2])/sqrt(length(cluster)),sd(scaled[cluster,3])/sqrt(length(cluster)),sd(scaled[cluster,4])/sqrt(length(cluster)),sd(scaled[cluster,5])/sqrt(length(cluster)),
+               sd(scaled[cluster,1])/sqrt(length(cluster)),sd(scaled[cluster,6])/sqrt(length(cluster)),sd(scaled[cluster,7])/sqrt(length(cluster)),sd(scaled[cluster,8])/sqrt(length(cluster)),sd(scaled[cluster,9])/sqrt(length(cluster))))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Treatment, color=Treatment)) + 
+  geom_line() +
+  geom_point()+
+  ylim(-2,3)+
+  ##geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 1", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("royalblue","firebrick")))
+
+```
+
+
+```{r}
+##barplot(height=c(mean(abs(C2[(cluster.ensembl.L1),1])),mean(abs(C3[(cluster.ensembl.L1),1])),mean(abs(C4[(cluster.ensembl.L1),1])),mean(abs(C5[(cluster.ensembl.L1),1])),
+                ## NA,mean(abs(R2[(cluster.ensembl.L1),1])),mean(abs(R3[(cluster.ensembl.L1),1])),mean(abs(R4[(cluster.ensembl.L1),1])),mean(abs(R5[(cluster.ensembl.L1),1]))),
+        ##col=c(rep("royalblue",4),NA,rep("firebrick",4)),names.arg = c(".5H C","1H C","2H C","4H C",NA,".5H R","1H R","2H R","4H R"),ylab="Total Sig. DEG",main="Rapamycin Relative to Control",ylim=c(0,2))
+
+##barplot(height=c(mean((C2[(cluster.ensembl.L1),1])),mean((C3[(cluster.ensembl.L1),1])),mean((C4[(cluster.ensembl.L1),1])),mean((C5[(cluster.ensembl.L1),1])),NA,mean((R2[(cluster.ensembl.L1),1])),mean((R3[(cluster.ensembl.L1),1])),mean((R4[(cluster.ensembl.L1),1])),mean((R5[(cluster.ensembl.L1),1]))),col=c(rep("royalblue",4),NA,rep("firebrick",4)),names.arg = c(".5H C","1H C","2H C","4H C",NA,".5H R","1H R","2H R","4H R"),ylab="Total Sig. DEG",main="Rapamycin Relative to Control",ylim=c(-1,1))
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl.L1=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+  
+linedata=matrix(0,nrow=8,ncol=4)
+
+fcgs=cluster.ensembl.L1
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.")
+linedata[,1]=c(rep("Control",4),rep("Rapamycin",4))
+linedata[,2]=as.numeric(c(.5,1,2,4,.5,1,2,4))
+linedata[,3]=as.numeric(c(mean((C2[(fcgs),1])),mean((C3[(fcgs),1])),mean((C4[(fcgs),1])),mean((C5[(fcgs),1])),mean((R2[(fcgs),1])),mean((R3[(fcgs),1])),mean((R4[(fcgs),1])),mean((R5[(fcgs),1]))))
+linedata[,4]=as.numeric(c(sd((C2[(fcgs),1])),sd((C3[(fcgs),1])),sd((C4[(fcgs),1])),sd((C5[(fcgs),1])),sd((R2[(fcgs),1])),sd((R3[(fcgs),1])),sd((R4[(fcgs),1])),sd((R5[(fcgs),1]))))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Treatment, color=Treatment)) + 
+  geom_line() +
+  geom_point()+
+  ylim(-1.5,1.5)+
+  geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 1", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("royalblue","firebrick")))
+
+
+```
+
 
 
 ```{r}
@@ -591,7 +986,46 @@ print(p+labs(title="Co-expression cluster 2", x="Refeeding Time (hours)", y = "M
    scale_color_manual(values=c("royalblue","firebrick")))
 
 ```
+```{r}
+##barplot(height=c(mean(abs(C2[(cluster.ensembl.L1),1])),mean(abs(C3[(cluster.ensembl.L1),1])),mean(abs(C4[(cluster.ensembl.L1),1])),mean(abs(C5[(cluster.ensembl.L1),1])),
+                ## NA,mean(abs(R2[(cluster.ensembl.L1),1])),mean(abs(R3[(cluster.ensembl.L1),1])),mean(abs(R4[(cluster.ensembl.L1),1])),mean(abs(R5[(cluster.ensembl.L1),1]))),
+        ##col=c(rep("royalblue",4),NA,rep("firebrick",4)),names.arg = c(".5H C","1H C","2H C","4H C",NA,".5H R","1H R","2H R","4H R"),ylab="Total Sig. DEG",main="Rapamycin Relative to Control",ylim=c(0,2))
 
+##barplot(height=c(mean((C2[(cluster.ensembl.L1),1])),mean((C3[(cluster.ensembl.L1),1])),mean((C4[(cluster.ensembl.L1),1])),mean((C5[(cluster.ensembl.L1),1])),NA,mean((R2[(cluster.ensembl.L1),1])),mean((R3[(cluster.ensembl.L1),1])),mean((R4[(cluster.ensembl.L1),1])),mean((R5[(cluster.ensembl.L1),1]))),col=c(rep("royalblue",4),NA,rep("firebrick",4)),names.arg = c(".5H C","1H C","2H C","4H C",NA,".5H R","1H R","2H R","4H R"),ylab="Total Sig. DEG",main="Rapamycin Relative to Control",ylim=c(-1,1))
+
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=na.omit(row.names(scaled)[unlist(dnd$lower[[clusternum]])])
+cluster.ensembl.L1=(scaledID)[unlist(dnd$lower[[clusternum]]),1]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+                           col=branchcolors[clusternum])
+  
+linedata=matrix(0,nrow=10,ncol=4)
+
+fcgs=cluster.ensembl.L2
+linedata=data.frame(linedata)
+colnames(linedata)=c("Treatment","Time","Mean Relative Expression","Std. Dev.")
+linedata[,1]=c(rep("Control",5),rep("Rapamycin",5))
+linedata[,2]=as.numeric(c(0,.5,1,2,4,0,.5,1,2,4))
+linedata[,3]=as.numeric(c(0,mean((C2[(fcgs),1])),mean((C3[(fcgs),1])),mean((C4[(fcgs),1])),mean((C5[(fcgs),1])),0,mean((R2[(fcgs),1])),mean((R3[(fcgs),1])),mean((R4[(fcgs),1])),mean((R5[(fcgs),1]))))
+linedata[,4]=as.numeric(c(0,sd((C2[(fcgs),1])),sd((C3[(fcgs),1])),sd((C4[(fcgs),1])),sd((C5[(fcgs),1])),0,sd((R2[(fcgs),1])),sd((R3[(fcgs),1])),sd((R4[(fcgs),1])),sd((R5[(fcgs),1]))))
+
+p<- ggplot(linedata, aes(x=Time, y=linedata[,3], group=Treatment, color=Treatment)) + 
+  geom_line() +
+  geom_point()+
+  ylim(-3,1)+
+  geom_hline(yintercept=0, linetype="dashed", color = "black")+
+  geom_errorbar(aes(ymin=linedata[,3]-linedata[,4], ymax=linedata[,3]+linedata[,4]), width=.2,
+                 position=position_dodge(0.05))
+
+
+print(p+labs(title="Co-expression cluster 2", x="Refeeding Time (hours)", y = "Mean Relative Expression")+
+   theme_classic() +
+   scale_color_manual(values=c("royalblue","firebrick")))
+
+
+```
 
 ```{r}
 clusternum=3
