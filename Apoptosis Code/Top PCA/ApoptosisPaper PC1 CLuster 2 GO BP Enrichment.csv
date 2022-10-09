@@ -1,0 +1,152 @@
+"","category","term","ontology","numDEInCat","adjp"
+"6879","GO:0022613","ribonucleoprotein complex biogenesis","BP",48,1.47729299702011e-12
+"10395","GO:0042254","ribosome biogenesis","BP",37,4.31339841937356e-11
+"3019","GO:0006364","rRNA processing","BP",27,1.06935369568385e-07
+"5565","GO:0016072","rRNA metabolic process","BP",27,2.86025687953023e-07
+"3037","GO:0006396","RNA processing","BP",61,9.37352470220203e-07
+"10853","GO:0043170","macromolecule metabolic process","BP",309,1.83060858002771e-06
+"11279","GO:0044237","cellular metabolic process","BP",337,3.12123103900968e-06
+"11244","GO:0044085","cellular component biogenesis","BP",137,3.66477378066668e-06
+"16162","GO:0071840","cellular component organization or biogenesis","BP",239,4.26995410679394e-06
+"15501","GO:0070647","protein modification by small protein conjugation or removal","BP",66,1.05540113842463e-05
+"11294","GO:0044267","cellular protein metabolic process","BP",189,1.2577636275073e-05
+"11008","GO:0043412","macromolecule modification","BP",166,1.42085613532334e-05
+"11290","GO:0044260","cellular macromolecule metabolic process","BP",273,1.42085613532334e-05
+"4642","GO:0010467","gene expression","BP",209,2.76041026640236e-05
+"3086","GO:0006464","cellular protein modification process","BP",158,2.99346149206136e-05
+"9976","GO:0036211","protein modification process","BP",158,2.99346149206136e-05
+"9215","GO:0034613","cellular protein localization","BP",94,7.08424821626842e-05
+"15543","GO:0070727","cellular macromolecule localization","BP",94,8.42544825310177e-05
+"12349","GO:0046907","intracellular transport","BP",85,9.60205949488411e-05
+"12745","GO:0048518","positive regulation of biological process","BP",215,9.77357179986452e-05
+"9167","GO:0034470","ncRNA processing","BP",31,0.000100687483408974
+"3044","GO:0006403","RNA localization","BP",23,0.000107840043696795
+"7602","GO:0031325","positive regulation of cellular metabolic process","BP",131,0.00010845103051501
+"4511","GO:0009893","positive regulation of metabolic process","BP",145,0.000108506845935875
+"3338","GO:0006807","nitrogen compound metabolic process","BP",309,0.000109753210495654
+"13612","GO:0051641","cellular localization","BP",142,0.000110776769436078
+"12749","GO:0048522","positive regulation of cellular process","BP",199,0.000131729413308627
+"7600","GO:0031323","regulation of cellular metabolic process","BP",212,0.000179151581366163
+"20339","GO:1904816","positive regulation of protein localization to chromosome, telomeric region","BP",6,0.000180501794263473
+"5563","GO:0016070","RNA metabolic process","BP",169,0.000202394679773366
+"8751","GO:0033365","protein localization to organelle","BP",56,0.000234749630293262
+"9185","GO:0034504","protein localization to nucleus","BP",25,0.000242587545885795
+"13363","GO:0051169","nuclear transport","BP",28,0.000244352568717295
+"8209","GO:0032446","protein modification by small protein conjugation","BP",54,0.000247331329102773
+"5544","GO:0016032","viral process","BP",54,0.000247331329102773
+"3824","GO:0008152","metabolic process","BP",345,0.000260745238513077
+"16095","GO:0071704","organic substance metabolic process","BP",334,0.000274086255175634
+"3456","GO:0006996","organelle organization","BP",157,0.00030308106491735
+"4707","GO:0010604","positive regulation of macromolecule metabolic process","BP",134,0.000421747216702069
+"5564","GO:0016071","mRNA metabolic process","BP",48,0.00044718855714389
+"20337","GO:1904814","regulation of protein localization to chromosome, telomeric region","BP",6,0.000499219746398491
+"3408","GO:0006913","nucleocytoplasmic transport","BP",27,0.00055790150578028
+"10407","GO:0042273","ribosomal large subunit biogenesis","BP",11,0.000587501224902143
+"6334","GO:0019222","regulation of metabolic process","BP",229,0.000636718799985011
+"3046","GO:0006405","RNA export from nucleus","BP",16,0.000673762582351688
+"13367","GO:0051173","positive regulation of nitrogen compound metabolic process","BP",122,0.000673762582351688
+"9248","GO:0034660","ncRNA metabolic process","BP",33,0.000748134538967549
+"11372","GO:0044403","biological process involved in symbiotic interaction","BP",54,0.00087354043916184
+"20358","GO:1904851","positive regulation of establishment of protein localization to telomere","BP",5,0.000991043856671545
+"11293","GO:0044265","cellular macromolecule catabolic process","BP",61,0.00100947003174934
+"6438","GO:0019538","protein metabolic process","BP",193,0.00100947003174934
+"11591","GO:0045184","establishment of protein localization","BP",89,0.00105524365742182
+"13619","GO:0051649","establishment of localization in cell","BP",114,0.00119144864110048
+"15912","GO:0071426","ribonucleoprotein complex export from nucleus","BP",15,0.00119144864110048
+"15763","GO:0071166","ribonucleoprotein complex localization","BP",15,0.00126610219867664
+"11912","GO:0045935","positive regulation of nucleobase-containing compound metabolic process","BP",83,0.00147538244714629
+"3388","GO:0006886","intracellular protein transport","BP",59,0.00171086889826758
+"15251","GO:0070203","regulation of establishment of protein localization to telomere","BP",5,0.00182475682506003
+"9233","GO:0034641","cellular nitrogen compound metabolic process","BP",215,0.00184509636930783
+"20367","GO:1904869","regulation of protein localization to Cajal body","BP",5,0.00188032235898697
+"20368","GO:1904871","positive regulation of protein localization to Cajal body","BP",5,0.00188032235898697
+"173","GO:0000377","RNA splicing, via transesterification reactions with bulged adenosine as nucleophile","BP",26,0.00188032235898697
+"186","GO:0000398","mRNA splicing, via spliceosome","BP",26,0.00188032235898697
+"11280","GO:0044238","primary metabolic process","BP",315,0.00212011191529408
+"172","GO:0000375","RNA splicing, via transesterification reactions","BP",26,0.00212011191529408
+"4681","GO:0010557","positive regulation of macromolecule biosynthetic process","BP",81,0.00227873531301817
+"16545","GO:0072594","establishment of protein localization to organelle","BP",34,0.00273224963456427
+"13051","GO:0050657","nucleic acid transport","BP",18,0.00273639023236453
+"13052","GO:0050658","RNA transport","BP",18,0.00273639023236453
+"3962","GO:0008380","RNA splicing","BP",30,0.0027602349116901
+"19643","GO:1903405","protein localization to nuclear body","BP",5,0.00277224425239831
+"20365","GO:1904867","protein localization to Cajal body","BP",5,0.00277224425239831
+"15250","GO:0070202","regulation of establishment of protein localization to chromosome","BP",5,0.00291709547707671
+"16920","GO:0090304","nucleic acid metabolic process","BP",179,0.00296151210420476
+"6007","GO:0016925","protein sumoylation","BP",11,0.00312056109064245
+"13393","GO:0051236","establishment of RNA localization","BP",18,0.00341812231010491
+"2891","GO:0006139","nucleobase-containing compound metabolic process","BP",193,0.00358992054572495
+"7605","GO:0031328","positive regulation of cellular biosynthetic process","BP",83,0.00367211512213914
+"14252","GO:0060341","regulation of cellular localization","BP",45,0.00391651705566078
+"3399","GO:0006900","vesicle budding from membrane","BP",13,0.00392655659478759
+"4509","GO:0009891","positive regulation of biosynthetic process","BP",84,0.00402135745559452
+"20916","GO:1990173","protein localization to nucleoplasm","BP",5,0.00468575050382209
+"14188","GO:0060255","regulation of macromolecule metabolic process","BP",209,0.00489676665614631
+"20370","GO:1904874","positive regulation of telomerase RNA localization to Cajal body","BP",5,0.00490162153350192
+"4597","GO:0010256","endomembrane system organization","BP",31,0.00490903800428873
+"3038","GO:0006397","mRNA processing","BP",32,0.00550545790609853
+"6177","GO:0018205","peptidyl-lysine modification","BP",27,0.0067604341647048
+"12150","GO:0046483","heterocycle metabolic process","BP",195,0.00748730470860342
+"3792","GO:0008104","protein localization","BP",109,0.00796425029726675
+"11964","GO:0046039","GTP metabolic process","BP",6,0.00811825475509682
+"11377","GO:0044419","biological process involved in interspecies interaction between organisms","BP",84,0.00960868231017543
+"4512","GO:0009894","regulation of catabolic process","BP",51,0.00997974396186286
+"11010","GO:0043414","macromolecule methylation","BP",22,0.0100964015994404
+"13406","GO:0051254","positive regulation of RNA metabolic process","BP",73,0.0100964015994404
+"3457","GO:0006997","nucleus organization","BP",13,0.0102162530549305
+"13364","GO:0051170","import into nucleus","BP",15,0.0108440737026822
+"9212","GO:0034605","cellular response to heat","BP",13,0.0108440737026822
+"5554","GO:0016050","vesicle organization","BP",24,0.0113372533910204
+"13362","GO:0051168","nuclear export","BP",17,0.0113494742508216
+"15247","GO:0070199","establishment of protein localization to chromosome","BP",6,0.0127164555883733
+"3047","GO:0006406","mRNA export from nucleus","BP",12,0.0128932762450258
+"15913","GO:0071427","mRNA-containing ribonucleoprotein complex export from nucleus","BP",12,0.0128932762450258
+"14662","GO:0061024","membrane organization","BP",46,0.0128932762450258
+"3206","GO:0006611","protein export from nucleus","BP",16,0.0131794438361168
+"13365","GO:0051171","regulation of nitrogen compound metabolic process","BP",189,0.0137429656182924
+"16629","GO:0080090","regulation of primary metabolic process","BP",195,0.0142864478047993
+"11285","GO:0044248","cellular catabolic process","BP",94,0.0142864478047993
+"20369","GO:1904872","regulation of telomerase RNA localization to Cajal body","BP",5,0.0146618593414269
+"11880","GO:0045893","positive regulation of transcription, DNA-templated","BP",69,0.0146804291836717
+"19685","GO:1903508","positive regulation of nucleic acid-templated transcription","BP",69,0.0146804291836717
+"18871","GO:1901564","organonitrogen compound metabolic process","BP",212,0.0147614296291119
+"13269","GO:0051028","mRNA transport","BP",14,0.0147614296291119
+"19311","GO:1902680","positive regulation of RNA biosynthetic process","BP",69,0.0147614296291119
+"3291","GO:0006725","cellular aromatic compound metabolic process","BP",194,0.0147614296291119
+"4643","GO:0010468","regulation of gene expression","BP",165,0.0147614296291119
+"10408","GO:0042274","ribosomal small subunit biogenesis","BP",9,0.0147946337934027
+"4193","GO:0009057","macromolecule catabolic process","BP",64,0.0173593574957077
+"15248","GO:0070200","establishment of protein localization to telomere","BP",5,0.0175785456486135
+"7606","GO:0031329","regulation of cellular catabolic process","BP",44,0.0175785456486135
+"17054","GO:0090670","RNA localization to Cajal body","BP",5,0.0180641891201839
+"17055","GO:0090671","telomerase RNA localization to Cajal body","BP",5,0.0180641891201839
+"17056","GO:0090672","telomerase RNA localization","BP",5,0.0180641891201839
+"17063","GO:0090685","RNA localization to nucleus","BP",5,0.0180641891201839
+"8604","GO:0033036","macromolecule localization","BP",120,0.0189047645360325
+"4711","GO:0010608","posttranscriptional regulation of gene expression","BP",34,0.0219304265897613
+"17120","GO:0097064","ncRNA export from nucleus","BP",7,0.0221003236349945
+"19592","GO:1903311","regulation of mRNA metabolic process","BP",22,0.0234967137907876
+"20184","GO:1904526","regulation of microtubule binding","BP",4,0.0275027415063351
+"3118","GO:0006511","ubiquitin-dependent protein catabolic process","BP",35,0.0283870514141063
+"15126","GO:0065003","protein-containing complex assembly","BP",67,0.0283870514141063
+"3823","GO:0008150","biological_process","BP",444,0.0283870514141063
+"15438","GO:0070534","protein K63-linked ubiquitination","BP",8,0.0286704479958535
+"4402","GO:0009408","response to heat","BP",14,0.029629115053787
+"13421","GO:0051276","chromosome organization","BP",56,0.031655682344921
+"21841","GO:2001234","negative regulation of apoptotic signaling pathway","BP",16,0.031655682344921
+"15246","GO:0070198","protein localization to chromosome, telomeric region","BP",6,0.031655682344921
+"6576","GO:0019941","modification-dependent protein catabolic process","BP",35,0.0320209174718675
+"3203","GO:0006606","protein import into nucleus","BP",13,0.0320209174718675
+"3595","GO:0007249","I-kappaB kinase/NF-kappaB signaling","BP",20,0.0320209174718675
+"4192","GO:0009056","catabolic process","BP",103,0.0340671903016862
+"11191","GO:0043933","protein-containing complex subunit organization","BP",76,0.0341699987339938
+"5508","GO:0015931","nucleobase-containing compound transport","BP",18,0.0367883442872557
+"5549","GO:0016043","cellular component organization","BP",211,0.0370687400417101
+"13595","GO:0051603","proteolysis involved in cellular protein catabolic process","BP",38,0.0387481647710996
+"21840","GO:2001233","regulation of apoptotic signaling pathway","BP",21,0.0422599418903334
+"10826","GO:0043122","regulation of I-kappaB kinase/NF-kappaB signaling","BP",18,0.0422599418903334
+"11137","GO:0043632","modification-dependent macromolecule catabolic process","BP",35,0.0424051048915487
+"5164","GO:0015031","protein transport","BP",77,0.0430513314328599
+"18573","GO:1900180","regulation of protein localization to nucleus","BP",12,0.0439561489503342
+"10827","GO:0043123","positive regulation of I-kappaB kinase/NF-kappaB signaling","BP",15,0.0440270628443321
+"19855","GO:1903827","regulation of cellular protein localization","BP",31,0.0454051496876016

@@ -16,16 +16,19 @@ library(heatmaply)
 library("biomaRt")
 library("goseq")
 library(dendextend)
-library(KEGG.db)
+##library(KEGG.db)
 cpmdata=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/cpmtable.csv",row.names=1)
 meancpm=read.csv("https://raw.githubusercontent.com/johncsantiago/SData/master/Apoptosis%20Code/ApoptosisMeanCPMdata.csv",row.names=1)
 
-##ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
-##ID.conversion=getBM(attributes=c("ensembl_gene_id","external_gene_name"),mart=ensembl)
-##ID.conversion=na.omit(ID.conversion)
-##row.names(ID.conversion)=ID.conversion[,1]
-##ID.conversion[ID.conversion[,2]=="",2]=ID.conversion[ID.conversion[,2]=="",1]
-##ID.conversion=ID.conversion[row.names(cpmdata),]
+ensembl = useMart("ensembl",dataset="hsapiens_gene_ensembl")
+ID.conversion=getBM(attributes=c("ensembl_gene_id","external_gene_name"),mart=ensembl)
+entrez.conversion=getBM(attributes=c("ensembl_gene_id","entrezgene_id"),mart=ensembl)
+ID.conversion=na.omit(ID.conversion)
+entrez.conversion=t(na.omit(entrez.conversion))
+row.names(ID.conversion)=ID.conversion[,1]
+names(entrez.conversion)=entrez.conversion[1,]
+ID.conversion[ID.conversion[,2]=="",2]=ID.conversion[ID.conversion[,2]=="",1]
+ID.conversion=ID.conversion[row.names(cpmdata),]
 ##go_slim=getBM(attributes="goslim_goa_accession",mart=ensembl)
 
 
@@ -118,7 +121,6 @@ if(branches==1){
 
 colordend=(color_branches(hc, h=cutheight, col=branchcolors))
 
-
 heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
 
 ##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
@@ -186,14 +188,14 @@ sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
 
 
 
-KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
-KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
-KEGGnames=(as.list(KEGGPATHID2NAME))
-KEGG.wall$names=""
-for(i in 1:nrow(KEGG.wall)){
-  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
-}
-sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+##KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+##KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+##KEGGnames=(as.list(KEGGPATHID2NAME))
+##KEGG.wall$names=""
+##for(i in 1:nrow(KEGG.wall)){
+  ##KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+##}
+##sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
 
 
 pc1.sig.GO1=sig.GO
@@ -281,14 +283,14 @@ sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
 
 
 
-KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
-KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
-KEGGnames=(as.list(KEGGPATHID2NAME))
-KEGG.wall$names=""
-for(i in 1:nrow(KEGG.wall)){
-  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
-}
-sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+##KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+##KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+##KEGGnames=(as.list(KEGGPATHID2NAME))
+##KEGG.wall$names=""
+##for(i in 1:nrow(KEGG.wall)){
+  ##KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+##}
+##sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
 
 
 pc1.sig.GO2=sig.GO
@@ -322,6 +324,7 @@ while(i<=nrow(gmt)){
 pc1.sig.GObp2.genes=gmt
 write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_GObp.txt", sep="\t", col.names = F, row.names = F)
 write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC1_Cluster2_genes.csv")
+write.csv(pc1.sig.GObp2,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/ApoptosisPaper PC1 GO BP Enrichment.csv")
 ```
 
 
@@ -461,14 +464,14 @@ sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
 
 
 
-KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
-KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
-KEGGnames=(as.list(KEGGPATHID2NAME))
-KEGG.wall$names=""
-for(i in 1:nrow(KEGG.wall)){
-  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
-}
-sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+##KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+##KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+##KEGGnames=(as.list(KEGGPATHID2NAME))
+##KEGG.wall$names=""
+##for(i in 1:nrow(KEGG.wall)){
+  ##KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+##}
+##sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
 
 
 pc2.sig.GO1=sig.GO
@@ -503,6 +506,7 @@ while(i<=nrow(gmt)){
 pc2.sig.GOcc1.genes=gmt
 write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_GOcc.txt", sep="\t", col.names = F, row.names = F)
 write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster1_genes.csv")
+write.csv(pc2.sig.GOcc1,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/ApoptosisPaper PC2 Cluster 1 GO CC Enrichment.csv")
 ```
 
 
@@ -568,14 +572,14 @@ sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
 
 
 
-KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
-KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
-KEGGnames=(as.list(KEGGPATHID2NAME))
-KEGG.wall$names=""
-for(i in 1:nrow(KEGG.wall)){
-  KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
-}
-sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+##KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+##KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+##KEGGnames=(as.list(KEGGPATHID2NAME))
+##KEGG.wall$names=""
+##for(i in 1:nrow(KEGG.wall)){
+  ##KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+##}
+##sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
 
 
 pc2.sig.GO2=sig.GO
@@ -609,9 +613,305 @@ while(i<=nrow(gmt)){
 pc2.sig.GObp2.genes=gmt
 write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_GObp.txt", sep="\t", col.names = F, row.names = F)
 write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC2_Cluster2_genes.csv")
+write.csv(pc2.sig.GObp2,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/ApoptosisPaper PC2 Cluster 2 GO BP Enrichment.csv")
 ```
 
 
+
+
+```{r}
+PCcontribute=PC3contribute
+loading=(PCcontribute)
+eigs <- pca$sdev^2
+ve=(eigs / sum(eigs))*100
+percent.variation=signif(ve,4)
+
+##The column sum of squares of the loadings (pca$rotation) are the variances of PCs.
+percents=(PCcontribute*PCcontribute)
+percents=percents[order(percents,decreasing=T)]
+loading=loading[names(percents)]
+percent2=percents
+temppercent=0
+i=1
+while(i<=length(percents)){
+  percents[i]=percents[i]+temppercent
+  temppercent=percents[i]
+  i=i+1
+}
+
+##percents=percents[loading[names(percents)]>0]
+
+
+hmd=names(percents)[percents<=.1]
+
+
+dataset=meancpm[hmd,]
+branches=2
+
+scaled=(t(scale(t(dataset))))
+scaledID=ID.conversion[row.names(scaled),]
+row.names(scaled)=scaledID[,2]
+colors=c("burlywood4","seagreen4","darkkhaki","lightblue4","cornsilk4",
+         "darkgreen","mediumpurple4","chocolate",
+         "firebrick","green3","deepskyblue",
+         "gold3","goldenrod","royalblue",
+         "black","violet","darkorange3",
+         "darkslategray4","orchid4")
+
+##colors=colors[c(10,4,2)]
+##colors=colors[c(15,9,1)]
+##PC1colors=c(colors[1:2])
+##PC2colors=c(colors[c(15,9)])
+
+colors=c(colors[1:2])
+
+hc <- hclust(dist(scaled), "complete")
+heights=sort(hc$height,decreasing = T)
+
+if(branches>1){
+  cutheight=heights[branches]
+}
+
+if(branches==1){
+  cutheight=max(heights)+1
+}
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+
+if(branches>1){
+  branchcolors=colors[1:length(dnd$lower)]
+}
+if(branches==1){
+  branchcolors="black"
+}
+
+colordend=(color_branches(hc, h=cutheight, col=branchcolors))
+
+heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1) 
+
+##heatmap.2(scaled,trace="none",col=hmcolors,dendrogram = "row",Rowv=colordend,Colv="NA",cexRow = .1,keysize = 1,lhei = c(1,5))
+
+col2rgb("burlywood")
+col2rgb("seagreen4")
+```
+
+```{r}
+
+clusternum=1
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=cpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+##KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+##KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+##KEGGnames=(as.list(KEGGPATHID2NAME))
+##KEGG.wall$names=""
+##for(i in 1:nrow(KEGG.wall)){
+  ##KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+##}
+##sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+pc3.sig.GO1=sig.GO
+pc3.sig.GObp1=sig.GObp
+pc3.sig.GOmf1=sig.GOmf
+pc3.sig.GOcc1=sig.GOcc
+pc3.sig.slims1=sig.slims
+pc3.sig.slimsbp1=sig.slimsbp
+pc3.sig.slimsmf1=sig.slimsmf
+pc3.sig.slimscc1=sig.slimscc
+pc3.sig.KEGG1=sig.KEGG
+pc3.sigs1=sigs
+pc3.cluster1=cluster
+
+```
+
+
+```{r}
+
+cats=pc3.sig.GObp1
+sigs=pc3.sigs1
+cluster=pc3.cluster1
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,15),sigs)
+  i=i+1
+}
+
+pc3.sig.GObp1.genes=gmt
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster1_GObp.txt", sep="\t", col.names = F, row.names = F)
+##write.csv(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster1_GObp.gmt")
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster1_GObp.gmt", sep="\t", col.names = F, row.names = F)
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster1_genes.csv")
+write.csv(pc3.sig.GO1,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/ApoptosisPaper PC3 Cluster 1 GO BP Enrichment.csv")
+```
+
+
+
+```{r}
+
+clusternum=2
+
+dnd=cut(as.dendrogram(hc),h=cutheight)
+cluster=row.names(scaled)[unlist(dnd$lower[[clusternum]])]
+clusterdend=color_branches(dnd$lower[[clusternum]], h=cutheight, 
+col=branchcolors[clusternum])
+
+
+heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep="")) ##,keysize = 1,lhei = c(1,5))
+
+##for better color key size, use this in console
+##heatmap.2(scaled,trace="none",col=hmcolors, dendrogram = "row", Rowv=clusterdend,Colv="NA",cexRow = .5,main=paste("Genes in Cluster Number ", clusternum, sep=""),keysize = 1,lhei = c(1,5))
+
+
+```
+
+
+
+```{r}
+
+##uses genes from "cluster" up above
+scaledID=na.omit(scaledID)
+row.names(scaledID)=scaledID[,2]
+if(branches>1){
+sigs=scaledID[(cluster),1]
+}
+if(branches==1){
+  sigs=scaledID[row.names(scaled),1]
+}
+##default for background genes is the current CPM data
+bg=cpmdata[,1:2]
+
+
+
+bg[,1]=0
+sigs=intersect(sigs,row.names(bg))
+bg[sigs,1]=1
+genes=bg[,1]
+names(genes)=row.names(bg)
+pwf=nullp(genes,"hg19","ensGene")
+
+GO.wall=goseq(pwf,"hg19","ensGene")
+GO.wall$adjp=p.adjust(GO.wall$over_represented_pvalue,method="BH")
+sig.GO=GO.wall[GO.wall$adjp<.05,c("category","term","ontology", "numDEInCat" ,"adjp")]
+sig.GOcc=sig.GO[sig.GO$ontology=="CC",]
+sig.GObp=sig.GO[sig.GO$ontology=="BP",]
+sig.GOmf=sig.GO[sig.GO$ontology=="MF",]
+
+go=getgo(names(genes),"hg19","ensGene")
+go_slim2cat=lapply(go,function(x){ x[x %in% go_slim[[1]]]  })
+GOslim.wall=goseq(pwf,"hg19","ensGene",gene2cat = go_slim2cat)
+GOslim.wall$adjp=p.adjust(GOslim.wall$over_represented_pvalue,method="BH")
+sig.slims=GOslim.wall[GOslim.wall$adjp<.05,c("category","term","numDEInCat","ontology","adjp")]
+sig.slimscc=sig.slims[sig.slims$ontology=="CC",]
+sig.slimsbp=sig.slims[sig.slims$ontology=="BP",]
+sig.slimsmf=sig.slims[sig.slims$ontology=="MF",]
+
+
+
+##KEGG.wall=goseq(pwf,"hg19","ensGene",test.cats = "KEGG")
+##KEGG.wall$adjp=p.adjust(KEGG.wall$over_represented_pvalue,method="BH")
+##KEGGnames=(as.list(KEGGPATHID2NAME))
+##KEGG.wall$names=""
+##for(i in 1:nrow(KEGG.wall)){
+  ##KEGG.wall$names[i]=KEGGnames[[KEGG.wall$category[i]]]
+##}
+##sig.KEGG=KEGG.wall[KEGG.wall$adjp<.05,c("names", "numDEInCat","adjp")]
+
+
+pc3.sig.GO2=sig.GO
+pc3.sig.GObp2=sig.GObp
+pc3.sig.GOmf2=sig.GOmf
+pc3.sig.GOcc2=sig.GOcc
+pc3.sig.slims2=sig.slims
+pc3.sig.slimsbp2=sig.slimsbp
+pc3.sig.slimsmf2=sig.slimsmf
+pc3.sig.slimscc2=sig.slimscc
+pc3.sig.KEGG2=sig.KEGG
+pc3.sigs2=sigs
+pc3.cluster2=cluster
+
+```
+
+
+```{r}
+
+cats=pc3.sig.GObp2
+sigs=pc3.sigs2
+cluster=pc3.cluster2
+slims=unlist(go)
+gmt=matrix("",nrow=nrow(cats),ncol=(max(cats$numDEInCat)+2))
+gmt[,1:2]=cats$term
+i=1
+while(i<=nrow(gmt)){
+  gmt[i,3:(cats[i,"numDEInCat"]+2)]=intersect(substring(names(slims)[slims==cats[i,"category"]],1,15),sigs)
+  i=i+1
+}
+pc3.sig.GObp2.genes=gmt
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster2_GObp.txt", sep="\t", col.names = F, row.names = F)
+##write.csv(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster2_GObp.gmt")
+write.table(gmt, file="/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster2_GObp.gmt", sep="\t", col.names = F, row.names = F)
+
+write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/PC3_Cluster2_genes.csv")
+write.csv(pc3.sig.GObp2,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/Top PCA/ApoptosisPaper PC3 Cluster 2 GO BP Enrichment.csv")
+```
 
 
 
@@ -620,6 +920,13 @@ write.csv(cluster,"/Users/johncsantiago/Documents/GitHub/SData/Apoptosis Code/To
 
 
 ```{r}
+
+
+heatmap.2(scaled[ID.conversion[(gmt[gmt[,1]=="meiotic cell cycle",3:27]),2],],trace="none",col=hmcolors, dendrogram = "none", Rowv=F,Colv="NA",cexRow = .5)
+
+
+
+
 
 ##par(mar=c(3,20,2,2))
 
