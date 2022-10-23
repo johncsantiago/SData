@@ -19,31 +19,25 @@ ui <- fillPage(
   titlePanel("Customize Plot"),
   sidebarLayout(position="left",
                 sidebarPanel(
-                  selectInput("select", h3("Select Functional Group for Color"), 
-                              choices = list("High Performance" = 1, 
-                                             "Intermediate Performance" = 2,
-                                             "Low Performance" = 3), 
+                  selectInput("pos.neg", h3("Positive or Negative Correlation"),
+                              choices = list("Positive" = 1,
+                                             "Negative" = 2,
+                                             "Both" = 3),
                               selected = 1),
                   
-                  conditionalPanel(
-                    condition = "input.select == 1",
-                    colourInput("H.line.color", "Line Color",
-                                "royalblue3",showColour = 'background'),
-                    ),
-                  conditionalPanel(
-                    condition = "input.select == 2",
-                    colourInput("I.line.color", "Line Color",
-                                "gold",showColour = 'background'),
-                    ),
-                  conditionalPanel(
-                    condition = "input.select == 3",
-                    colourInput("L.line.color", "Line Color",
-                                "firebrick",showColour = 'background'),
-                    ),
-                  sliderInput("shape", h3("Shape"), min = 1, max = 5, value = 2),
-                  sliderInput("size", h3("Size"), min = 0, max = 5, value = 2, step=.1),
-                  sliderInput("back", h4("Background"), min = 0, max = 1, value = 1,step=.01),
-                , width = 3),
+                  ##conditionalPanel(
+                    ##condition = "input.select == 1",
+                    ##colourInput("H.line.color", "Line Color",
+                                "royalblue3",showColour = 'background')),
+                    
+                  sliderInput("cpm.cutoff", h3("CPM"), min = 0, max = 1, 
+                              value = 20, step = 5),
+                  sliderInput("cor.cutoff", h3("Cor."), min = 0, max = 100, 
+                              value = 80, step = 1),
+                  sliderInput("p.cutoff", h4("Cor. P"), min = 0, max = 1, 
+                              value = 1, step = .01),
+                  width = 3),
+                
                 mainPanel(
                   
                   plotOutput(outputId = "distPlot", height=600, width=900)
@@ -56,42 +50,64 @@ ui <- fillPage(
 # Define server logic required to draw a histogram ----
 server <- function(input, output) {
 
-    ##Liver Trait Data 
-    LTD= read.csv("https://raw.githubusercontent.com/johncsantiago/Lactate-Correlation-Manuscript/master/Data/LiverTraitData.csv")
+    git.dir      = "https://raw.githubusercontent.com/johncsantiago/Lactate-Correlation-Manuscript/master/Data/"
+    LTD          = read.csv(paste0(git.dir,"LiverTraitData.csv"), row.names = 1)
+    cpmdata      = read.csv(paste0(git.dir,"LacCorCpmData.csv"), row.names = 1)
+    groups       = read.csv(paste0(git.dir,"Metadata.csv"), row.names = 1)
+    annot        = read.csv(paste0(git.dir,"AnnotationData.csv"),row.names=1)
+    lac.cor.data = read.csv(paste0(git.dir,"LacCorData.csv"), row.names = 1)
+    lac.cor.p    = read.csv(paste0(git.dir,"LacCorP.csv"), row.names = 1)
+      
+    ##FunctionalGroups
+    FG=c(rep("Adequate Function",5),rep("Intermediate Function",2),rep("Low Function",3))
+    names(FG)=c("FV12","LV12","LV13","FV13","LV11","FN11","FN12","LN11","FN13","LN13")
     
+    LacData=LTD$alactate
+    names(LacData)=LTD$libraryID
+    LacData=LacData[LTD$time==3]
+    LacData=LacData[paste0(substring(names(FG),1,2),substring(names(FG),4,4))]
+    names(LacData)=paste0(substring(names(LacData),1,2),"1",substring(names(LacData),4,4))
+    cpm.0H=cpmdata[,names(FG)]
+    cpm.0H=cpm.0H[apply(cpm.0H,1,sum)>0,]
+      
     output$distPlot <- renderPlot({
-      ##FunctionalGroups
-      FG=c(rep(input$H.line.color,5),
-           rep(input$I.line.color,5,2),
-           rep(input$L.line.color,5,3))
-      names(FG)=c("FV12","LV12","LV13","FV13","LV11","FN11","FN12","LN11","FN13","LN13")
+      cpm.cutoff = 20
+      cor.cutoff = 0.8
+      sig.cutoff = .05
+      pos.or.neg = input$pos.neg
       
-      plot.new()
-      col.pan <- colorpanel(101, "black","white")
-      # Change the plot region color
-      rect(par("usr")[1], par("usr")[3],
-           par("usr")[2], par("usr")[4],
-           col = col.pan[(input$back*100)+1]) # Color
-      par(new = TRUE)
+      ##trim for genes that meet cpm.cutoff
+      cpm.genes=apply(cpm.0H,1,max)
+      cpm.genes=names(cpm.genes[cpm.genes>cpm.cutoff])
+      cordata=cpm.0H[cpm.genes,]
       
-      x=LTD$time[LTD$libraryID==paste0(substring(names(FG)[1],1,2),substring(names(FG)[1],4,4))&LTD$time!=0&LTD$time<=6]
-      y=LTD$alactate[LTD$libraryID==paste0(substring(names(FG)[1],1,2),substring(names(FG)[1],4,4))&LTD$time!=0&LTD$time<=6]
+      ##trim for genes that meet sig.cutoff
+      sig.genes=names(cor.p)[cor.p<sig.cutoff]
+      cordata=cordata[intersect(row.names(cordata),sig.genes),]
       
-      plot(x,y, pch=input$shape+20, bg=FG[1],col="black",ylim=c(min(na.omit(LTD$alactate)),max(na.omit(LTD$alactate))), ylab= "Lactate (mmol/L)", xlab = "Time (Hours)", cex=input$size, cex.lab=1.5, cex.axis=1.5)
-      lines(spline(x,y, n = 201,ties = "mean",method="natural"), col = FG[1], lwd=input$size)
-      i=2
-      while(i<=length(FG)){
-        x=LTD$time[LTD$libraryID==paste0(substring(names(FG)[i],1,2),substring(names(FG)[i],4,4))&LTD$time!=0&LTD$time<=6]
-        y=LTD$alactate[LTD$libraryID==paste0(substring(names(FG)[i],1,2),substring(names(FG)[i],4,4))&LTD$time!=0&LTD$time<=6]
-        points(x,y, pch=input$shape+20, bg=FG[i],col="black", cex=input$size)
-        lines(spline(x,y, n = 201,ties = "mean",method="natural"), col = FG[i],lwd=input$size)
-        i=i+1
+      ##trim for genes that meet the cor.cutoff in the right direction
+      if(pos.or.neg== 1){
+        cor.genes=names(cor.data)[cor.data>cor.cutoff]
+        cordata=cordata[intersect(row.names(cordata),cor.genes),]
       }
-      legend("topright",
-             c("High Performance","Intermediate Performance","Low Performance"),
-             fill=unique(FG),bty="n",cex=1.5, 
-             text.col=col.pan[((((.6-input$back)/abs(.6-input$back))+1)*50)+1])
-    
+      if(pos.or.neg== 1){
+        cor.genes=names(cor.data)[cor.data<cor.cutoff]
+        cordata=cordata[intersect(row.names(cordata),cor.genes),]
+      }
+      
+      
+      hmdata = cpm.0H[cordata,]
+      hc = hclust(dist(hmdata), "complete")
+      hmdata=hmdata[hc$order,]  
+      pos.hmdata=t(scale(t(hmdata)))
+      
+      heatmaply(pos.hmdata,trace="none",col=RdYlBu(100)[100:1], scale="none",
+                dendrogram = "none",Rowv=F,Colv=F,
+                cexRow = .75, na.color="grey",
+                labRow = annot[row.names(hmdata),"symbol"],
+                labCol = c("AF1","AF2","AF3","AF4","AF5","IF1","IF2","LF1","LF2","LF3"),
+                main="Positively Correlating Genes")
+      
     }
     ##, height = 700, width = 900
     )
